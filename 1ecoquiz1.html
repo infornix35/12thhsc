@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Economics Quiz - Micro & Macro</title>
+    <style>
+        .styled-link {
+            text-decoration: none;
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            color: white;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+            display: inline-block;
+        }
+
+        .styled-link:hover {
+            background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        .styled-link:active {
+            transform: scale(0.98);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #000000;
+            min-height: 100vh;
+            padding: 20px;
+            color: white;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: #3b82f6;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            text-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .progress-container {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 25px;
+            padding: 5px;
+            margin: 20px 0;
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, #1e3a8a 0%, #3b82f6 100%);
+            height: 20px;
+            border-radius: 20px;
+            transition: width 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+        }
+
+        .quiz-container {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8), 0 0 20px rgba(59, 130, 246, 0.1);
+            padding: 40px;
+            margin-bottom: 20px;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .question-container {
+            display: none;
+        }
+
+        .question-container.active {
+            display: block;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .question-number {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 14px;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+        }
+
+        .category-badge {
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: auto;
+        }
+
+        .category-micro { 
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            box-shadow: 0 0 8px rgba(59, 130, 246, 0.4);
+        }
+        .category-macro { 
+            background: linear-gradient(135deg, #1e3a8a 0%, #60a5fa 100%);
+            color: white;
+            box-shadow: 0 0 8px rgba(96, 165, 250, 0.4);
+        }
+        .category-general { 
+            background: linear-gradient(135deg, #312e81 0%, #6366f1 100%);
+            color: white;
+            box-shadow: 0 0 8px rgba(99, 102, 241, 0.4);
+        }
+
+        .question {
+            font-size: 20px;
+            font-weight: 600;
+            color: #e2e8f0;
+            margin-bottom: 30px;
+            line-height: 1.4;
+        }
+
+        .options {
+            display: grid;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .option {
+            background: rgba(30, 58, 138, 0.1);
+            border: 2px solid rgba(59, 130, 246, 0.3);
+            border-radius: 12px;
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            color: #e2e8f0;
+        }
+
+        .option:hover {
+            background: rgba(59, 130, 246, 0.2);
+            border-color: rgba(59, 130, 246, 0.6);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.2);
+        }
+
+        .option.selected {
+            background: rgba(59, 130, 246, 0.3);
+            border-color: #3b82f6;
+            color: #ffffff;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+        }
+
+        .option.correct {
+            background: rgba(34, 197, 94, 0.2);
+            border-color: #22c55e;
+            color: #ffffff;
+            box-shadow: 0 0 15px rgba(34, 197, 94, 0.3);
+        }
+
+        .option.incorrect {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: #ef4444;
+            color: #ffffff;
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
+        }
+
+        .option-letter {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+            font-size: 14px;
+        }
+
+        .selected .option-letter {
+            background: linear-gradient(135deg, #2563eb 0%, #60a5fa 100%);
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+        }
+
+        .correct .option-letter {
+            background: linear-gradient(135deg, #16a34a 0%, #22c55e 100%);
+        }
+
+        .incorrect .option-letter {
+            background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+        }
+
+        .quiz-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn:disabled {
+            background: rgba(71, 85, 105, 0.5);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #374151 0%, #6b7280 100%);
+            box-shadow: 0 4px 15px rgba(107, 114, 128, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #4b5563 0%, #9ca3af 100%);
+            box-shadow: 0 6px 20px rgba(107, 114, 128, 0.4);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-danger:hover {
+            background: linear-gradient(135deg, #b91c1c 0%, #dc2626 100%);
+            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+        }
+
+        .player-name-section {
+            margin: 20px 0;
+        }
+
+        .player-name-section input {
+            outline: none;
+        }
+
+        .player-name-section input:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .start-buttons, .result-buttons, .leaderboard-buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .leaderboard-screen {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .leaderboard-screen h2 {
+            color: #3b82f6;
+            font-size: 2rem;
+            margin-bottom: 30px;
+            text-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+        }
+
+        .leaderboard-container {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-bottom: 30px;
+        }
+
+        .leaderboard-entry {
+            background: rgba(30, 58, 138, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .leaderboard-entry:hover {
+            background: rgba(59, 130, 246, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.2);
+        }
+
+        .leaderboard-rank {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .leaderboard-rank.gold {
+            background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+        }
+
+        .leaderboard-rank.silver {
+            background: linear-gradient(135deg, #6b7280 0%, #9ca3af 100%);
+        }
+
+        .leaderboard-rank.bronze {
+            background: linear-gradient(135deg, #92400e 0%, #d97706 100%);
+        }
+
+        .leaderboard-info {
+            flex-grow: 1;
+            margin-left: 20px;
+            text-align: left;
+        }
+
+        .leaderboard-name {
+            color: #e2e8f0;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .leaderboard-details {
+            color: #cbd5e1;
+            font-size: 14px;
+        }
+
+        .leaderboard-score {
+            color: #3b82f6;
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+        }
+
+        .no-scores-message {
+            color: #cbd5e1;
+            font-size: 18px;
+            text-align: center;
+            padding: 40px;
+            background: rgba(30, 58, 138, 0.05);
+            border-radius: 12px;
+            border: 1px dashed rgba(59, 130, 246, 0.3);
+        }
+
+        .personal-best {
+            background: rgba(34, 197, 94, 0.1) !important;
+            border-color: rgba(34, 197, 94, 0.3) !important;
+        }
+
+        .personal-best .leaderboard-name::after {
+            content: " (You)";
+            color: #22c55e;
+            font-size: 14px;
+        }
+
+        .start-screen, .results-screen {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .start-screen h2, .results-screen h2 {
+            color: #3b82f6;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+        }
+
+        .start-screen p, .results-screen p {
+            color: #cbd5e1;
+            font-size: 18px;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .score-display {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            margin: 30px 0;
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.3);
+        }
+
+        .score-display h3 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+        }
+
+        .score-breakdown {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .score-item {
+            background: rgba(30, 58, 138, 0.2);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .score-item h4 {
+            color: #3b82f6;
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+            text-shadow: 0 0 5px rgba(59, 130, 246, 0.3);
+        }
+
+        .score-item p {
+            color: #cbd5e1;
+            font-size: 14px;
+            margin: 0;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .quiz-container {
+                padding: 25px;
+            }
+            
+            .question {
+                font-size: 18px;
+            }
+            
+            .option {
+                padding: 12px 15px;
+                font-size: 14px;
+            }
+            
+            .quiz-controls {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="styled-link">🏠 Go Home</a>
+    <div class="container">
+        <div class="header">
+            <h1>Economics Quiz</h1>
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar" style="width: 0%">
+                    <span id="progressText">0 / 10</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Start Screen -->
+        <div class="quiz-container" id="startScreen">
+            <div class="start-screen">
+                <h2>Welcome to the Economics Quiz!</h2>
+                <p>Test your knowledge of Microeconomics and Macroeconomics with 10 multiple choice questions. Each question has 4 options - choose the best answer!</p>
+                <p><strong>Topics covered:</strong> Economic theories, key economists, definitions, concepts, and applications from both micro and macro economics.</p>
+                
+                <div class="player-name-section">
+                    <label for="playerName" style="color: #3b82f6; font-weight: bold; margin-bottom: 10px; display: block;">Enter Your Name:</label>
+                    <input type="text" id="playerName" placeholder="Your name here..." maxlength="20" 
+                           style="padding: 12px; border-radius: 8px; border: 2px solid rgba(59, 130, 246, 0.3); 
+                                  background: rgba(30, 58, 138, 0.1); color: white; font-size: 16px; 
+                                  margin-bottom: 20px; width: 250px; text-align: center;">
+                </div>
+                
+                <div class="start-buttons">
+                    <button class="btn" onclick="startQuiz()" style="margin-right: 15px;">Start Quiz</button>
+                    <button class="btn btn-secondary" onclick="showLeaderboard()">View Leaderboard</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quiz Questions -->
+        <div class="quiz-container hidden" id="quizContainer">
+            <div class="question-header">
+                <div class="question-number" id="questionNumber">Question 1 of 10</div>
+                <div class="category-badge" id="categoryBadge">General</div>
+            </div>
+            
+            <div class="question" id="questionText">
+                Loading question...
+            </div>
+            
+            <div class="options" id="optionsContainer">
+                <!-- Options will be populated by JavaScript -->
+            </div>
+            
+            <div class="quiz-controls">
+                <button class="btn" id="prevBtn" onclick="previousQuestion()" disabled>Previous</button>
+                <button class="btn" id="nextBtn" onclick="nextQuestion()" disabled>Next</button>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div class="quiz-container hidden" id="resultsScreen">
+            <div class="results-screen">
+                <h2>Quiz Complete!</h2>
+                <div class="score-display">
+                    <h3 id="finalScore">0/10</h3>
+                    <p>Your Performance</p>
+                </div>
+                
+                <div class="score-breakdown">
+                    <div class="score-item">
+                        <h4 id="correctCount">0</h4>
+                        <p>Correct Answers</p>
+                    </div>
+                    <div class="score-item">
+                        <h4 id="incorrectCount">0</h4>
+                        <p>Incorrect Answers</p>
+                    </div>
+                    <div class="score-item">
+                        <h4 id="percentageScore">0%</h4>
+                        <p>Percentage</p>
+                    </div>
+                    <div class="score-item">
+                        <h4 id="gradeDisplay">F</h4>
+                        <p>Grade</p>
+                    </div>
+                </div>
+                
+                <p id="performanceMessage">Good job on completing the quiz!</p>
+                <div class="result-buttons">
+                    <button class="btn" onclick="restartQuiz()" style="margin-right: 15px;">Take Quiz Again</button>
+                    <button class="btn btn-secondary" onclick="showLeaderboard()">View Leaderboard</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Leaderboard Screen -->
+        <div class="quiz-container hidden" id="leaderboardScreen">
+            <div class="leaderboard-screen">
+                <h2>🏆 Leaderboard 🏆</h2>
+                <div class="leaderboard-container" id="leaderboardContainer">
+                    <!-- Leaderboard entries will be populated by JavaScript -->
+                </div>
+                <div class="leaderboard-buttons">
+                    <button class="btn" onclick="hideLeaderboard()">Back to Quiz</button>
+                    <button class="btn btn-danger" onclick="clearLeaderboard()">Clear Leaderboard</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Quiz data with questions and multiple choice options
+        const quizData = [
+            {
+                question: "Who coined the terms Micro and Macro Economics?",
+                options: [
+                    "Adam Smith",
+                    "Alfred Marshall", 
+                    "Ragnar Frisch",
+                    "Joan Robinson"
+                ],
+                correct: 2,
+                category: "general"
+            },
+            {
+                question: "Micro Economics is also known as:",
+                options: [
+                    "Income Theory",
+                    "Price Theory",
+                    "Employment Theory",
+                    "Money Theory"
+                ],
+                correct: 1,
+                category: "micro"
+            },
+            {
+                question: "The main tool used in Micro Economics is:",
+                options: [
+                    "Lumping Method",
+                    "Aggregation",
+                    "Slicing Method",
+                    "Equilibrium Method"
+                ],
+                correct: 2,
+                category: "micro"
+            },
+            {
+                question: "Which book was written by Lord Keynes?",
+                options: [
+                    "Principles of Economics",
+                    "The Wealth of Nations",
+                    "General Theory of Employment, Interest and Money",
+                    "Das Kapital"
+                ],
+                correct: 2,
+                category: "macro"
+            },
+            {
+                question: "Which of the following is NOT studied under Micro Economics?",
+                options: [
+                    "Consumer Demand",
+                    "National Income",
+                    "Product Pricing",
+                    "Factor Pricing"
+                ],
+                correct: 1,
+                category: "micro"
+            },
+            {
+                question: "Which of the following economists is known for contributions to Macro Economics?",
+                options: [
+                    "Alfred Marshall",
+                    "Prof. Pigou",
+                    "Adam Smith",
+                    "Lord J. M. Keynes"
+                ],
+                correct: 3,
+                category: "macro"
+            },
+            {
+                question: "Which feature is common to Macro Economics?",
+                options: [
+                    "Partial Equilibrium",
+                    "Study of Aggregates",
+                    "Individual Analysis",
+                    "Price Theory"
+                ],
+                correct: 1,
+                category: "macro"
+            },
+            {
+                question: "What is the meaning of 'Ceteris Paribus'?",
+                options: [
+                    "Nothing is constant",
+                    "Cost is stable",
+                    "Other things remaining constant",
+                    "Prices are flexible"
+                ],
+                correct: 2,
+                category: "general"
+            },
+            {
+                question: "Which theory falls under Macro Economics?",
+                options: [
+                    "Theory of Product Pricing",
+                    "Theory of Rent",
+                    "Theory of Income & Employment",
+                    "Theory of Demand"
+                ],
+                correct: 2,
+                category: "macro"
+            },
+            {
+                question: "Which of the following is considered a macro variable?",
+                options: [
+                    "Firm's Output",
+                    "Household Income",
+                    "Inflation",
+                    "Cost of Production"
+                ],
+                correct: 2,
+                category: "macro"
+            }
+        ];
+
+        // Quiz state variables
+        let currentQuestion = 0;
+        let userAnswers = [];
+        let quizStarted = false;
+        let quizCompleted = false;
+        let currentPlayerName = '';
+
+        // DOM elements
+        const startScreen = document.getElementById('startScreen');
+        const quizContainer = document.getElementById('quizContainer');
+        const resultsScreen = document.getElementById('resultsScreen');
+        const leaderboardScreen = document.getElementById('leaderboardScreen');
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        const questionNumber = document.getElementById('questionNumber');
+        const categoryBadge = document.getElementById('categoryBadge');
+        const questionText = document.getElementById('questionText');
+        const optionsContainer = document.getElementById('optionsContainer');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const playerNameInput = document.getElementById('playerName');
+
+        // Leaderboard functions
+        function saveScore(name, score, percentage, grade, correctAnswers, totalQuestions) {
+            const scores = getLeaderboardData();
+            const newScore = {
+                name: name || 'Anonymous',
+                score: correctAnswers,
+                totalQuestions: totalQuestions,
+                percentage: percentage,
+                grade: grade,
+                date: new Date().toLocaleDateString(),
+                timestamp: Date.now()
+            };
+            
+            scores.push(newScore);
+            
+            // Sort by score (descending), then by percentage, then by timestamp (most recent first)
+            scores.sort((a, b) => {
+                if (b.score !== a.score) return b.score - a.score;
+                if (b.percentage !== a.percentage) return b.percentage - a.percentage;
+                return b.timestamp - a.timestamp;
+            });
+            
+            // Keep only top 10 scores
+            const topScores = scores.slice(0, 10);
+            
+            localStorage.setItem('economicsQuizLeaderboard', JSON.stringify(topScores));
+            return topScores;
+        }
+
+        function getLeaderboardData() {
+            const stored = localStorage.getItem('economicsQuizLeaderboard');
+            return stored ? JSON.parse(stored) : [];
+        }
+
+        function displayLeaderboard() {
+            const scores = getLeaderboardData();
+            const container = document.getElementById('leaderboardContainer');
+            
+            if (scores.length === 0) {
+                container.innerHTML = `
+                    <div class="no-scores-message">
+                        <p>No scores yet! Be the first to take the quiz and set a record!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = scores.map((score, index) => {
+                const rankClass = index === 0 ? 'gold' : index === 1 ? 'silver' : index === 2 ? 'bronze' : '';
+                const isPersonalBest = score.name === currentPlayerName;
+                
+                return `
+                    <div class="leaderboard-entry ${isPersonalBest ? 'personal-best' : ''}">
+                        <div class="leaderboard-rank ${rankClass}">
+                            ${index + 1}
+                        </div>
+                        <div class="leaderboard-info">
+                            <div class="leaderboard-name">${score.name}</div>
+                            <div class="leaderboard-details">
+                                ${score.score}/${score.totalQuestions} correct • ${score.percentage}% • Grade: ${score.grade} • ${score.date}
+                            </div>
+                        </div>
+                        <div class="leaderboard-score">
+                            ${score.percentage}%
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function showLeaderboard() {
+            startScreen.classList.add('hidden');
+            resultsScreen.classList.add('hidden');
+            leaderboardScreen.classList.remove('hidden');
+            displayLeaderboard();
+        }
+
+        function hideLeaderboard() {
+            leaderboardScreen.classList.add('hidden');
+            startScreen.classList.remove('hidden');
+        }
+
+        function clearLeaderboard() {
+            if (confirm('Are you sure you want to clear all leaderboard data? This action cannot be undone.')) {
+                localStorage.removeItem('economicsQuizLeaderboard');
+                displayLeaderboard();
+            }
+        }
+
+        // Start the quiz
+        function startQuiz() {
+            const name = playerNameInput.value.trim();
+            if (!name) {
+                alert('Please enter your name before starting the quiz!');
+                playerNameInput.focus();
+                return;
+            }
+            
+            currentPlayerName = name;
+            quizStarted = true;
+            startScreen.classList.add('hidden');
+            quizContainer.classList.remove('hidden');
+            userAnswers = new Array(quizData.length).fill(null);
+            displayQuestion();
+        }
+
+        // Display current question
+        function displayQuestion() {
+            const question = quizData[currentQuestion];
+            
+            questionNumber.textContent = `Question ${currentQuestion + 1} of ${quizData.length}`;
+            categoryBadge.textContent = question.category.charAt(0).toUpperCase() + question.category.slice(1);
+            categoryBadge.className = `category-badge category-${question.category}`;
+            questionText.textContent = question.question;
+            
+            // Update progress
+            const progress = ((currentQuestion + 1) / quizData.length) * 100;
+            progressBar.style.width = `${progress}%`;
+            progressText.textContent = `${currentQuestion + 1} / ${quizData.length}`;
+            
+            // Display options
+            optionsContainer.innerHTML = '';
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option';
+                optionElement.innerHTML = `
+                    <div class="option-letter">${String.fromCharCode(65 + index)}</div>
+                    <div>${option}</div>
+                `;
+                
+                // Check if this option was previously selected
+                if (userAnswers[currentQuestion] === index) {
+                    optionElement.classList.add('selected');
+                }
+                
+                optionElement.onclick = () => selectOption(index);
+                optionsContainer.appendChild(optionElement);
+            });
+            
+            // Update navigation buttons
+            prevBtn.disabled = currentQuestion === 0;
+            nextBtn.disabled = userAnswers[currentQuestion] === null;
+            nextBtn.textContent = currentQuestion === quizData.length - 1 ? 'Finish Quiz' : 'Next';
+        }
+
+        // Select an option
+        function selectOption(selectedIndex) {
+            userAnswers[currentQuestion] = selectedIndex;
+            
+            // Update visual feedback
+            const options = optionsContainer.querySelectorAll('.option');
+            options.forEach((option, index) => {
+                option.classList.remove('selected');
+                if (index === selectedIndex) {
+                    option.classList.add('selected');
+                }
+            });
+            
+            // Enable next button
+            nextBtn.disabled = false;
+        }
+
+        // Go to previous question
+        function previousQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                displayQuestion();
+            }
+        }
+
+        // Go to next question or finish quiz
+        function nextQuestion() {
+            if (currentQuestion < quizData.length - 1) {
+                currentQuestion++;
+                displayQuestion();
+            } else {
+                finishQuiz();
+            }
+        }
+
+        // Finish the quiz and show results
+        function finishQuiz() {
+            quizCompleted = true;
+            quizContainer.classList.add('hidden');
+            resultsScreen.classList.remove('hidden');
+            calculateAndDisplayResults();
+        }
+
+        // Calculate score and display results
+        function calculateAndDisplayResults() {
+            let correctAnswers = 0;
+            let incorrectAnswers = 0;
+
+            // Calculate correct answers
+            for (let i = 0; i < quizData.length; i++) {
+                if (userAnswers[i] === quizData[i].correct) {
+                    correctAnswers++;
+                } else {
+                    incorrectAnswers++;
+                }
+            }
+
+            const percentage = Math.round((correctAnswers / quizData.length) * 100);
+            
+            // Determine grade
+            let grade;
+            if (percentage >= 90) grade = 'A+';
+            else if (percentage >= 80) grade = 'A';
+            else if (percentage >= 70) grade = 'B';
+            else if (percentage >= 60) grade = 'C';
+            else if (percentage >= 50) grade = 'D';
+            else grade = 'F';
+
+            // Display results
+            document.getElementById('finalScore').textContent = `${correctAnswers}/${quizData.length}`;
+            document.getElementById('correctCount').textContent = correctAnswers;
+            document.getElementById('incorrectCount').textContent = incorrectAnswers;
+            document.getElementById('percentageScore').textContent = `${percentage}%`;
+            document.getElementById('gradeDisplay').textContent = grade;
+
+            // Performance message
+            let message;
+            if (percentage >= 90) {
+                message = "Outstanding! You have excellent knowledge of economics concepts!";
+            } else if (percentage >= 80) {
+                message = "Great job! You have a strong understanding of economics!";
+            } else if (percentage >= 70) {
+                message = "Good work! You have a solid grasp of the material!";
+            } else if (percentage >= 60) {
+                message = "Fair performance. Consider reviewing the material for better understanding.";
+            } else if (percentage >= 50) {
+                message = "You passed, but there's room for improvement. Keep studying!";
+            } else {
+                message = "Keep practicing! Review the material and try again to improve your score.";
+            }
+            
+            document.getElementById('performanceMessage').textContent = message;
+
+            // Save score to leaderboard
+            saveScore(currentPlayerName, correctAnswers, percentage, grade, correctAnswers, quizData.length);
+
+            // Update progress bar to 100%
+            progressBar.style.width = '100%';
+            progressText.textContent = 'Quiz Complete!';
+        }
+
+        // Restart the quiz
+        function restartQuiz() {
+            currentQuestion = 0;
+            userAnswers = [];
+            quizStarted = false;
+            quizCompleted = false;
+            
+            resultsScreen.classList.add('hidden');
+            leaderboardScreen.classList.add('hidden');
+            startScreen.classList.remove('hidden');
+            
+            // Reset progress bar
+            progressBar.style.width = '0%';
+            progressText.textContent = `0 / ${quizData.length}`;
+            
+            // Clear the name input for new player
+            playerNameInput.value = '';
+            currentPlayerName = '';
+        }
+
+        // Initialize the quiz when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Quiz is ready to start
+            console.log('Economics Quiz loaded with', quizData.length, 'questions');
+            
+            // Allow Enter key to start quiz
+            playerNameInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    startQuiz();
+                }
+            });
+            
+            // Focus on name input
+            playerNameInput.focus();
+        });
+    </script>
+</body>
+</html>
