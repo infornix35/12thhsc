@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Economics Lessons</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0c1220, #1a2439);
+            min-height: 100vh;
+            padding: 20px;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 0 15px;
+            max-width: 800px;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+            line-height: 1.2;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: #cbd5e1;
+            line-height: 1.6;
+        }
+
+        .lessons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto 40px;
+        }
+
+        .lesson-card {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.85), rgba(30, 41, 59, 0.95));
+            border-radius: 18px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 0 12px rgba(59, 130, 246, 0.2);
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(59, 130, 246, 0.25);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 220px;
+            backdrop-filter: blur(5px);
+            cursor: pointer;
+        }
+
+        .lesson-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #1e3a8a 0%, #3b82f6 100%);
+            transition: all 0.3s ease;
+        }
+
+        .lesson-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 18px 35px rgba(0, 0, 0, 0.6), 0 0 25px rgba(59, 130, 246, 0.35);
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 1));
+        }
+
+        .lesson-card:hover::before {
+            height: 100%;
+            opacity: 0.1;
+        }
+
+        .lesson-number {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: white;
+            box-shadow: 0 4px 10px rgba(59, 130, 246, 0.45);
+        }
+
+        .lesson-card h3 {
+            font-size: 1.5rem;
+            color: #e2e8f0;
+            font-weight: 600;
+            margin-bottom: 15px;
+            max-width: 90%;
+            position: relative;
+            z-index: 1;
+        }
+
+        .lesson-card p {
+            font-size: 1rem;
+            color: #cbd5e1;
+            line-height: 1.5;
+            max-width: 90%;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            padding: 20px;
+            color: #94a3b8;
+            font-size: 0.95rem;
+            border-top: 1px solid rgba(59, 130, 246, 0.15);
+            width: 100%;
+            max-width: 500px;
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Progress bar */
+        .progress-container {
+            width: 100%;
+            height: 6px;
+            background: rgba(59, 130, 246, 0.2);
+            border-radius: 3px;
+            margin-top: 20px;
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #1e3a8a 0%, #3b82f6 100%);
+            width: 0;
+            transition: width 0.5s ease;
+            border-radius: 3px;
+        }
+
+        .lesson-card:hover .progress-bar {
+            width: 70%;
+        }
+
+        /* Status indicator */
+        .status {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(59, 130, 246, 0.3);
+            color: #60a5fa;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            z-index: 1;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .header p {
+                font-size: 1.05rem;
+            }
+            
+            .lessons-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                max-width: 600px;
+            }
+            
+            .lesson-card {
+                padding: 25px;
+                min-height: 180px;
+            }
+            
+            .lesson-card h3 {
+                font-size: 1.4rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 15px 10px;
+            }
+            
+            .header h1 {
+                font-size: 1.9rem;
+            }
+            
+            .lesson-card {
+                padding: 20px 15px;
+            }
+            
+            .lesson-card h3 {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <div class="header">
+            <h1>Economics Lessons</h1>
+            <p>Explore key economic concepts through our comprehensive lesson modules</p>
+        </div>
+
+        <!-- Lessons Grid with Links -->
+        <div class="lessons-grid">
+            <!-- Lesson 1 -->
+            <a href="1ecoquiz1.html" class="lesson-card">
+                <div class="lesson-number">1</div>
+                <div class="status">Quiz Available</div>
+                <h3>Introduction to Micro and Macro Economics</h3>
+                <p>Fundamental concepts of economic analysis at individual and national levels</p>
+                <div class="progress-container">
+                    <div class="progress-bar"></div>
+                </div>
+            </a>
+
+            <!-- Lesson 2 -->
+            <a href="2ecoquiz1.html" class="lesson-card">
+                <div class="lesson-number">2</div>
+                <div class="status">Quiz Available</div>
+                <h3>Utility Analysis</h3>
+                <p>Understanding consumer satisfaction and decision-making processes</p>
+                <div class="progress-container">
+                    <div class="progress-bar"></div>
+                </div>
+            </a>
+
+            <!-- Lesson 3A -->
+            <a href="3aecoquiz1.html" class="lesson-card">
+                <div class="lesson-number">3A</div>
+                <div class="status">Quiz Available</div>
+                <h3>Demand Analysis (Part A)</h3>
+                <p>Factors influencing consumer demand and market behavior</p>
+                <div class="progress-container">
+                    <div class="progress-bar"></div>
+                </div>
+            </a>
+
+            <!-- Lesson 3B -->
+            <a href="3becoquiz1.html" class="lesson-card">
+                <div class="lesson-number">3B</div>
+                <div class="status">Quiz Available</div>
+                <h3>Elasticity of Demand (Part B)</h3>
+                <p>Responsiveness of demand to price and income changes</p>
+                <div class="progress-container">
+                    <div class="progress-bar"></div>
+                </div>
+            </a>
+
+            <!-- Lesson 4 -->
+            <a href="4ecoquiz1.html" class="lesson-card">
+                <div class="lesson-number">4</div>
+                <div class="status">Quiz Available</div>
+                <h3>Supply Analysis</h3>
+                <p>Production decisions and factors affecting market supply</p>
+                <div class="progress-container">
+                    <div class="progress-bar"></div>
+                </div>
+            </a>
+
+            <!-- Lesson 5 -->
+            <a href="5ecoquiz1.html" class="lesson-card">
+                <div class="lesson-number">5</div>
+                <div class="status">Quiz Available</div>
+                <h3>Forms of Market</h3>
+                <p>Comparative analysis of market structures and competition</p>
+                <div class="progress-container">
+                    <div class="progress-bar"></div>
+                </div>
+            </a>
+
+            <!-- Lesson 6 -->
+            <a href="6ecoquiz1.html" class="lesson-card">
+                <div class="lesson-number">6</div>
+                <div class="status">Quiz Available</div>
+                <h3>Index Numbers</h3>
+                <p>Statistical measures for tracking economic changes over time</p>
+                <div class="progress-container">
+                    <div class="progress-bar"></div>
+                </div>
+            </a>
+
+            <!-- Lesson 7 -->
+            <a href="7ecoquiz1.html" class="lesson-card">
+                <div class="lesson-number">7</div>
+                <div class="status">Quiz Available</div>
+                <h3>National Income</h3>
+                <p>Measurement of a nation's economic performance and output</p>
+                <div class="progress-container">
+                    <div class="progress-bar"></div>
+                </div>
+            </a>
+
+            <!-- Lesson 8 -->
+            <a href="8ecoquiz1.html" class="lesson-card">
+                <div class="lesson-number">8</div>
+                <div class="status">Quiz Available</div>
+                <h3>Public Finance in India</h3>
+                <p>Government revenue, expenditure and fiscal policies</p>
+                <div class="progress-container">
+                    <div class="progress-bar"></div>
+                </div>
+            </a>
+
+            <!-- Lesson 9 -->
+            <a href="9ecoquiz1.html" class="lesson-card">
+                <div class="lesson-number">9</div>
+                <div class="status">Quiz Available</div>
+                <h3>Money Market and Capital Market in India</h3>
+                <p>Financial systems and instruments driving economic growth</p>
+                <div class="progress-container">
+                    <div class="progress-bar"></div>
+                </div>
+            </a>
+
+            <!-- Lesson 10 -->
+            <a href="economics.html" class="lesson-card">
+                <div class="lesson-number">10</div>
+                <div class="status">Flashcards</div>
+                <h3>Foreign Trade of India</h3>
+                <p>International trade patterns, policies and economic impact</p>
+                <div class="progress-container">
+                    <div class="progress-bar"></div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Simple Footer -->
+        <div class="footer">
+            <p>© 2023 Economics Learning Hub | Comprehensive curriculum coverage</p>
+        </div>
+    </div>
+
+    <script>
+        // Enhanced animation for lesson cards
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.lesson-card');
+            
+            // Add stagger animation on load
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, 100 * index);
+            });
+        });
+    </script>
+</body>
+</html>
