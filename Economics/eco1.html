@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Economics Quiz - Micro & Macro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #000000;
+            min-height: 100vh;
+            padding: 20px;
+            color: white;
+            display: flex; /* Added for overall layout control */
+            flex-direction: column; /* Added for overall layout control */
+            align-items: center; /* Center content horizontally */
+        }
+
+        /* NEW: Top Navigation Buttons */
+        .top-nav-buttons {
+            width: 100%;
+            max-width: 800px; /* Align with container max-width */
+            display: flex;
+            justify-content: flex-start; /* Align to start for left placement */
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 0 10px; /* Add some padding on smaller screens */
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%; /* Ensure it takes full width within max-width */
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: #3b82f6;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            text-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .progress-container {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 25px;
+            padding: 5px;
+            margin: 20px 0;
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, #1e3a8a 0%, #3b82f6 100%);
+            height: 20px;
+            border-radius: 20px;
+            transition: width 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+        }
+
+        .quiz-container {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8), 0 0 20px rgba(59, 130, 246, 0.1);
+            padding: 40px;
+            margin-bottom: 20px;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .question-number {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 14px;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+        }
+
+        .category-badge {
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: auto;
+        }
+
+        .category-mcq {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            box-shadow: 0 0 8px rgba(59, 130, 246, 0.4);
+        }
+        .category-odd {
+            background: linear-gradient(135deg, #1e3a8a 0%, #60a5fa 100%);
+            color: white;
+            box-shadow: 0 0 8px rgba(96, 165, 250, 0.4);
+        }
+        .category-identify {
+            background: linear-gradient(135deg, #312e81 0%, #6366f1 100%);
+            color: white;
+            box-shadow: 0 0 8px rgba(99, 102, 241, 0.4);
+        }
+        .category-match {
+            background: linear-gradient(135deg, #7c2d12 0%, #ea580c 100%);
+            color: white;
+            box-shadow: 0 0 8px rgba(234, 88, 12, 0.4);
+        }
+
+        .question {
+            font-size: 20px;
+            font-weight: 600;
+            color: #e2e8f0;
+            margin-bottom: 30px;
+            line-height: 1.4;
+        }
+
+        .options {
+            display: grid;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .option {
+            background: rgba(30, 58, 138, 0.1);
+            border: 2px solid rgba(59, 130, 246, 0.3);
+            border-radius: 12px;
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            color: #e2e8f0;
+        }
+
+        .option:hover {
+            background: rgba(59, 130, 246, 0.2);
+            border-color: rgba(59, 130, 246, 0.6);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.2);
+        }
+
+        .option.selected {
+            background: rgba(59, 130, 246, 0.3);
+            border-color: #3b82f6;
+            color: #ffffff;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+        }
+
+        .option-letter {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+            font-size: 14px;
+        }
+
+        .selected .option-letter {
+            background: linear-gradient(135deg, #2563eb 0%, #60a5fa 100%);
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+        }
+
+        .quiz-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+            text-decoration: none; /* For anchor tags */
+            display: inline-flex; /* For anchor tags to allow padding */
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn:disabled {
+            background: rgba(71, 85, 105, 0.5);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #374151 0%, #6b7280 100%);
+            box-shadow: 0 4px 15px rgba(107, 114, 128, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #4b5563 0%, #9ca3af 100%);
+            box-shadow: 0 6px 20px rgba(107, 114, 128, 0.4);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-danger:hover {
+            background: linear-gradient(135deg, #b91c1c 0%, #dc2626 100%);
+            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+        }
+
+        .start-screen {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .start-screen h2 {
+            color: #3b82f6;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+        }
+
+        .start-screen p {
+            color: #cbd5e1;
+            font-size: 18px;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .player-name-section {
+            margin: 20px 0;
+        }
+
+        .player-name-section input {
+            padding: 12px;
+            border-radius: 8px;
+            border: 2px solid rgba(59, 130, 246, 0.3);
+            background: rgba(30, 58, 138, 0.1);
+            color: white;
+            font-size: 16px;
+            margin-bottom: 20px;
+            width: 250px;
+            text-align: center;
+            outline: none;
+        }
+
+        .player-name-section input:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .start-buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .results-screen {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .results-screen h2 {
+            color: #3b82f6;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+        }
+
+        .score-display {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            margin: 30px 0;
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.3);
+        }
+
+        .score-display h3 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+        }
+
+        .score-breakdown {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .score-item {
+            background: rgba(30, 58, 138, 0.2);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .score-item h4 {
+            color: #3b82f6;
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+            text-shadow: 0 0 5px rgba(59, 130, 246, 0.3);
+        }
+
+        .score-item p {
+            color: #cbd5e1;
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .result-buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .detailed-results {
+            margin-top: 30px;
+            text-align: left;
+        }
+
+        .detailed-results h3 {
+            color: #3b82f6;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .answer-review {
+            background: rgba(30, 58, 138, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .answer-review.correct {
+            border-color: #22c55e;
+            background: rgba(34, 197, 94, 0.1);
+        }
+
+        .answer-review.incorrect {
+            border-color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .review-question {
+            font-weight: 600;
+            color: #e2e8f0;
+            margin-bottom: 10px;
+        }
+
+        .review-answer {
+            color: #cbd5e1;
+            margin-bottom: 10px;
+        }
+
+        .review-explanation {
+            background: rgba(59, 130, 246, 0.1);
+            border-left: 4px solid #3b82f6;
+            padding: 12px;
+            margin-top: 10px;
+            font-size: 14px;
+            color: #93c5fd;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .status-correct {
+            color: #22c55e;
+            font-weight: bold;
+        }
+
+        .status-incorrect {
+            color: #ef4444;
+            font-weight: bold;
+        }
+
+        .leaderboard-screen {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .leaderboard-screen h2 {
+            color: #3b82f6;
+            font-size: 2rem;
+            margin-bottom: 30px;
+            text-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+        }
+
+        .leaderboard-entry {
+            background: rgba(30, 58, 138, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .leaderboard-entry:hover {
+            background: rgba(59, 130, 246, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.2);
+        }
+
+        .leaderboard-entry.current-user {
+            background: rgba(34, 197, 94, 0.2);
+            border-color: #22c55e;
+        }
+
+        .leaderboard-rank {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .leaderboard-rank.gold {
+            background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+        }
+
+        .leaderboard-rank.silver {
+            background: linear-gradient(135deg, #6b7280 0%, #9ca3af 100%);
+        }
+
+        .leaderboard-rank.bronze {
+            background: linear-gradient(135deg, #92400e 0%, #d97706 100%);
+        }
+
+        .leaderboard-info {
+            flex-grow: 1;
+            margin-left: 20px;
+            text-align: left;
+        }
+
+        .leaderboard-name {
+            color: #e2e8f0;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .leaderboard-details {
+            color: #cbd5e1;
+            font-size: 14px;
+        }
+
+        .leaderboard-score {
+            color: #3b82f6;
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+        }
+
+        .no-scores-message {
+            color: #cbd5e1;
+            font-size: 18px;
+            text-align: center;
+            padding: 40px;
+            background: rgba(30, 58, 138, 0.05);
+            border-radius: 12px;
+            border: 1px dashed rgba(59, 130, 246, 0.3);
+        }
+
+        .leaderboard-buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        /* Styles for the match-the-pairs table */
+        .match-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            color: #e2e8f0;
+        }
+
+        .match-table th, .match-table td {
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            padding: 10px 15px;
+            text-align: left;
+        }
+
+        .match-table th {
+            background: rgba(30, 58, 138, 0.5);
+            font-weight: bold;
+            color: #93c5fd;
+        }
+
+        .match-table tr:nth-child(even) {
+            background: rgba(30, 58, 138, 0.1);
+        }
+
+        .match-table tr:hover {
+            background: rgba(59, 130, 246, 0.15);
+        }
+
+
+        @media (max-width: 768px) {
+            .top-nav-buttons {
+                justify-content: center; /* Center buttons on smaller screens */
+                flex-wrap: wrap;
+            }
+            .container {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .quiz-container {
+                padding: 25px;
+            }
+            
+            .question {
+                font-size: 18px;
+            }
+            
+            .option {
+                padding: 12px 15px;
+                font-size: 14px;
+            }
+            
+            .quiz-controls {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .start-buttons, .result-buttons, .leaderboard-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 200px;
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="top-nav-buttons">
+        <a href="../../index.html" class="btn btn-secondary">Back to Home</a>
+        <a href="../Economics/economics.html" class="btn btn-secondary">Back to Lessons</a>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>Economics Quiz</h1>
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar" style="width: 0%">
+                    <span id="progressText">0 / 10</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz-container page active" id="startScreen">
+            <div class="start-screen">
+                <h2>Economics Comprehensive Test</h2>
+                <p>Microeconomics & Macroeconomics concepts and applications.</p>
+                
+                <div class="player-name-section">
+                    <label for="playerName" style="color: #3b82f6; font-weight: bold; margin-bottom: 10px; display: block;">Enter Your Name:</label>
+                    <input type="text" id="playerName" placeholder="Your name here..." maxlength="20">
+                </div>
+                
+                <div class="start-buttons">
+                    <button class="btn" onclick="startQuiz()">Start Quiz</button>
+                    <button class="btn btn-secondary" onclick="showLeaderboard()">View Leaderboard</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz-container page" id="quizContainer">
+            <div class="question-header">
+                <div class="question-number" id="questionNumber">Question 1 of 10</div>
+                <div class="category-badge" id="categoryBadge">MCQ</div>
+            </div>
+            
+            <div class="question" id="questionText">
+                Loading question...
+            </div>
+            
+            <div class="options" id="optionsContainer">
+            </div>
+            
+            <div class="quiz-controls">
+                <button class="btn btn-secondary" id="prevBtn" onclick="previousQuestion()" disabled>Previous</button>
+                <button class="btn" id="nextBtn" onclick="nextQuestion()" disabled>Next</button>
+            </div>
+        </div>
+
+        <div class="quiz-container page" id="resultsScreen">
+            <div class="results-screen">
+                <h2>Quiz Complete!</h2>
+                <div class="score-display">
+                    <h3 id="finalScore">0/10</h3>
+                    <p>Your Performance</p>
+                </div>
+                
+                <div class="score-breakdown">
+                    <div class="score-item">
+                        <h4 id="correctCount">0</h4>
+                        <p>Correct Answers</p>
+                    </div>
+                    <div class="score-item">
+                        <h4 id="incorrectCount">0</h4>
+                        <p>Incorrect Answers</p>
+                    </div>
+                    <div class="score-item">
+                        <h4 id="percentageScore">0%</h4>
+                        <p>Percentage</p>
+                    </div>
+                    <div class="score-item">
+                        <h4 id="gradeDisplay">F</h4>
+                        <p>Grade</p>
+                    </div>
+                </div>
+                
+                <p id="performanceMessage">Good job on completing the quiz!</p>
+                <div class="result-buttons">
+                    <button class="btn" onclick="showDetailedResults()">View Detailed Results</button>
+                    <button class="btn btn-secondary" onclick="restartQuiz()">Take Quiz Again</button>
+                    <button class="btn btn-secondary" onclick="showLeaderboard()">View Leaderboard</button>
+                    </div>
+
+                <div class="detailed-results hidden" id="detailedResults">
+                    <h3>📊 Detailed Answer Review</h3>
+                    <div id="answerReviewContainer">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz-container page" id="leaderboardScreen">
+            <div class="leaderboard-screen">
+                <h2>🏆 Leaderboard 🏆</h2>
+                <div class="leaderboard-container" id="leaderboardContainer">
+                </div>
+                <div class="leaderboard-buttons">
+                    <button class="btn btn-secondary" onclick="hideLeaderboard()">Back to Quiz</button>
+                    <button class="btn btn-danger" onclick="clearLeaderboard()">Clear Leaderboard</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Quiz data with 10 selected questions from all categories
+        const quizData = [
+            // MCQ Questions (25)
+            {
+                question: "Who coined the terms 'microeconomics' and 'macroeconomics'?",
+                options: ["Adam Smith", "Alfred Marshall", "John Maynard Keynes", "Ragnar Frisch"],
+                correct: 3,
+                category: "mcq",
+                explanation: "Ragnar Frisch, a Norwegian economist, coined these terms to distinguish between the study of individual economic units and the economy as a whole."
+            },
+            {
+                question: "The Greek root 'Mikros' (micro) means:",
+                options: ["Large", "Small", "Aggregate", "Equilibrium"],
+                correct: 1,
+                category: "mcq",
+                explanation: "The term 'micro' is derived from the Greek word 'mikros', meaning 'small'."
+            },
+            {
+                question: "Which economist popularized microeconomics through 'Principles of Economics'?",
+                options: ["J.R. Hicks", "Alfred Marshall", "David Ricardo", "J.S. Mill"],
+                correct: 1,
+                category: "mcq",
+                explanation: "Alfred Marshall's 'Principles of Economics' (1890) laid the foundation for modern microeconomic theory."
+            },
+            {
+                question: "Macroeconomics gained prominence after:",
+                options: ["The Mercantilist era", "The Great Depression", "The Industrial Revolution", "The Physiocrats’ movement"],
+                correct: 1,
+                category: "mcq",
+                explanation: "The Great Depression of 1929-1930s highlighted the need for macroeconomic analysis and policy, leading to its prominence."
+            },
+            {
+                question: "The scope of microeconomics includes:",
+                options: ["National income", "General price level", "Theory of factor pricing", "Business cycles"],
+                correct: 2,
+                category: "mcq",
+                explanation: "Microeconomics deals with specific aspects of the economy, such as theory of product pricing, theory of factor pricing, and theory of economic welfare."
+            },
+            {
+                question: "Macroeconomics is best described as:",
+                options: ["Study of individual firms", "Functioning of the economy as a whole", "Analysis of product pricing", "Microscopic study of the economy"],
+                correct: 1,
+                category: "mcq",
+                explanation: "Macroeconomics studies the economy as a whole, including aggregate variables like national income, employment, and inflation."
+            },
+            {
+                question: "The 'slicing method' refers to:",
+                options: ["Studying national aggregates", "Dividing the economy into individual units", "General equilibrium analysis", "Policy-oriented science"],
+                correct: 1,
+                category: "mcq",
+                explanation: "The 'slicing method' is a technique used in microeconomics to study individual parts of the economy by 'slicing' the whole into smaller units."
+            },
+            {
+                question: "Keynes’ major contribution to macroeconomics is:",
+                options: ["Theory of factor pricing", "General Theory of Employment, Interest and Money", "Principles of partial equilibrium", "Marginalism principle"],
+                correct: 1,
+                category: "mcq",
+                explanation: "John Maynard Keynes's 'General Theory of Employment, Interest and Money' (1936) is considered the foundational text of modern macroeconomics."
+            },
+            {
+                question: "Microeconomics is also called:",
+                options: ["Income theory", "Price theory", "Growth theory", "Employment theory"],
+                correct: 1,
+                category: "mcq",
+                explanation: "Microeconomics is also known as Price Theory because it primarily explains how prices are determined in various markets."
+            },
+            {
+                question: "A feature exclusive to macroeconomics is:",
+                options: ["Partial equilibrium", "Study of individual units", "General equilibrium analysis", "Marginalism principle"],
+                correct: 2,
+                category: "mcq",
+                explanation: "Macroeconomics utilizes general equilibrium analysis, which considers the simultaneous interaction of all markets in the economy, unlike microeconomics' partial equilibrium."
+            },
+            {
+                question: "The theory of economic welfare in microeconomics focuses on:",
+                options: ["National income fluctuations", "Efficiency in resource allocation", "Currency exchange rates", "Business cycle control"],
+                correct: 1,
+                category: "mcq",
+                explanation: "The theory of economic welfare in microeconomics deals with the efficiency in the allocation of resources and the maximization of social welfare."
+            },
+            {
+                question: "Which concept is central to microeconomic decision-making?",
+                options: ["National output", "Marginalism", "General price level", "Aggregate savings"],
+                correct: 1,
+                category: "mcq",
+                explanation: "Marginalism – analyzing decisions at the margin – is fundamental to microeconomic analysis, where decisions are based on incremental changes."
+            },
+            {
+                question: "Physiocrats contributed to early:",
+                options: ["Microeconomic analysis", "Macroeconomic analysis", "Factor pricing theory", "Market structure models"],
+                correct: 1,
+                category: "mcq",
+                explanation: "The Physiocrats, an 18th-century French school of economists, made early contributions to macroeconomic thought, particularly regarding national income."
+            },
+            {
+                question: "The 'lumping method' is associated with:",
+                options: ["Microeconomics", "Macroeconomics", "Welfare economics", "Partial equilibrium"],
+                correct: 1,
+                category: "mcq",
+                explanation: "The 'lumping method' (or aggregative method) is used in macroeconomics to study the economy as a whole by aggregating individual units."
+            },
+            {
+                question: "Which falls under macroeconomics?",
+                options: ["Theory of consumer demand", "Theory of business cycles", "Firm-level supply analysis", "Individual income determination"],
+                correct: 1,
+                category: "mcq",
+                explanation: "The Theory of Business Cycles, dealing with fluctuations in overall economic activity, is a key area of macroeconomics."
+            },
+            {
+                question: "Maurice Dobb defined microeconomics as:",
+                options: ["'Study of large aggregates'", "'Microscopic study of the economy'", "'Functioning of the whole economy'", "'Policy-oriented science'"],
+                correct: 1,
+                category: "mcq",
+                explanation: "Maurice Dobb defined microeconomics as the 'microscopic study of the economy', focusing on individual units."
+            },
+            {
+                question: "Microeconomics assumes:",
+                options: ["Dynamic economic variables", "'Ceteris Paribus' (other things constant)", "Government intervention", "Full employment as variable"],
+                correct: 1,
+                category: "mcq",
+                explanation: "Microeconomics typically uses the 'ceteris paribus' assumption, meaning 'all other things being equal', to isolate the effect of one variable."
+            },
+            {
+                question: "Macro theory of distribution studies:",
+                options: ["Individual wages", "Relative shares in national income", "Firm-level profits", "Consumer satisfaction maximization"],
+                correct: 1,
+                category: "mcq",
+                explanation: "Macro theory of distribution examines how the total national income is distributed among different factors of production (e.g., total wages, total rent)."
+            },
+            {
+                question: "A limitation of microeconomics is:",
+                options: ["Ignoring individual behavior", "Not studying national unemployment", "Overemphasizing inflation", "Neglecting resource allocation"],
+                correct: 1,
+                category: "mcq",
+                explanation: "Microeconomics focuses on individual units and thus cannot address aggregate problems like national unemployment or inflation directly."
+            },
+            {
+                question: "Macroeconomics helps governments address:",
+                options: ["Individual pricing strategies", "Economic growth and employment", "Firm-level production efficiency", "Consumer demand patterns"],
+                correct: 1,
+                category: "mcq",
+                explanation: "Macroeconomics provides insights and tools for governments to formulate policies related to overall economic growth, employment, and stability."
+            },
+            {
+                question: "The 16th-17th century Mercantilists advocated:",
+                options: ["Microeconomic policies", "Macroeconomic policies", "Factor pricing models", "Partial equilibrium analysis"],
+                correct: 1,
+                category: "mcq",
+                explanation: "Mercantilists focused on accumulating national wealth through trade surpluses, a concept related to overall national economic policy (macroeconomics)."
+            },
+            {
+                question: "Efficiency in consumption (microeconomics) aims to:",
+                options: ["Maximize production output", "Maximize societal satisfaction", "Increase national income", "Control inflation"],
+                correct: 1,
+                category: "mcq",
+                explanation: "Efficiency in consumption refers to the distribution of goods and services among consumers in a way that maximizes overall societal satisfaction, a microeconomic welfare concept."
+            },
+            {
+                question: "Which economist contributed to macroeconomics development besides Keynes?",
+                options: ["Joan Robinson", "Irving Fisher", "Alfred Marshall", "A.P. Lerner"],
+                correct: 1,
+                category: "mcq",
+                explanation: "Irving Fisher made significant contributions to economic theory, particularly on interest rates and monetary theory, which are macroeconomic topics."
+            },
+            {
+                question: "Classical economists like Adam Smith:",
+                options: ["Exclusively used micro analysis", "Combined macro and micro analysis", "Focused only on national income", "Rejected aggregate studies"],
+                correct: 1,
+                category: "mcq",
+                explanation: "Classical economists often combined elements of both micro and macro analysis in their broader economic theories."
+            },
+            {
+                question: "Macroeconomics is policy-oriented because it:",
+                options: ["Studies individual firms", "Suggests solutions for inflation/unemployment", "Analyzes market structures", "Focuses on consumer behavior"],
+                correct: 1,
+                category: "mcq",
+                explanation: "Macroeconomics is policy-oriented as it provides frameworks and tools for governments to address economy-wide issues like inflation, unemployment, and recessions."
+            },
+
+            // Odd One Out (10)
+            {
+                question: "Choose the odd one: Theory of product pricing, Theory of factor pricing, Theory of economic welfare, Theory of general price level",
+                options: ["Theory of product pricing", "Theory of factor pricing", "Theory of economic welfare", "Theory of general price level"],
+                correct: 3,
+                category: "odd",
+                explanation: "Theory of general price level is macroeconomic, while others are microeconomic concepts."
+            },
+            {
+                question: "Choose the odd one: Rent, Wages, National income, Interest",
+                options: ["Rent", "Wages", "National income", "Interest"],
+                correct: 2,
+                category: "odd",
+                explanation: "National income is an aggregate concept, while others are factor rewards for individual factors of production."
+            },
+            {
+                question: "Choose the odd one: Alfred Marshall, J.M. Keynes, David Ricardo, J.S. Mill",
+                options: ["Alfred Marshall", "J.M. Keynes", "David Ricardo", "J.S. Mill"],
+                correct: 1,
+                category: "odd",
+                explanation: "J.M. Keynes pioneered modern macroeconomics, while Alfred Marshall, David Ricardo, and J.S. Mill were primarily associated with classical and neoclassical microeconomic thought."
+            },
+            {
+                question: "Choose the odd one: Partial equilibrium, Slicing method, Marginalism, Lumping method",
+                options: ["Partial equilibrium", "Slicing method", "Marginalism", "Lumping method"],
+                correct: 3,
+                category: "odd",
+                explanation: "Lumping method is a macroeconomic approach, while partial equilibrium, slicing method, and marginalism are microeconomic tools/concepts."
+            },
+            {
+                question: "Choose the odd one: Perfect competition, Monopoly, Inflation, Oligopoly",
+                options: ["Perfect competition", "Monopoly", "Inflation", "Oligopoly"],
+                correct: 2,
+                category: "odd",
+                explanation: "Inflation is a macroeconomic phenomenon (general price level increase), while perfect competition, monopoly, and oligopoly are microeconomic market structures."
+            },
+            {
+                question: "Choose the odd one: Physiocrats, Mercantilists, Neoclassical economists, Keynesians",
+                options: ["Physiocrats", "Mercantilists", "Neoclassical economists", "Keynesians"],
+                correct: 2,
+                category: "odd",
+                explanation: "Neoclassical economists are most strongly associated with the development and popularization of microeconomics, while Physiocrats, Mercantilists, and Keynesians are more aligned with macroeconomic thought or early aggregate analysis."
+            },
+            {
+                question: "Choose the odd one: Efficiency in production, Efficiency in consumption, Overall economic efficiency, Income inequality",
+                options: ["Efficiency in production", "Efficiency in consumption", "Overall economic efficiency", "Income inequality"],
+                correct: 3,
+                category: "odd",
+                explanation: "Efficiency in production, consumption, and overall economic efficiency are core concepts of microeconomic welfare theory. Income inequality is a macroeconomic distribution issue."
+            },
+            {
+                question: "Choose the odd one: Individual consumer, Individual producer, National output, Price of a commodity",
+                options: ["Individual consumer", "Individual producer", "National output", "Price of a commodity"],
+                correct: 2,
+                category: "odd",
+                explanation: "National output is an aggregate, economy-wide measure, making it a macroeconomic concept. The others are microeconomic units or concepts."
+            },
+            {
+                question: "Choose the odd one: Theory of business cycles, Theory of investment function, Theory of consumption function, Theory of factor pricing",
+                options: ["Theory of business cycles", "Theory of investment function", "Theory of consumption function", "Theory of factor pricing"],
+                correct: 3,
+                category: "odd",
+                explanation: "Theory of factor pricing (determining wages, rent, interest, profit) is a microeconomic theory. The others are fundamental theories within macroeconomics dealing with aggregate economic activity."
+            },
+            {
+                question: "Choose the odd one: Free market economy, Foreign trade analysis, Business decisions, Economic growth models",
+                options: ["Free market economy", "Foreign trade analysis", "Business decisions", "Economic growth models"],
+                correct: 3,
+                category: "odd",
+                explanation: "Economic growth models are a core area of macroeconomics, focusing on long-term expansion of an economy. The others are either general economic systems or microeconomic applications."
+            },
+
+            // Identify the Term (10)
+            {
+                question: "Identify the term: 'Microscopic study of the economy.' (Maurice Dobb's definition)",
+                options: ["Macroeconomics", "Econometrics", "Microeconomics", "Welfare economics"],
+                correct: 2,
+                category: "identify",
+                explanation: "Maurice Dobb defined microeconomics as the 'microscopic study of the economy'."
+            },
+            {
+                question: "Identify the term: 'Deals with the functioning of the economy as a whole.' (Carl Shapiro's definition)",
+                options: ["Microeconomics", "Partial equilibrium", "Macroeconomics", "Factor pricing"],
+                correct: 2,
+                category: "identify",
+                explanation: "This definition accurately describes macroeconomics, which focuses on the aggregate economy."
+            },
+            {
+                question: "Identify the term: 'Equilibrium analysis of an individual economic unit.'",
+                options: ["General equilibrium", "Partial equilibrium", "Growth equilibrium", "Dynamic equilibrium"],
+                correct: 1,
+                category: "identify",
+                explanation: "Partial equilibrium analysis examines the equilibrium of a single market or unit, assuming other markets remain constant."
+            },
+            {
+                question: "Identify the term: 'Distribution of goods to maximize societal satisfaction.'",
+                options: ["Efficiency in production", "Efficiency in consumption", "Overall efficiency", "Economic welfare"],
+                correct: 1,
+                category: "identify",
+                explanation: "This refers to efficiency in consumption, a key aspect of welfare economics under microeconomics."
+            },
+            {
+                question: "Identify the term: 'Study of large aggregates like employment and national income.' (J.L. Hansen’s definition)",
+                options: ["Microeconomics", "Price theory", "Macroeconomics", "Marginalism"],
+                correct: 2,
+                category: "identify",
+                explanation: "J.L. Hansen's definition points directly to macroeconomics, which deals with aggregates."
+            },
+            {
+                question: "Identify the term: 'Change in total output caused by an additional unit of input.'",
+                options: ["Equilibrium", "Slicing method", "Marginalism", "Lumping method"],
+                correct: 2,
+                category: "identify",
+                explanation: "Marginalism is the principle of evaluating the additional (marginal) benefits and costs of one more unit of an activity."
+            },
+            {
+                question: "Identify the term: 'Analysis of demand-supply balance in the entire economy.'",
+                options: ["Partial equilibrium", "General equilibrium", "Market equilibrium", "Static equilibrium"],
+                correct: 1,
+                category: "identify",
+                explanation: "General equilibrium analysis studies the interaction and equilibrium of all markets simultaneously across the entire economy."
+            },
+            {
+                question: "Identify the term: 'Production of goods most desired by society.'",
+                options: ["Efficiency in production", "Efficiency in consumption", "Overall economic efficiency", "Factor allocation"],
+                correct: 2,
+                category: "identify",
+                explanation: "Overall economic efficiency in microeconomics encompasses both production and consumption efficiency to maximize societal well-being."
+            },
+            {
+                question: "Identify the term: 'Method of splitting the economy into individual units for study.'",
+                options: ["Lumping method", "Slicing method", "Marginal analysis", "Aggregative analysis"],
+                correct: 1,
+                category: "identify",
+                explanation: "The slicing method is used in microeconomics to examine individual units or markets within the larger economy."
+            },
+            {
+                question: "Identify the term: 'Relative shares of factor rewards in total national income.'",
+                options: ["Factor pricing", "Macro theory of distribution", "Product pricing", "Welfare theory"],
+                correct: 1,
+                category: "identify",
+                explanation: "The macro theory of distribution specifically examines how the national income (aggregate income) is divided among rent, wages, interest, and profit."
+            },
+
+            // Match the Pairs (5)
+            {
+                question: "Match economists to contributions:<br><br><table class='match-table'><thead><tr><th>Column A</th><th>Column B</th></tr></thead><tbody><tr><td>1. Ragnar Frisch</td><td>A. Coined 'microeconomics' and 'macroeconomics'</td></tr><tr><td>2. Alfred Marshall</td><td>B. Popularized microeconomics</td></tr><tr><td>3. John Maynard Keynes</td><td>C. Developed macroeconomic framework</td></tr><tr><td>4. Physiocrats</td><td>D. Early analysis of national income</td></tr></tbody></table>",
+                options: ["1-A, 2-B, 3-C, 4-D", "1-B, 2-A, 3-D, 4-C", "1-C, 2-D, 3-B, 4-A", "1-D, 2-C, 3-A, 4-B"],
+                correct: 0, // Options are 0-indexed, so "1-A, 2-B, 3-C, 4-D" is the first option
+                category: "match",
+                explanation: "Ragnar Frisch coined the terms; Alfred Marshall popularized microeconomics; John Maynard Keynes developed the macroeconomic framework; Physiocrats provided early national income analysis."
+            },
+            {
+                question: "Match concepts to branches:<br><br><table class='match-table'><thead><tr><th>Column A</th><th>Column B</th></tr></thead><tbody><tr><td>1. Theory of product pricing</td><td>A. Microeconomics</td></tr><tr><td>2. Theory of national income</td><td>B. Macroeconomics</td></tr><tr><td>3. Theory of factor pricing</td><td>C. Microeconomics</td></tr><tr><td>4. Theory of business cycles</td><td>D. Macroeconomics</td></tr></tbody></table>",
+                options: ["1-B, 2-A, 3-B, 4-A", "1-A, 2-B, 3-C, 4-D", "1-B, 2-B, 3-A, 4-A", "1-A, 2-A, 3-B, 4-B"],
+                correct: 1, // "1-A, 2-B, 3-A, 4-B" corresponds to the second option
+                category: "match",
+                explanation: "Product and factor pricing are microeconomic concepts. National income and business cycles are macroeconomic concepts."
+            },
+            {
+                question: "Match features to branches:<br><br><table class='match-table'><thead><tr><th>Column A</th><th>Column B</th></tr></thead><tbody><tr><td>1. Partial equilibrium</td><td>A. Microeconomics</td></tr><tr><td>2. Policy-oriented</td><td>B. Macroeconomics</td></tr><tr><td>3. Study of individual units</td><td>C. Microeconomics</td></tr><tr><td>4. Growth models</td><td>D. Macroeconomics</td></tr></tbody></table>",
+                options: ["1-A, 2-B, 3-B, 4-A", "1-B, 2-A, 3-A, 4-B", "1-A, 2-B, 3-C, 4-D", "1-B, 2-B, 3-A, 4-A"],
+                correct: 2, // "1-A, 2-B, 3-C, 4-D" where C=A and D=B, indicating the third option
+                category: "match",
+                explanation: "Partial equilibrium and study of individual units are microeconomic. Policy-oriented nature and growth models are macroeconomic."
+            },
+            {
+                question: "Match historical eras to approaches:<br><br><table class='match-table'><thead><tr><th>Column A</th><th>Column B</th></tr></thead><tbody><tr><td>1. Mercantilists (16th-17th c.)</td><td>A. Early macroeconomic policies</td></tr><tr><td>2. Classical economists</td><td>B. Combined micro-macro analysis</td></tr><tr><td>3. Great Depression (1930s)</td><td>C. Rise of macroeconomics</td></tr><tr><td>4. Neo-classical era</td><td>D. Microeconomics popularization</td></tr></tbody></table>",
+                options: ["1-A, 2-B, 3-C, 4-D", "1-B, 2-A, 3-D, 4-C", "1-C, 2-D, 3-B, 4-A", "1-D, 2-C, 3-A, 4-B"],
+                correct: 0,
+                category: "match",
+                explanation: "Mercantilists had early macroeconomic policies; Classical economists combined analyses; the Great Depression led to macroeconomics' rise; the Neo-classical era popularized microeconomics."
+            },
+            {
+                question: "Match importance to branches:<br><br><table class='match-table'><thead><tr><th>Column A</th><th>Column B</th></tr></thead><tbody><tr><td>1. Price determination</td><td>A. Microeconomics</td></tr><tr><td>2. Controlling inflation</td><td>B. Macroeconomics</td></tr><tr><td>3. Business decisions</td><td>C. Microeconomics</td></tr><tr><td>4. National income analysis</td><td>D. Macroeconomics</td></tr></tbody></table>",
+                options: ["1-A, 2-B, 3-B, 4-A", "1-B, 2-A, 3-A, 4-B", "1-A, 2-B, 3-C, 4-D", "1-B, 2-B, 3-A, 4-A"],
+                correct: 2, // "1-A, 2-B, 3-C, 4-D" where C=A and D=B, indicating the third option
+                category: "match",
+                explanation: "Price determination and business decisions are microeconomic. Controlling inflation and national income analysis are macroeconomic."
+            }
+        ];
+
+        // Quiz state variables
+        let currentQuestion = 0;
+        let userAnswers = [];
+        let quizStarted = false;
+        let quizCompleted = false;
+        let currentPlayerName = '';
+
+        // DOM elements
+        let startScreen, quizContainer, resultsScreen, leaderboardScreen; // Declared with let
+        let progressBar, progressText, questionNumber, categoryBadge, questionText, optionsContainer; // Declared with let
+        let prevBtn, nextBtn, playerNameInput; // Declared with let
+
+        // Show/hide pages
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById(pageId).classList.add('active');
+        }
+
+        // Leaderboard functions
+        function saveScore(name, score, percentage, grade, correctAnswers, totalQuestions) {
+            const scores = getLeaderboardData();
+            const newScore = {
+                name: name || 'Anonymous',
+                score: correctAnswers,
+                totalQuestions: totalQuestions,
+                percentage: percentage,
+                grade: grade,
+                date: new Date().toLocaleDateString(),
+                timestamp: Date.now()
+            };
+            
+            scores.push(newScore);
+            
+            // Sort by score (descending), then by percentage, then by timestamp (most recent first)
+            scores.sort((a, b) => {
+                if (b.score !== a.score) return b.score - a.score;
+                if (b.percentage !== a.percentage) return b.percentage - a.percentage;
+                return b.timestamp - a.timestamp;
+            });
+            
+            // Keep only top 10 scores
+            const topScores = scores.slice(0, 10);
+            
+            localStorage.setItem('economicsQuizLeaderboard', JSON.stringify(topScores));
+            return topScores;
+        }
+
+        function getLeaderboardData() {
+            const stored = localStorage.getItem('economicsQuizLeaderboard');
+            return stored ? JSON.parse(stored) : [];
+        }
+
+        function displayLeaderboard() {
+            const scores = getLeaderboardData();
+            const container = document.getElementById('leaderboardContainer');
+            
+            if (scores.length === 0) {
+                container.innerHTML = `
+                    <div class="no-scores-message">
+                        <p>No scores yet! Be the first to take the quiz and set a record!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = scores.map((score, index) => {
+                const rankClass = index === 0 ? 'gold' : index === 1 ? 'silver' : index === 2 ? 'bronze' : '';
+                const isPersonalBest = score.name === currentPlayerName;
+                
+                return `
+                    <div class="leaderboard-entry ${isPersonalBest ? 'current-user' : ''}">
+                        <div class="leaderboard-rank ${rankClass}">
+                            ${index + 1}
+                        </div>
+                        <div class="leaderboard-info">
+                            <div class="leaderboard-name">${score.name}</div>
+                            <div class="leaderboard-details">
+                                ${score.score}/${score.totalQuestions} correct • ${score.percentage}% • Grade: ${score.grade} • ${score.date}
+                            </div>
+                        </div>
+                        <div class="leaderboard-score">
+                            ${score.percentage}%
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function showLeaderboard() {
+            showPage('leaderboardScreen');
+            displayLeaderboard();
+        }
+
+        function hideLeaderboard() {
+            showPage('startScreen');
+        }
+
+        function clearLeaderboard() {
+            if (confirm('Are you sure you want to clear all leaderboard data? This action cannot be undone.')) {
+                localStorage.removeItem('economicsQuizLeaderboard');
+                displayLeaderboard();
+            }
+        }
+
+        // Start the quiz
+        function startQuiz() {
+            const name = playerNameInput.value.trim();
+            if (!name) {
+                alert('Please enter your name before starting the quiz!');
+                playerNameInput.focus();
+                return;
+            }
+            
+            currentPlayerName = name;
+            quizStarted = true;
+            userAnswers = new Array(quizData.length).fill(null);
+            currentQuestion = 0;
+            
+            // Hide start screen and show quiz container
+            startScreen.classList.remove('active');
+            quizContainer.classList.add('active');
+            
+            // Initialize question display
+            displayQuestion();
+            
+            // Update progress
+            progressBar.style.width = '0%';
+            progressText.textContent = '1 / ' + quizData.length;
+        }
+
+        // Display current question
+        function displayQuestion() {
+            if (!quizStarted) return;
+            
+            const question = quizData[currentQuestion];
+            if (!question) return;
+            
+            questionNumber.textContent = `Question ${currentQuestion + 1} of ${quizData.length}`;
+            
+            // Set category badge
+            const categoryNames = {
+                'mcq': 'MCQ',
+                'odd': 'Odd One Out',
+                'identify': 'Identify the Term',
+                'match': 'Match the Pairs'
+            };
+            categoryBadge.textContent = categoryNames[question.category] || 'MCQ';
+            categoryBadge.className = `category-badge category-${question.category}`;
+            
+            // Set question text (handle HTML for match questions)
+            questionText.innerHTML = question.question;
+            
+            // Update progress
+            const progress = ((currentQuestion + 1) / quizData.length) * 100;
+            progressBar.style.width = `${progress}%`;
+            progressText.textContent = `${currentQuestion + 1} / ${quizData.length}`;
+            
+            // Display options
+            optionsContainer.innerHTML = '';
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option';
+                optionElement.innerHTML = `
+                    <div class="option-letter">${String.fromCharCode(65 + index)}</div>
+                    <div>${option}</div>
+                `;
+                
+                // Check if this option was previously selected
+                if (userAnswers[currentQuestion] === index) {
+                    optionElement.classList.add('selected');
+                }
+                
+                optionElement.onclick = () => selectOption(index);
+                optionsContainer.appendChild(optionElement);
+            });
+            
+            // Update navigation buttons
+            prevBtn.disabled = currentQuestion === 0;
+            nextBtn.disabled = userAnswers[currentQuestion] === null;
+            nextBtn.textContent = currentQuestion === quizData.length - 1 ? 'Finish Quiz' : 'Next';
+        }
+
+        // Select an option
+        function selectOption(selectedIndex) {
+            userAnswers[currentQuestion] = selectedIndex;
+            
+            // Update visual feedback
+            const options = optionsContainer.querySelectorAll('.option');
+            options.forEach((option, index) => {
+                option.classList.remove('selected');
+                if (index === selectedIndex) {
+                    option.classList.add('selected');
+                }
+            });
+            
+            // Enable next button
+            nextBtn.disabled = false;
+        }
+
+        // Go to previous question
+        function previousQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                displayQuestion();
+            }
+        }
+
+        // Go to next question or finish quiz
+        function nextQuestion() {
+            if (currentQuestion < quizData.length - 1) {
+                currentQuestion++;
+                displayQuestion();
+            } else {
+                finishQuiz();
+            }
+        }
+
+        // Finish the quiz and show results
+        function finishQuiz() {
+            quizCompleted = true;
+            showPage('resultsScreen');
+            calculateAndDisplayResults();
+        }
+
+        // Calculate score and display results
+        function calculateAndDisplayResults() {
+            let correctAnswers = 0;
+            let incorrectAnswers = 0;
+
+            // Calculate correct answers
+            for (let i = 0; i < quizData.length; i++) {
+                if (userAnswers[i] === quizData[i].correct) {
+                    correctAnswers++;
+                } else {
+                    incorrectAnswers++;
+                }
+            }
+
+            const percentage = Math.round((correctAnswers / quizData.length) * 100);
+            
+            // Determine grade
+            let grade;
+            if (percentage >= 90) grade = 'A+';
+            else if (percentage >= 80) grade = 'A';
+            else if (percentage >= 70) grade = 'B';
+            else if (percentage >= 60) grade = 'C';
+            else if (percentage >= 50) grade = 'D';
+            else grade = 'F';
+
+            // Display results
+            document.getElementById('finalScore').textContent = `${correctAnswers}/${quizData.length}`;
+            document.getElementById('correctCount').textContent = correctAnswers;
+            document.getElementById('incorrectCount').textContent = incorrectAnswers;
+            document.getElementById('percentageScore').textContent = `${percentage}%`;
+            document.getElementById('gradeDisplay').textContent = grade;
+
+            // Performance message
+            let message;
+            if (percentage >= 90) {
+                message = "Outstanding! You have excellent knowledge of economics concepts!";
+            } else if (percentage >= 80) {
+                message = "Great job! You have a strong understanding of economics!";
+            } else if (percentage >= 70) {
+                message = "Good work! You have a solid grasp of the material!";
+            } else if (percentage >= 60) {
+                message = "Fair performance. Consider reviewing the material for better understanding.";
+            } else if (percentage >= 50) {
+                message = "You passed, but there's room for improvement. Keep studying!";
+            } else {
+                message = "Keep practicing! Review the material and try again to improve your score.";
+            }
+            
+            document.getElementById('performanceMessage').textContent = message;
+
+            // Save score to leaderboard
+            saveScore(currentPlayerName, correctAnswers, percentage, grade, correctAnswers, quizData.length);
+
+            // Update progress bar to 100%
+            progressBar.style.width = '100%';
+            progressText.textContent = 'Quiz Complete!';
+        }
+
+        // Show detailed results
+        function showDetailedResults() {
+            const detailedResults = document.getElementById('detailedResults');
+            const container = document.getElementById('answerReviewContainer');
+            
+            detailedResults.classList.toggle('hidden');
+            
+            if (!detailedResults.classList.contains('hidden')) {
+                container.innerHTML = '';
+                
+                quizData.forEach((question, index) => {
+                    const isCorrect = userAnswers[index] === question.correct;
+                    const userAnswer = userAnswers[index];
+                    
+                    const reviewDiv = document.createElement('div');
+                    reviewDiv.className = `answer-review ${isCorrect ? 'correct' : 'incorrect'}`;
+                    
+                    reviewDiv.innerHTML = `
+                        <div class="review-question">
+                            <span class="${isCorrect ? 'status-correct' : 'status-incorrect'}">
+                                ${isCorrect ? '✓ CORRECT' : '✗ INCORRECT'}
+                            </span>
+                            Q${index + 1}: ${question.question}
+                        </div>
+                        <div class="review-answer">
+                            Your answer: ${userAnswer !== null ? question.options[userAnswer] : 'No answer selected'}<br>
+                            Correct answer: ${question.options[question.correct]}
+                        </div>
+                        <div class="review-explanation">
+                            💡 ${question.explanation}
+                        </div>
+                    `;
+                    
+                    container.appendChild(reviewDiv);
+                });
+            }
+        }
+
+        // Restart the quiz
+        function restartQuiz() {
+            currentQuestion = 0;
+            userAnswers = [];
+            quizStarted = false;
+            quizCompleted = false;
+            
+            showPage('startScreen');
+            
+            // Reset progress bar
+            progressBar.style.width = '0%';
+            progressText.textContent = `0 / ${quizData.length}`;
+            
+            // Clear the name input for new player
+            playerNameInput.value = '';
+            currentPlayerName = '';
+            
+            // Hide detailed results
+            document.getElementById('detailedResults').classList.add('hidden');
+        }
+
+        // Initialize the quiz when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Assign DOM elements to the `let` variables
+            startScreen = document.getElementById('startScreen');
+            quizContainer = document.getElementById('quizContainer');
+            resultsScreen = document.getElementById('resultsScreen');
+            leaderboardScreen = document.getElementById('leaderboardScreen');
+            progressBar = document.getElementById('progressBar');
+            progressText = document.getElementById('progressText');
+            questionNumber = document.getElementById('questionNumber');
+            categoryBadge = document.getElementById('categoryBadge');
+            questionText = document.getElementById('questionText');
+            optionsContainer = document.getElementById('optionsContainer');
+            prevBtn = document.getElementById('prevBtn');
+            nextBtn = document.getElementById('nextBtn');
+            playerNameInput = document.getElementById('playerName');
+
+            // Reset any existing state
+            currentQuestion = 0;
+            userAnswers = [];
+            quizStarted = false;
+            quizCompleted = false;
+            currentPlayerName = '';
+
+            // Allow Enter key to start quiz
+            playerNameInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    startQuiz();
+                }
+            });
+            
+            // Focus on name input
+            playerNameInput.focus();
+        });
+    </script>
+</body>
+</html>

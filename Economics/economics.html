@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Economics Lessons</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* General Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0c1220, #1a2439);
+            min-height: 100vh;
+            padding: 20px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Header Section */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 0 15px;
+            max-width: 700px;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+            line-height: 1.2;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            color: #cbd5e1;
+            line-height: 1.6;
+        }
+
+        /* Lesson Grid */
+        #lessons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto 40px;
+            place-items: center;
+        }
+
+        .lesson-card {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.85), rgba(30, 41, 59, 0.95));
+            border-radius: 18px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 0 12px rgba(59, 130, 246, 0.2);
+            padding: 25px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(59, 130, 246, 0.25);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            min-height: 150px;
+            backdrop-filter: blur(5px);
+            cursor: pointer;
+            text-decoration: none; /* Crucial for anchor tags */
+            color: inherit; /* Inherit text color from parent */
+        }
+
+        .lesson-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #1e3a8a 0%, #3b82f6 100%);
+            transition: all 0.3s ease;
+        }
+
+        .lesson-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 18px 35px rgba(0, 0, 0, 0.6), 0 0 25px rgba(59, 130, 246, 0.35);
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 1));
+        }
+
+        .lesson-card:hover::before {
+            height: 100%;
+            opacity: 0.1;
+        }
+
+        .lesson-icon {
+            width: 55px;
+            height: 55px;
+            margin: 0 auto 15px;
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            color: white;
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.45);
+            transition: all 0.3s ease;
+        }
+
+        .lesson-card:hover .lesson-icon {
+            transform: scale(1.1);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.6);
+        }
+
+        .lesson-card h3 {
+            font-size: 1.35rem;
+            color: #e2e8f0;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            position: relative;
+            z-index: 1;
+            margin-bottom: 8px;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: auto;
+            padding: 20px;
+            color: #94a3b8;
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(59, 130, 246, 0.15);
+            width: 100%;
+            max-width: 500px;
+            animation: fadeIn 1s ease-out;
+        }
+
+        /* Keyframe animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.1rem;
+            }
+            
+            .header p {
+                font-size: 1rem;
+            }
+            
+            #lessons-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 18px;
+            }
+            
+            .lesson-card {
+                padding: 20px;
+                min-height: 130px;
+            }
+            
+            .lesson-icon {
+                width: 45px;
+                height: 45px;
+                font-size: 1.4rem;
+                margin-bottom: 10px;
+            }
+            
+            .lesson-card h3 {
+                font-size: 1.2rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            body {
+                padding: 15px 10px;
+            }
+            
+            .header h1 {
+                font-size: 1.9rem;
+            }
+            
+            #lessons-grid {
+                grid-template-columns: 1fr;
+                max-width: 300px;
+            }
+            
+            .lesson-card {
+                width: 100%;
+                min-height: 140px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Economics Hub</h1>
+            <p>Select a lesson to get started</p>
+        </div>
+
+        <div id="lessons-grid">
+            </div>
+
+        <div class="footer">
+            <p>© 2023 Subjects Hub</p>
+        </div>
+    </div>
+
+    <script>
+        // --- Lesson Data with file names ---
+        const allLessonsData = [
+            { id: 'lesson1', title: "INTRODUCTION TO MICRO AND MACRO ECONOMICS", icon: "📈", fileName: "eco1.html" },
+            { id: 'lesson2', title: "UTILITY ANALYSIS", icon: "📈", fileName: "eco2.html" },
+            { id: 'lesson3a', title: "A DEMAND ANALYSIS", icon: "📊", fileName: "eco3.html" },
+            { id: 'lesson3b', title: "B ELASTICITY OF DEMAND", icon: "📊", fileName: "eco3b.html" },
+            { id: 'lesson4', title: "SUPPLY ANALYSIS", icon: "🏭", fileName: "eco4.html" },
+            { id: 'lesson5', title: "FORMS OF MARKET", icon: "🛒", fileName: "eco5.html" },
+            { id: 'lesson6', title: "INDEX NUMBERS", icon: "🔢", fileName: "eco6.html" },
+            { id: 'lesson7', title: "NATIONAL INCOME", icon: "💰", fileName: "eco7.html" },
+            { id: 'lesson8', title: "PUBLIC FINANCE IN INDIA", icon: "🏛️", fileName: "eco8.html" },
+            { id: 'lesson9', title: "MONEY MARKET AND CAPITAL MARKET IN INDIA", icon: "🏦", fileName: "eco9.html" },
+            { id: 'lesson10', title: "FOREIGN TRADE OF INDIA", icon: "🚢", fileName: "eco10.html" }
+        ];
+
+        // --- Functions ---
+        function displayLessons() {
+            const lessonsGrid = document.getElementById('lessons-grid');
+            lessonsGrid.innerHTML = ''; // Clear existing lessons
+
+            allLessonsData.forEach(lesson => {
+                const lessonLink = document.createElement('a'); // Create an anchor tag
+                lessonLink.classList.add('lesson-card');
+                lessonLink.href = lesson.fileName; // Set the href to the lesson's HTML file
+                lessonLink.innerHTML = `
+                    <div class="lesson-icon">${lesson.icon}</div>
+                    <h3>${lesson.title}</h3>
+                `;
+                lessonsGrid.appendChild(lessonLink);
+            });
+        }
+
+        // --- Initial Load ---
+        document.addEventListener('DOMContentLoaded', () => {
+            displayLessons(); // Show lesson cards when the page loads
+
+            const cards = document.querySelectorAll('.lesson-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, 100 * index);
+            });
+        });
+
+    </script>
+</body>
+</html>
