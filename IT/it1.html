@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Design Quiz</title>
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --surface: #1e293b;
+            --primary: #3b82f6;
+            --primary-light: #60a5fa;
+            --text-light: #cbd5e1;
+            --text-dark: #94a3b8;
+            --correct: #22c55e;
+            --incorrect: #ef4444;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: system-ui, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { width: 100%; max-width: 700px; }
+        .quiz-card {
+            background-color: var(--surface);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        .page { display: none; }
+        .page.active { display: block; animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        h1 {
+            font-size: 2.2rem;
+            font-weight: bold;
+            text-align: center;
+            color: var(--primary-light);
+            margin-bottom: 10px;
+        }
+        p { color: var(--text-dark); text-align: center; margin-bottom: 25px; }
+        .btn-grid { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+            text-decoration: none;
+        }
+        .btn:hover:not(:disabled) { background-color: var(--primary-light); transform: translateY(-2px); }
+        .btn.secondary { background-color: #334155; }
+        .btn.secondary:hover:not(:disabled) { background-color: #475569; }
+        .btn:disabled { background-color: #475569; cursor: not-allowed; opacity: 0.6; }
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--bg-dark);
+            border: 1px solid #334155;
+            border-radius: 8px;
+            color: white;
+            text-align: center;
+            margin-top: 10px;
+        }
+        .progress-container { background-color: #334155; border-radius: 99px; padding: 4px; margin: 20px 0; }
+        .progress-bar { background-color: var(--primary); height: 10px; border-radius: 99px; transition: width 0.4s ease; }
+        .question-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .badge { background-color: var(--primary); padding: 5px 12px; border-radius: 99px; font-size: 0.8rem; }
+        .question-text { font-size: 1.25rem; margin-bottom: 25px; line-height: 1.6; }
+        .options-container { display: grid; gap: 12px; margin-bottom: 25px; }
+        .option {
+            background-color: rgba(59, 130, 246, 0.1);
+            border: 1px solid #334155;
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s, border-color 0.2s;
+            display: flex; align-items: center; gap: 12px;
+        }
+        .option:hover { border-color: var(--primary); background-color: rgba(59, 130, 246, 0.2); }
+        .option.selected { border-color: var(--primary-light); background-color: rgba(59, 130, 246, 0.3); }
+        .option.multi-selected { border-color: var(--correct); background-color: rgba(34, 197, 94, 0.2); }
+        .option-letter {
+            width: 30px; height: 30px; border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            display: flex; align-items: center; justify-content: center; font-weight: bold;
+            flex-shrink: 0;
+        }
+        .results-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; text-align: center; margin: 20px 0; }
+        .result-item h3 { font-size: 2rem; font-weight: bold; }
+        #correctCount { color: var(--correct); }
+        #incorrectCount { color: var(--incorrect); }
+        .answer-review { border-left: 4px solid #334155; padding: 15px; margin-bottom: 10px; background: rgba(0,0,0,0.1); border-radius: 4px; }
+        .answer-review.correct { border-left-color: var(--correct); }
+        .answer-review.incorrect { border-left-color: var(--incorrect); }
+        .match-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.9rem; }
+        .match-table td { border: 1px solid #334155; padding: 8px; }
+        .leaderboard-entry { display: flex; justify-content: space-between; padding: 12px; border-radius: 8px; transition: background-color 0.2s; }
+        .leaderboard-entry:nth-child(odd) { background-color: rgba(0,0,0,0.1); }
+        .leaderboard-entry:hover { background-color: rgba(59, 130, 246, 0.1); }
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Start Screen -->
+        <div id="startScreen" class="quiz-card page active">
+            <h1>Web Design Quiz</h1>
+            <p>Test your knowledge of HTML5 and CSS. Enter your name to begin.</p>
+            <input type="text" id="playerName" placeholder="Your Name Here..." maxlength="20">
+            <div class="btn-grid" style="margin-top: 20px;">
+                <button class="btn" onclick="startQuiz()">🚀 Start Quiz</button>
+            </div>
+             <div class="btn-grid" style="margin-top: 15px;">
+                <a href="index.html" class="btn secondary">🏠 Home</a>
+                <a href="it.html" class="btn secondary">📚 Back to Lesson</a>
+                <button class="btn secondary" onclick="showLeaderboard()">🏆 Leaderboard</button>
+            </div>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div id="quizScreen" class="quiz-card page">
+            <div class="progress-container"><div id="progressBar" class="progress-bar"></div></div>
+            <div class="question-header">
+                <span id="questionCounter"></span>
+                <span id="categoryBadge" class="badge"></span>
+            </div>
+            <div id="questionText" class="question-text"></div>
+            <div id="optionsContainer" class="options-container"></div>
+            <div class="btn-grid">
+                <button id="prevBtn" class="btn secondary" onclick="previousQuestion()">Previous</button>
+                <button id="nextBtn" class="btn" onclick="nextQuestion()">Next</button>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="resultsScreen" class="quiz-card page">
+            <h1>Quiz Complete!</h1>
+            <div class="results-grid">
+                <div class="result-item">
+                    <h3 id="finalScore">0/50</h3>
+                    <p>Score</p>
+                </div>
+                <div class="result-item">
+                    <h3 id="percentageScore">0%</h3>
+                    <p>Percentage</p>
+                </div>
+                <div class="result-item">
+                    <h3 id="correctCount">0</h3>
+                    <p>Correct</p>
+                </div>
+                <div class="result-item">
+                    <h3 id="incorrectCount">0</h3>
+                    <p>Incorrect</p>
+                </div>
+            </div>
+             <p id="performanceMessage" style="margin-bottom:20px;"></p>
+            <div class="btn-grid">
+                <button class="btn" onclick="toggleDetailedResults()">View Answers</button>
+                <button class="btn secondary" onclick="restartQuiz()">Take Again</button>
+            </div>
+            <div id="detailedResults" class="hidden" style="margin-top: 20px;"></div>
+        </div>
+        
+        <!-- Leaderboard Screen -->
+        <div id="leaderboardScreen" class="quiz-card page">
+            <h1>🏆 Leaderboard</h1>
+            <div id="leaderboardContainer" style="margin: 20px 0;"></div>
+            <div class="btn-grid">
+                 <button class="btn secondary" onclick="hideLeaderboard()">← Back</button>
+                 <button class="btn" style="background-color: var(--incorrect);" onclick="clearLeaderboard()">Clear Records</button>
+            </div>
+        </div>
+    </div>
+
+<script>
+    const quizData = [
+        // Part A: Single Choice (25)
+        { question: "Which HTML5 input type defines a color picker?", options: ["type=\"range\"", "type=\"color\"", "type=\"file\"", "type=\"search\""], correct: 1, type: "single", explanation: "The type=\"color\" input creates a color picker interface." },
+        { question: "The `pattern` attribute in HTML5 forms is used for:", options: ["Setting minimum input length", "Validating input using regular expressions", "Disabling an input field", "Autocompleting user data"], correct: 1, type: "single", explanation: "The `pattern` attribute uses regular expressions to validate user input." },
+        { question: "Which attribute makes an input field mandatory?", options: ["disabled", "autofocus", "required", "placeholder"], correct: 2, type: "single", explanation: "The `required` attribute ensures users must fill in the field before submitting." },
+        { question: "The `&lt;meta&gt;` tag is placed within:", options: ["&lt;body&gt;", "&lt;footer&gt;", "&lt;head&gt;", "&lt;section&gt;"], correct: 2, type: "single", explanation: "Meta tags provide document metadata and belong in the &lt;head&gt; section." },
+        { question: "CSS syntax consists of:", options: ["Selector and declarations", "Tags and attributes", "Classes and IDs", "Properties and values"], correct: 0, type: "single", explanation: "A CSS rule consists of a selector and a declaration block." },
+        { question: "To set an image as a webpage background, use:", options: ["background-color", "background-image", "border-image", "img-src"], correct: 1, type: "single", explanation: "The `background-image` property sets one or more background images for an element." },
+        { question: "Which CSS property centers text horizontally?", options: ["font-align", "vertical-align", "text-align", "position: center"], correct: 2, type: "single", explanation: "The `text-align` property specifies the horizontal alignment of text." },
+        { question: "For an ordered list starting at 50, use:", options: ["&lt;ol start=\"50\"&gt;", "&lt;ol value=\"50\"&gt;", "&lt;ol begin=\"50\"&gt;", "&lt;ol reversed=\"50\"&gt;"], correct: 0, type: "single", explanation: "The `start` attribute for an `<ol>` tag specifies the start value." },
+        { question: "The `&lt;audio&gt;` tag attribute that loops playback is:", options: ["cycle", "repeat", "loop", "reversed"], correct: 2, type: "single", explanation: "The `loop` attribute, if specified, will cause the audio to automatically repeat." },
+        { question: "Client-side image maps use:", options: ["&lt;servermap&gt;", "&lt;map&gt; and &lt;area&gt;", "&lt;imagemap&gt;", "&lt;hotspot&gt;"], correct: 1, type: "single", explanation: "A client-side image map uses `<map>` and `<area>` elements." },
+        { question: "To embed an external webpage section, use:", options: ["&lt;frame&gt;", "&lt;inline&gt;", "&lt;iframe&gt;", "&lt;embed&gt;"], correct: 2, type: "single", explanation: "The `<iframe>` (Inline Frame) element embeds another HTML page into the current one." },
+        { question: "Free web hosting for limited periods is:", options: ["Dedicated hosting", "Shared hosting", "Server hosting", "Free hosting"], correct: 3, type: "single", explanation: "Free hosting provides web hosting at no cost, often with limitations." },
+        { question: "The CSS property `float: right` moves an element:", options: ["To the left of its container", "To the right of its container", "To the top", "To the bottom"], correct: 1, type: "single", explanation: "The `float` property places an element on the left or right side of its container." },
+        { question: "Which HTML5 tag creates a definition list?", options: ["&lt;nl&gt;", "&lt;dl&gt;", "&lt;def&gt;", "&lt;list&gt;"], correct: 1, type: "single", explanation: "The `<dl>` tag is used to create a description list." },
+        { question: "To disable an input field, use:", options: ["readonly", "disabled", "blocked", "inactive"], correct: 1, type: "single", explanation: "The `disabled` attribute makes an input field un-clickable and un-usable." },
+        { question: "The `&lt;source&gt;` tag is used with:", options: ["&lt;audio&gt; and &lt;video&gt;", "&lt;img&gt;", "&lt;map&gt;", "&lt;iframe&gt;"], correct: 0, type: "single", explanation: "The `<source>` tag specifies multiple media resources for `<video>` and `<audio>`." },
+        { question: "For fixed positioning relative to the browser window, use:", options: ["position: static", "position: fixed", "position: relative", "position: absolute"], correct: 1, type: "single", explanation: "`position: fixed` makes an element positioned relative to the viewport." },
+        { question: "Which attribute specifies an image for `&lt;input type=\"image\"&gt;`?", options: ["img", "source", "src", "href"], correct: 2, type: "single", explanation: "For an `<input>` of type `image`, the `src` attribute is required." },
+        { question: "The `autocomplete` attribute:", options: ["Validates email formats", "Suggests previous input values", "Disables form submission", "Hides input fields"], correct: 1, type: "single", explanation: "The `autocomplete` attribute provides a hint to the browser for auto-completion." },
+        { question: "To create a polygon hotspot in an image map, use `shape=\"____\"`.", options: ["rect", "circle", "poly", "triangle"], correct: 2, type: "single", explanation: "`shape=\"poly\"` is used for defining a polygonal region." },
+        { question: "The CSS universal selector is:", options: ["#", ".", "*", "@"], correct: 2, type: "single", explanation: "The asterisk (*) is the universal selector in CSS." },
+        { question: "Which tag defines a term in a definition list?", options: ["&lt;dd&gt;", "&lt;dt&gt;", "&lt;dfn&gt;", "&lt;term&gt;"], correct: 1, type: "single", explanation: "The `<dt>` (Description Term) tag specifies a term in a description list." },
+        { question: "For a video thumbnail before playback, use:", options: ["preload", "poster", "thumbnail", "src"], correct: 1, type: "single", explanation: "The `poster` attribute specifies an image to be shown while the video is downloading." },
+        { question: "The first file loaded on free web hosting must be named:", options: ["home.html", "start.html", "index.html", "main.html"], correct: 2, type: "single", explanation: "Web servers are typically configured to look for `index.html` as the default file." },
+        { question: "Grouping CSS selectors uses:", options: ["Periods (.)", "Commas (,)", "Semicolons (;)", "Colons (:)"], correct: 1, type: "single", explanation: "To apply the same styles to multiple selectors, you group them with a comma." },
+        // Part B: Multi Choice (10)
+        { question: "Two new HTML5 input types for validation:", options: ["type=\"tel\"", "type=\"button\"", "type=\"email\"", "type=\"text\"", "type=\"radio\""], correct: [0, 2], type: "multi", explanation: "HTML5 introduced 'tel' and 'email' for better validation and mobile keyboards." },
+        { question: "Attributes restricting input values:", options: ["max", "color", "min", "src", "alt"], correct: [0, 2], type: "multi", explanation: "The max and min attributes set upper and lower bounds for numeric inputs." },
+        { question: "Required attributes for `&lt;meta&gt;` tags:", options: ["name", "href", "content", "size", "type"], correct: [0, 2], type: "multi", explanation: "Meta tags typically require both name and content attributes." },
+        { question: "CSS properties for text styling:", options: ["font-weight", "background-image", "text-decoration", "float", "position"], correct: [0, 2], type: "multi", explanation: "`font-weight` and `text-decoration` are both used to style text." },
+        { question: "Elements in a definition list:", options: ["&lt;dt&gt;", "&lt;ol&gt;", "&lt;dd&gt;", "&lt;ul&gt;", "&lt;li&gt;"], correct: [0, 2], type: "multi", explanation: "Definition lists use <dt> for terms and <dd> for descriptions." },
+        { question: "Common audio formats supported by HTML5:", options: [".mp3", ".avi", ".ogg", ".mp4", ".wmv"], correct: [0, 2], type: "multi", explanation: "MP3 and OGG are commonly supported audio formats in HTML5." },
+        { question: "Shapes for image map hotspots:", options: ["rect", "square", "poly", "line", "dot"], correct: [0, 2], type: "multi", explanation: "Image maps support `rect` (rectangle) and `poly` (polygon) shapes." },
+        { question: "Types of web hosting:", options: ["Shared hosting", "Cloud hosting", "Free hosting", "Email hosting", "Dedicated hosting"], correct: [0, 2], type: "multi", explanation: "Shared and Free hosting are common types of web hosting services." },
+        { question: "CSS `display` property values:", options: ["inline", "fixed", "block", "float", "none"], correct: [0, 2], type: "multi", explanation: "`inline` and `block` are fundamental display values." },
+        { question: "Tags for embedding media:", options: ["&lt;audio&gt;", "&lt;img&gt;", "&lt;video&gt;", "&lt;map&gt;", "&lt;iframe&gt;"], correct: [0, 2], type: "multi", explanation: "The `<audio>` and `<video>` tags are for embedding media content." },
+        // Part C: Match the Pairs (5 as single choice)
+        { question: "Match HTML5 input types to their descriptions:", type: "match", options: ["1-c, 2-d, 3-a, 4-b", "1-a, 2-b, 3-c, 4-d", "1-d, 2-c, 3-b, 4-a", "1-b, 2-a, 3-d, 4-c"], correct: 0, explanation: "Correct pairings: color→c, number→d, url→a, date→b.", matchData: { columnA: ["1. `color`", "2. `number`", "3. `url`", "4. `date`"], columnB: ["a. URL field", "b. date picker", "c. color picker", "d. number field"] } },
+        { question: "Match CSS properties to their uses:", type: "match", options: ["1-b, 2-a, 3-d, 4-c", "1-a, 2-b, 3-c, 4-d", "1-d, 2-c, 3-b, 4-a", "1-c, 2-d, 3-a, 4-b"], correct: 0, explanation: "Correct pairings: text-align→b, background-color→a, font-family→d, padding→c.", matchData: { columnA: ["1. `text-align`", "2. `background-color`", "3. `font-family`", "4. `padding`"], columnB: ["a. sets background", "b. aligns text", "c. adds space", "d. controls font"] } },
+        { question: "Match tags to their functions:", type: "match", options: ["1-b, 2-a, 3-c, 4-d", "1-a, 2-b, 3-d, 4-c", "1-d, 2-c, 3-b, 4-a", "1-c, 2-d, 3-a, 4-b"], correct: 0, explanation: "Correct pairings: meta→b, iframe→a, map→c, source→d.", matchData: { columnA: ["1. `&lt;meta&gt;`", "2. `&lt;iframe&gt;`", "3. `&lt;map&gt;`", "4. `&lt;source&gt;`"], columnB: ["a. inline frame", "b. metadata", "c. image map", "d. media resource"] } },
+        { question: "Match CSS selectors to their syntax:", type: "match", options: ["1-c, 2-a, 3-b, 4-d", "1-a, 2-b, 3-c, 4-d", "1-d, 2-c, 3-a, 4-b", "1-b, 2-d, 3-c, 4-a"], correct: 0, explanation: "Correct pairings: Class→c, ID→a, Universal→b, Group→d.", matchData: { columnA: ["1. Class", "2. ID", "3. Universal", "4. Group"], columnB: ["a. `#name`", "b. `*`", "c. `.name`", "d. `h1, p`"] } },
+        { question: "Match lists to their attributes:", type: "match", options: ["1-b, 2-a, 3-c, 4-d", "1-a, 2-b, 3-d, 4-c", "1-d, 2-c, 3-b, 4-a", "1-c, 2-d, 3-a, 4-b"], correct: 0, explanation: "Correct pairings: Ordered→b, Unordered→a, Definition→c, Nested→d.", matchData: { columnA: ["1. Ordered", "2. Unordered", "3. Definition", "4. Nested"], columnB: ["a. `disc`", "b. `start`", "c. `&lt;dt&gt;`", "d. list in list"] } },
+        // Part D: True/False (10)
+        { question: "The `pattern` attribute uses JavaScript for validation.", options: ["True", "False"], correct: 1, type: "boolean", explanation: "False. The pattern attribute uses regular expressions (regex), not JavaScript." },
+        { question: "`&lt;meta&gt;` tags are visible on the webpage.", options: ["True", "False"], correct: 1, type: "boolean", explanation: "False. Meta tags are for browsers and search engines, not visual display." },
+        { question: "External CSS files use the `&lt;style&gt;` tag.", options: ["True", "False"], correct: 1, type: "boolean", explanation: "False. External CSS is linked using the <link> tag." },
+        { question: "`float: none` is the default CSS behavior.", options: ["True", "False"], correct: 0, type: "boolean", explanation: "True. Elements have float: none by default." },
+        { question: "HTML5 supports `type=\"bullet\"` for unordered lists.", options: ["True", "False"], correct: 1, type: "boolean", explanation: "False. List styling is handled by the CSS `list-style-type` property." },
+        { question: "`&lt;video&gt;` tags require the `controls` attribute to show playback buttons.", options: ["True", "False"], correct: 0, type: "boolean", explanation: "True. Without `controls`, the video player will not have visible controls." },
+        { question: "Image maps can only be server-side.", options: ["True", "False"], correct: 1, type: "boolean", explanation: "False. Image maps can be client-side or server-side." },
+        { question: "Free hosting requires a paid domain.", options: ["True", "False"], correct: 1, type: "boolean", explanation: "False. Free hosting often provides free subdomains." },
+        { question: "`position: absolute` ignores page flow.", options: ["True", "False"], correct: 0, type: "boolean", explanation: "True. Absolutely positioned elements are removed from the normal document flow." },
+        { question: "The `&lt;dd&gt;` tag defines a term in a definition list.", options: ["True", "False"], correct: 1, type: "boolean", explanation: "False. The `<dd>` tag defines the description; `<dt>` defines the term." },
+    ];
+
+    let currentQuestionIndex = 0;
+    let userAnswers = new Array(quizData.length).fill(null);
+    let quizState = 'start'; // 'start', 'quiz', 'results', 'leaderboard'
+    let lastState = 'start';
+    let playerName = '';
+    
+    const DOMElements = {
+        pages: document.querySelectorAll('.page'),
+        startScreen: document.getElementById('startScreen'),
+        quizScreen: document.getElementById('quizScreen'),
+        resultsScreen: document.getElementById('resultsScreen'),
+        leaderboardScreen: document.getElementById('leaderboardScreen'),
+        progressBar: document.getElementById('progressBar'),
+        questionCounter: document.getElementById('questionCounter'),
+        categoryBadge: document.getElementById('categoryBadge'),
+        questionText: document.getElementById('questionText'),
+        optionsContainer: document.getElementById('optionsContainer'),
+        prevBtn: document.getElementById('prevBtn'),
+        nextBtn: document.getElementById('nextBtn'),
+    };
+    
+    function showPage(pageId) {
+        lastState = quizState;
+        quizState = pageId;
+        DOMElements.pages.forEach(p => p.classList.remove('active'));
+        document.getElementById(pageId).classList.add('active');
+    }
+
+    function startQuiz() {
+        playerName = document.getElementById('playerName').value.trim() || 'Anonymous';
+        currentQuestionIndex = 0;
+        userAnswers.fill(null);
+        renderQuestion();
+        showPage('quizScreen');
+    }
+
+    function renderQuestion() {
+        const question = quizData[currentQuestionIndex];
+        DOMElements.progressBar.style.width = `${((currentQuestionIndex) / quizData.length) * 100}%`;
+        DOMElements.questionCounter.textContent = `Question ${currentQuestionIndex + 1} of ${quizData.length}`;
+        DOMElements.categoryBadge.textContent = question.type.charAt(0).toUpperCase() + question.type.slice(1);
+        
+        let questionHTML = question.question;
+        if (question.type === 'match' && question.matchData) {
+            questionHTML += `<table class="match-table">`;
+            for(let i = 0; i < question.matchData.columnA.length; i++) {
+                questionHTML += `<tr><td>${question.matchData.columnA[i]}</td><td>${question.matchData.columnB[i]}</td></tr>`;
+            }
+            questionHTML += `</table>`;
+        }
+        DOMElements.questionText.innerHTML = questionHTML;
+
+        DOMElements.optionsContainer.innerHTML = '';
+
+        question.options.forEach((option, index) => {
+            const optionEl = document.createElement('div');
+            optionEl.className = 'option';
+            optionEl.innerHTML = `<span class="option-letter">${String.fromCharCode(65 + index)}</span><span>${option}</span>`;
+            
+            const currentAnswer = userAnswers[currentQuestionIndex];
+            if (question.type === 'multi') {
+                if (currentAnswer && currentAnswer.includes(index)) optionEl.classList.add('multi-selected');
+            } else {
+                if (currentAnswer === index) optionEl.classList.add('selected');
+            }
+
+            optionEl.onclick = () => selectAnswer(index, question.type);
+            DOMElements.optionsContainer.appendChild(optionEl);
+        });
+        updateNavButtons();
+    }
+    
+    function selectAnswer(index, type) {
+        let currentAnswer = userAnswers[currentQuestionIndex];
+        if (type === 'multi') {
+            const newAnswer = currentAnswer ? [...currentAnswer] : [];
+            const pos = newAnswer.indexOf(index);
+            if (pos > -1) newAnswer.splice(pos, 1);
+            else if (newAnswer.length < 2) newAnswer.push(index);
+            userAnswers[currentQuestionIndex] = newAnswer.length > 0 ? newAnswer : null;
+        } else {
+            userAnswers[currentQuestionIndex] = index;
+        }
+        renderQuestion();
+    }
+    
+    function updateNavButtons() {
+        DOMElements.prevBtn.disabled = currentQuestionIndex === 0;
+        let answer = userAnswers[currentQuestionIndex];
+        if (quizData[currentQuestionIndex].type === 'multi') {
+            DOMElements.nextBtn.disabled = !answer || answer.length !== 2;
+        } else {
+            DOMElements.nextBtn.disabled = answer === null;
+        }
+        DOMElements.nextBtn.textContent = currentQuestionIndex === quizData.length - 1 ? 'Finish' : 'Next';
+    }
+
+    function previousQuestion() {
+        if (currentQuestionIndex > 0) { currentQuestionIndex--; renderQuestion(); }
+    }
+    
+    function nextQuestion() {
+        if (currentQuestionIndex < quizData.length - 1) {
+            currentQuestionIndex++;
+            renderQuestion();
+        } else {
+            finishQuiz();
+        }
+    }
+
+    function finishQuiz() {
+        let score = 0;
+        quizData.forEach((q, i) => {
+            const userAnswer = userAnswers[i];
+            let isCorrect = false;
+            if (q.type === 'multi') {
+                const sortedUser = userAnswer ? [...userAnswer].sort() : [];
+                const sortedCorrect = [...q.correct].sort();
+                if (sortedUser.length === sortedCorrect.length && sortedUser.every((v, idx) => v === sortedCorrect[idx])) isCorrect = true;
+            } else {
+                if (userAnswer === q.correct) isCorrect = true;
+            }
+            if (isCorrect) score++;
+        });
+        
+        const percentage = Math.round((score / quizData.length) * 100);
+        document.getElementById('finalScore').textContent = `${score}/${quizData.length}`;
+        document.getElementById('percentageScore').textContent = `${percentage}%`;
+        document.getElementById('correctCount').textContent = score;
+        document.getElementById('incorrectCount').textContent = quizData.length - score;
+        
+        let message = "Keep practicing!";
+        if (percentage >= 80) message = "Excellent work!";
+        else if (percentage >= 60) message = "Good job!";
+        document.getElementById('performanceMessage').textContent = message;
+
+        saveScoreToLeaderboard(score);
+        showPage('resultsScreen');
+    }
+    
+    function toggleDetailedResults() {
+        const container = document.getElementById('detailedResults');
+        container.classList.toggle('hidden');
+        if (container.classList.contains('hidden')) return;
+        
+        container.innerHTML = '<h3>Answer Review</h3>';
+        quizData.forEach((q, i) => {
+            let userAnswer = userAnswers[i];
+            let isCorrect = false;
+            if (q.type === 'multi') {
+                const sortedUser = userAnswer ? [...userAnswer].sort() : [];
+                const sortedCorrect = [...q.correct].sort();
+                isCorrect = sortedUser.length === sortedCorrect.length && sortedUser.every((v, idx) => v === sortedCorrect[idx]);
+            } else {
+                isCorrect = userAnswer === q.correct;
+            }
+
+            const div = document.createElement('div');
+            div.className = `answer-review ${isCorrect ? 'correct' : 'incorrect'}`;
+            div.innerHTML = `<strong>Q${i+1}: ${q.question}</strong><br><small>Your answer: ${formatAnswer(q, userAnswer)}. Correct: ${formatAnswer(q, q.correct)}</small><br><small><em>Explanation: ${q.explanation}</em></small>`;
+            container.appendChild(div);
+        });
+    }
+
+    function formatAnswer(q, answer) {
+        if (answer === null || answer === undefined) return 'Not answered';
+        if (q.type === 'multi') {
+             return answer.map(i => q.options[i]).join(', ');
+        }
+        return q.options[answer];
+    }
+    
+    function restartQuiz() { showPage('startScreen'); }
+
+    function getLeaderboard() { return JSON.parse(localStorage.getItem('quizLeaderboard') || '[]'); }
+    function saveScoreToLeaderboard(score) {
+        let board = getLeaderboard();
+        board.push({ name: playerName, score });
+        board.sort((a, b) => b.score - a.score);
+        localStorage.setItem('quizLeaderboard', JSON.stringify(board.slice(0, 5)));
+    }
+    
+    function showLeaderboard() {
+        const board = getLeaderboard();
+        const container = document.getElementById('leaderboardContainer');
+        if (board.length === 0) {
+            container.innerHTML = '<p>No scores yet. Be the first!</p>';
+        } else {
+            container.innerHTML = board.map((entry, i) => 
+                `<div class="leaderboard-entry">
+                    <span><strong>${i+1}. ${entry.name}</strong></span>
+                    <span>${entry.score} / ${quizData.length}</span>
+                </div>`
+            ).join('');
+        }
+        showPage('leaderboardScreen');
+    }
+    
+    function hideLeaderboard() { showPage(lastState); }
+    
+    function clearLeaderboard() {
+        if (confirm('Are you sure you want to clear all records?')) {
+            localStorage.removeItem('quizLeaderboard');
+            showLeaderboard();
+        }
+    }
+</script>
+</body>
+</html>
