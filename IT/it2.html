@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web Design Quiz</title>
+    <title>Digital Marketing Quiz</title>
     <style>
         :root {
             --bg-dark: #0f172a;
@@ -437,8 +437,8 @@
     <div class="container">
         <!-- Start Screen -->
         <div id="startScreen" class="quiz-card page active">
-            <h1>🎯 Web Design Quiz</h1>
-            <p>Test your knowledge of HTML5 and CSS. Enter your name to begin the challenge!</p>
+            <h1>🎯 Digital Marketing Quiz</h1>
+            <p>Test your knowledge of Digital Marketing concepts including SEO, Analytics, and more!</p>
             <input type="text" id="playerName" placeholder="Enter your name..." maxlength="20" required>
             <div id="nameError" class="error-message hidden">Please enter your name to continue</div>
             <div class="btn-grid" style="margin-top: 20px;">
@@ -465,16 +465,16 @@
                 <h3>Scoring:</h3>
                 <ul style="margin-left: 20px; margin-bottom: 20px;">
                     <li>Each question is worth 1 point</li>
-                    <li>Total: 50 questions</li>
-                    <li>Passing score: 30+ points (60%)</li>
+                    <li>Total: 40 questions</li>
+                    <li>Passing score: 24+ points (60%)</li>
                 </ul>
                 
-                <h3>Tips:</h3>
+                <h3>Topics Covered:</h3>
                 <ul style="margin-left: 20px;">
-                    <li>Read each question carefully</li>
-                    <li>For multi-choice, select exactly 2 answers</li>
-                    <li>You can navigate back to review answers</li>
-                    <li>All questions must be answered to finish</li>
+                    <li>Digital Marketing Channels</li>
+                    <li>SEO Techniques and Tools</li>
+                    <li>Analytics and Metrics</li>
+                    <li>Content Marketing</li>
                 </ul>
             </div>
             <div class="btn-grid">
@@ -505,7 +505,7 @@
             <h1>🎉 Quiz Complete!</h1>
             <div class="results-grid">
                 <div class="result-item">
-                    <h3 id="finalScore">0/50</h3>
+                    <h3 id="finalScore">0/40</h3>
                     <p>Score</p>
                 </div>
                 <div class="result-item">
@@ -544,63 +544,305 @@
 
 <script>
     const quizData = [
-        // Part A: Single Choice (25)
-        { question: "Which HTML5 input type defines a color picker?", options: ["type=\"range\"", "type=\"color\"", "type=\"file\"", "type=\"search\""], correct: 1, type: "single", explanation: "The type=\"color\" input creates a color picker interface." },
-        { question: "The `pattern` attribute in HTML5 forms is used for:", options: ["Setting minimum input length", "Validating input using regular expressions", "Disabling an input field", "Autocompleting user data"], correct: 1, type: "single", explanation: "The `pattern` attribute uses regular expressions to validate user input." },
-        { question: "Which attribute makes an input field mandatory?", options: ["disabled", "autofocus", "required", "placeholder"], correct: 2, type: "single", explanation: "The `required` attribute ensures users must fill in the field before submitting." },
-        { question: "The `&lt;meta&gt;` tag is placed within:", options: ["&lt;body&gt;", "&lt;footer&gt;", "&lt;head&gt;", "&lt;section&gt;"], correct: 2, type: "single", explanation: "Meta tags provide document metadata and belong in the &lt;head&gt; section." },
-        { question: "CSS syntax consists of:", options: ["Selector and declarations", "Tags and attributes", "Classes and IDs", "Properties and values"], correct: 0, type: "single", explanation: "A CSS rule consists of a selector and a declaration block." },
-        { question: "To set an image as a webpage background, use:", options: ["background-color", "background-image", "border-image", "img-src"], correct: 1, type: "single", explanation: "The `background-image` property sets one or more background images for an element." },
-        { question: "Which CSS property centers text horizontally?", options: ["font-align", "vertical-align", "text-align", "position: center"], correct: 2, type: "single", explanation: "The `text-align` property specifies the horizontal alignment of text." },
-        { question: "For an ordered list starting at 50, use:", options: ["&lt;ol start=\"50\"&gt;", "&lt;ol value=\"50\"&gt;", "&lt;ol begin=\"50\"&gt;", "&lt;ol reversed=\"50\"&gt;"], correct: 0, type: "single", explanation: "The `start` attribute for an `<ol>` tag specifies the start value." },
-        { question: "The `&lt;audio&gt;` tag attribute that loops playback is:", options: ["cycle", "repeat", "loop", "reversed"], correct: 2, type: "single", explanation: "The `loop` attribute, if specified, will cause the audio to automatically repeat." },
-        { question: "Client-side image maps use:", options: ["&lt;servermap&gt;", "&lt;map&gt; and &lt;area&gt;", "&lt;imagemap&gt;", "&lt;hotspot&gt;"], correct: 1, type: "single", explanation: "A client-side image map uses `<map>` and `<area>` elements." },
-        { question: "To embed an external webpage section, use:", options: ["&lt;frame&gt;", "&lt;inline&gt;", "&lt;iframe&gt;", "&lt;embed&gt;"], correct: 2, type: "single", explanation: "The `<iframe>` (Inline Frame) element embeds another HTML page into the current one." },
-        { question: "Free web hosting for limited periods is:", options: ["Dedicated hosting", "Shared hosting", "Server hosting", "Free hosting"], correct: 3, type: "single", explanation: "Free hosting provides web hosting at no cost, often with limitations." },
-        { question: "The CSS property `float: right` moves an element:", options: ["To the left of its container", "To the right of its container", "To the top", "To the bottom"], correct: 1, type: "single", explanation: "The `float` property places an element on the left or right side of its container." },
-        { question: "Which HTML5 tag creates a definition list?", options: ["&lt;nl&gt;", "&lt;dl&gt;", "&lt;def&gt;", "&lt;list&gt;"], correct: 1, type: "single", explanation: "The `<dl>` tag is used to create a description list." },
-        { question: "To disable an input field, use:", options: ["readonly", "disabled", "blocked", "inactive"], correct: 1, type: "single", explanation: "The `disabled` attribute makes an input field un-clickable and un-usable." },
-        { question: "The `&lt;source&gt;` tag is used with:", options: ["&lt;audio&gt; and &lt;video&gt;", "&lt;img&gt;", "&lt;map&gt;", "&lt;iframe&gt;"], correct: 0, type: "single", explanation: "The `<source>` tag specifies multiple media resources for `<video>` and `<audio>`." },
-        { question: "For fixed positioning relative to the browser window, use:", options: ["position: static", "position: fixed", "position: relative", "position: absolute"], correct: 1, type: "single", explanation: "`position: fixed` makes an element positioned relative to the viewport." },
-        { question: "Which attribute specifies an image for `&lt;input type=\"image\"&gt;`?", options: ["img", "source", "src", "href"], correct: 2, type: "single", explanation: "For an `<input>` of type `image`, the `src` attribute is required." },
-        { question: "The `autocomplete` attribute:", options: ["Validates email formats", "Suggests previous input values", "Disables form submission", "Hides input fields"], correct: 1, type: "single", explanation: "The `autocomplete` attribute provides a hint to the browser for auto-completion." },
-        { question: "To create a polygon hotspot in an image map, use `shape=\"____\"`.", options: ["rect", "circle", "poly", "triangle"], correct: 2, type: "single", explanation: "`shape=\"poly\"` is used for defining a polygonal region." },
-        { question: "The CSS universal selector is:", options: ["#", ".", "*", "@"], correct: 2, type: "single", explanation: "The asterisk (*) is the universal selector in CSS." },
-        { question: "Which tag defines a term in a definition list?", options: ["&lt;dd&gt;", "&lt;dt&gt;", "&lt;dfn&gt;", "&lt;term&gt;"], correct: 1, type: "single", explanation: "The `<dt>` (Description Term) tag specifies a term in a description list." },
-        { question: "For a video thumbnail before playback, use:", options: ["preload", "poster", "thumbnail", "src"], correct: 1, type: "single", explanation: "The `poster` attribute specifies an image to be shown while the video is downloading." },
-        { question: "The first file loaded on free web hosting must be named:", options: ["home.html", "start.html", "index.html", "main.html"], correct: 2, type: "single", explanation: "Web servers are typically configured to look for `index.html` as the default file." },
-        { question: "Grouping CSS selectors uses:", options: ["Periods (.)", "Commas (,)", "Semicolons (;)", "Colons (:)"], correct: 1, type: "single", explanation: "To apply the same styles to multiple selectors, you group them with a comma." },
-        
-        // Part B: Multi Choice (10)
-        { question: "Select TWO new HTML5 input types for validation:", options: ["type=\"tel\"", "type=\"button\"", "type=\"email\"", "type=\"text\"", "type=\"radio\""], correct: [0, 2], type: "multi", explanation: "HTML5 introduced 'tel' and 'email' for better validation and mobile keyboards." },
-        { question: "Select TWO attributes that restrict input values:", options: ["max", "color", "min", "src", "alt"], correct: [0, 2], type: "multi", explanation: "The max and min attributes set upper and lower bounds for numeric inputs." },
-        { question: "Select TWO required attributes for `&lt;meta&gt;` tags:", options: ["name", "href", "content", "size", "type"], correct: [0, 2], type: "multi", explanation: "Meta tags typically require both name and content attributes." },
-        { question: "Select TWO CSS properties for text styling:", options: ["font-weight", "background-image", "text-decoration", "float", "position"], correct: [0, 2], type: "multi", explanation: "`font-weight` and `text-decoration` are both used to style text." },
-        { question: "Select TWO elements used in a definition list:", options: ["&lt;dt&gt;", "&lt;ol&gt;", "&lt;dd&gt;", "&lt;ul&gt;", "&lt;li&gt;"], correct: [0, 2], type: "multi", explanation: "Definition lists use <dt> for terms and <dd> for descriptions." },
-        { question: "Select TWO common audio formats supported by HTML5:", options: [".mp3", ".avi", ".ogg", ".mp4", ".wmv"], correct: [0, 2], type: "multi", explanation: "MP3 and OGG are commonly supported audio formats in HTML5." },
-        { question: "Select TWO shapes for image map hotspots:", options: ["rect", "square", "poly", "line", "dot"], correct: [0, 2], type: "multi", explanation: "Image maps support `rect` (rectangle) and `poly` (polygon) shapes." },
-        { question: "Select TWO types of web hosting:", options: ["Shared hosting", "Cloud hosting", "Free hosting", "Email hosting", "Dedicated hosting"], correct: [0, 2], type: "multi", explanation: "Shared and Free hosting are common types of web hosting services." },
-        { question: "Select TWO CSS `display` property values:", options: ["inline", "fixed", "block", "float", "none"], correct: [0, 2], type: "multi", explanation: "`inline` and `block` are fundamental display values." },
-        { question: "Select TWO tags for embedding media:", options: ["&lt;audio&gt;", "&lt;img&gt;", "&lt;video&gt;", "&lt;map&gt;", "&lt;iframe&gt;"], correct: [0, 2], type: "multi", explanation: "The `<audio>` and `<video>` tags are for embedding media content." },
-        
-        // Part C: Match the Pairs (5 as single choice)
-        { question: "Match HTML5 input types to their descriptions:", type: "match", options: ["1-c, 2-d, 3-a, 4-b", "1-a, 2-b, 3-c, 4-d", "1-d, 2-c, 3-b, 4-a", "1-b, 2-a, 3-d, 4-c"], correct: 0, explanation: "Correct pairings: color→c, number→d, url→a, date→b.", matchData: { columnA: ["1. `color`", "2. `number`", "3. `url`", "4. `date`"], columnB: ["a. URL field", "b. date picker", "c. color picker", "d. number field"] } },
-        { question: "Match CSS properties to their uses:", type: "match", options: ["1-b, 2-a, 3-d, 4-c", "1-a, 2-b, 3-c, 4-d", "1-d, 2-c, 3-b, 4-a", "1-c, 2-d, 3-a, 4-b"], correct: 0, explanation: "Correct pairings: text-align→b, background-color→a, font-family→d, padding→c.", matchData: { columnA: ["1. `text-align`", "2. `background-color`", "3. `font-family`", "4. `padding`"], columnB: ["a. sets background", "b. aligns text", "c. adds space", "d. controls font"] } },
-        { question: "Match tags to their functions:", type: "match", options: ["1-b, 2-a, 3-c, 4-d", "1-a, 2-b, 3-d, 4-c", "1-d, 2-c, 3-b, 4-a", "1-c, 2-d, 3-a, 4-b"], correct: 0, explanation: "Correct pairings: meta→b, iframe→a, map→c, source→d.", matchData: { columnA: ["1. `&lt;meta&gt;`", "2. `&lt;iframe&gt;`", "3. `&lt;map&gt;`", "4. `&lt;source&gt;`"], columnB: ["a. inline frame", "b. metadata", "c. image map", "d. media resource"] } },
-        { question: "Match CSS selectors to their syntax:", type: "match", options: ["1-c, 2-a, 3-b, 4-d", "1-a, 2-b, 3-c, 4-d", "1-d, 2-c, 3-a, 4-b", "1-b, 2-d, 3-c, 4-a"], correct: 0, explanation: "Correct pairings: Class→c, ID→a, Universal→b, Group→d.", matchData: { columnA: ["1. Class", "2. ID", "3. Universal", "4. Group"], columnB: ["a. `#name`", "b. `*`", "c. `.name`", "d. `h1, p`"] } },
-        { question: "Match lists to their attributes:", type: "match", options: ["1-b, 2-a, 3-c, 4-d", "1-a, 2-b, 3-d, 4-c", "1-d, 2-c, 3-b, 4-a", "1-c, 2-d, 3-a, 4-b"], correct: 0, explanation: "Correct pairings: Ordered→b, Unordered→a, Definition→c, Nested→d.", matchData: { columnA: ["1. Ordered", "2. Unordered", "3. Definition", "4. Nested"], columnB: ["a. `disc`", "b. `start`", "c. `&lt;dt&gt;`", "d. list in list"] } },
-        
-        // Part D: True/False (10)
-        { question: "The `pattern` attribute uses JavaScript for validation.", options: ["True", "False"], correct: 1, type: "boolean", explanation: "False. The pattern attribute uses regular expressions (regex), not JavaScript." },
-        { question: "`&lt;meta&gt;` tags are visible on the webpage.", options: ["True", "False"], correct: 1, type: "boolean", explanation: "False. Meta tags are for browsers and search engines, not visual display." },
-        { question: "External CSS files use the `&lt;style&gt;` tag.", options: ["True", "False"], correct: 1, type: "boolean", explanation: "False. External CSS is linked using the <link> tag." },
-        { question: "`float: none` is the default CSS behavior.", options: ["True", "False"], correct: 0, type: "boolean", explanation: "True. Elements have float: none by default." },
-        { question: "HTML5 supports `type=\"bullet\"` for unordered lists.", options: ["True", "False"], correct: 1, type: "boolean", explanation: "False. List styling is handled by the CSS `list-style-type` property." },
-        { question: "`&lt;video&gt;` tags require the `controls` attribute to show playback buttons.", options: ["True", "False"], correct: 0, type: "boolean", explanation: "True. Without `controls`, the video player will not have visible controls." },
-        { question: "Image maps can only be server-side.", options: ["True", "False"], correct: 1, type: "boolean", explanation: "False. Image maps can be client-side or server-side." },
-        { question: "Free hosting requires a paid domain.", options: ["True", "False"], correct: 1, type: "boolean", explanation: "False. Free hosting often provides free subdomains." },
-        { question: "`position: absolute` ignores page flow.", options: ["True", "False"], correct: 0, type: "boolean", explanation: "True. Absolutely positioned elements are removed from the normal document flow." },
-        { question: "The `&lt;dd&gt;` tag defines a term in a definition list.", options: ["True", "False"], correct: 1, type: "boolean", explanation: "False. The `<dd>` tag defines the description; `<dt>` defines the term." },
+        // Part A: Single Choice MCQs (15)
+        {
+            question: "Digital marketing primarily makes use of",
+            options: ["Print ads", "Search engines", "Direct mail", "Door-to-door sales"],
+            correct: 1,
+            type: "single",
+            explanation: "Digital marketing primarily uses search engines as they provide online visibility, targeted reach, and measurable results. Unlike traditional methods like print ads or direct mail, search engines form the backbone of digital marketing strategies."
+        },
+        {
+            question: "Which of these is NOT a channel in digital marketing?",
+            options: ["TV commercials", "SEO", "Email marketing", "Social Media Marketing"],
+            correct: 0,
+            type: "single",
+            explanation: "TV commercials are traditional media advertising, not digital marketing. Digital marketing channels include SEO (search optimization), email marketing (digital communication), and social media marketing (online platforms)."
+        },
+        {
+            question: "The unpaid results shown in search engines are called",
+            options: ["Paid search", "Organic search", "Sponsored results", "Referral search"],
+            correct: 1,
+            type: "single",
+            explanation: "Organic search results are the unpaid listings that appear naturally based on relevance and SEO optimization. Paid search and sponsored results require payment, while referral search is not a standard search engine term."
+        },
+        {
+            question: "A program that gathers webpage data for search engines is known as",
+            options: ["Optimizer", "Reader", "Crawler", "Filter"],
+            correct: 2,
+            type: "single",
+            explanation: "A crawler (also called spider or bot) is an automated program that systematically browses the web to collect and index webpage data for search engines. It's essential for search engine indexing."
+        },
+        {
+            question: "Black Hat SEO tactics lead to",
+            options: ["Higher trust from Google", "Risk of blacklisting", "Better customer reviews", "Enhanced user experience"],
+            correct: 1,
+            type: "single",
+            explanation: "Black Hat SEO uses unethical tactics that violate search engine guidelines, leading to penalties and potential blacklisting. These practices harm rather than help long-term search rankings."
+        },
+        {
+            question: "Which of the following is an example of long-tail keyword?",
+            options: ["Shoes", "Cheap shoes", "Blue running shoes for men", "Product"],
+            correct: 2,
+            type: "single",
+            explanation: "Long-tail keywords are specific, detailed phrases with 3+ words like 'Blue running shoes for men'. They have lower search volume but higher conversion rates compared to short, generic terms like 'shoes'."
+        },
+        {
+            question: "To check website traffic, the most widely used tool is",
+            options: ["eBay", "Google Analytics", "Google Drive", "Flipkart Analytics"],
+            correct: 1,
+            type: "single",
+            explanation: "Google Analytics is the most widely used web analytics tool that provides comprehensive traffic data, user behavior insights, and conversion tracking. The other options are not analytics tools."
+        },
+        {
+            question: "A technique focusing on optimizing website's HTML and visible content is",
+            options: ["Off-Page SEO", "Technical SEO", "On-Page SEO", "Social Media Marketing"],
+            correct: 2,
+            type: "single",
+            explanation: "On-Page SEO focuses on optimizing elements within your website including HTML tags, content, titles, and meta descriptions. Off-Page SEO deals with external factors, while Technical SEO handles backend issues."
+        },
+        {
+            question: "The paid advertisement on search pages is identified by the word",
+            options: ["Organic", "Sponsored/Ad", "Prime", "Published"],
+            correct: 1,
+            type: "single",
+            explanation: "Paid advertisements on search results are clearly marked with 'Sponsored', 'Ad', or similar labels to distinguish them from organic results, ensuring transparency for users."
+        },
+        {
+            question: "White Hat SEO focuses on",
+            options: ["Manipulating search engines", "Ethical user experience", "Copying others", "Buying backlinks"],
+            correct: 1,
+            type: "single",
+            explanation: "White Hat SEO emphasizes ethical practices that improve user experience while following search engine guidelines. It focuses on quality content, proper optimization, and legitimate link building."
+        },
+        {
+            question: "Flash use on websites should be avoided because",
+            options: ["Search engines can't index it", "It's too bright", "It loads too fast", "It's free"],
+            correct: 0,
+            type: "single",
+            explanation: "Flash content cannot be properly indexed by search engines, making it invisible for SEO purposes. Additionally, Flash is not supported on many modern devices and browsers."
+        },
+        {
+            question: "The analysis of how a webpage performs regarding speed and file size falls under",
+            options: ["Link building", "Page speed info", "Social bookmarking", "Email marketing"],
+            correct: 1,
+            type: "single",
+            explanation: "Page speed analysis measures website performance including load times, file sizes, and optimization opportunities. It's crucial for both user experience and search engine rankings."
+        },
+        {
+            question: "'Acquisition', 'Behavior', and 'Conversion' are stages of",
+            options: ["Keyword planning", "Buying Funnel", "Backlinking", "Tagging"],
+            correct: 1,
+            type: "single",
+            explanation: "The buying funnel represents the customer journey: Acquisition (attracting visitors), Behavior (how they interact), and Conversion (desired actions). This framework helps analyze and optimize marketing strategies."
+        },
+        {
+            question: "The main goal of content marketing is",
+            options: ["Improving site speed", "Generating brand awareness and leads", "Getting backlinks only", "Hiding information"],
+            correct: 1,
+            type: "single",
+            explanation: "Content marketing aims to create valuable, relevant content to attract and engage audiences, ultimately generating brand awareness and qualified leads. It's about providing value rather than direct selling."
+        },
+        {
+            question: "A keyword like 'Compression Springs for Industrial Use' represents which type of keyword?",
+            options: ["Brand keyword", "Short tail", "Long tail", "Negative keyword"],
+            correct: 2,
+            type: "single",
+            explanation: "This is a long-tail keyword because it's highly specific with multiple words targeting a niche audience. Long-tail keywords typically have lower competition and higher conversion rates."
+        },
+
+        // Part B: Two Correct Options (15)
+        {
+            question: "Two important channels in Digital Marketing are",
+            options: ["TV", "Social Media", "SEO", "Door-to-door sales"],
+            correct: [1, 2],
+            type: "multi",
+            explanation: "Social Media and SEO are core digital marketing channels. Social Media enables direct audience engagement and brand building, while SEO drives organic traffic from search engines. TV and door-to-door sales are traditional marketing methods."
+        },
+        {
+            question: "SEO strategies are categorized as",
+            options: ["Email SEO", "On-Page SEO", "Technical SEO", "Guest SEO"],
+            correct: [1, 2],
+            type: "multi",
+            explanation: "On-Page SEO (optimizing content and HTML elements) and Technical SEO (site structure, speed, mobile-friendliness) are the main SEO categories. Email SEO and Guest SEO are not standard SEO categorizations."
+        },
+        {
+            question: "Tools for SEO Audit include",
+            options: ["SEOptimer", "Microsoft Word", "WooRank", "Windows Firewall"],
+            correct: [0, 2],
+            type: "multi",
+            explanation: "SEOptimer and WooRank are specialized SEO audit tools that analyze website performance, technical issues, and optimization opportunities. Microsoft Word and Windows Firewall are not SEO tools."
+        },
+        {
+            question: "In Analytics, 'Users' and 'Sessions' refer to",
+            options: ["Unique visitors", "Number of interactions", "Keywords", "Image sizes"],
+            correct: [0, 1],
+            type: "multi",
+            explanation: "In web analytics, 'Users' represents unique visitors to your site, while 'Sessions' counts the number of interaction periods. These are fundamental metrics for understanding website traffic and engagement."
+        },
+        {
+            question: "Friendly URLs and Backlinks are considered useful for",
+            options: ["SEO", "Content creation", "Tag design", "Device rendering"],
+            correct: [0, 1],
+            type: "multi",
+            explanation: "Friendly URLs improve SEO by making pages more accessible to search engines and users. Both friendly URLs and backlinks also support content creation by improving content discoverability and authority."
+        },
+        {
+            question: "The two main SEO techniques are",
+            options: ["White Hat SEO", "Link Buying", "Black Hat SEO", "Doorway pages"],
+            correct: [0, 2],
+            type: "multi",
+            explanation: "White Hat SEO (ethical practices) and Black Hat SEO (unethical practices) are the two main approaches. Link buying and doorway pages are specific Black Hat tactics, not broad techniques."
+        },
+        {
+            question: "Effective On-Page SEO practices involve",
+            options: ["Meta tags", "Alt attributes for images", "Spamming forums", "Cloaking"],
+            correct: [0, 1],
+            type: "multi",
+            explanation: "Meta tags and alt attributes for images are legitimate On-Page SEO practices that improve search engine understanding and accessibility. Spamming forums and cloaking are Black Hat tactics."
+        },
+        {
+            question: "Essential analytics metrics for measuring website popularity:",
+            options: ["Active users", "Bounce rate", "Phone calls", "Pop-up count"],
+            correct: [0, 1],
+            type: "multi",
+            explanation: "Active users show website engagement levels, while bounce rate indicates content relevance and user satisfaction. Phone calls and pop-up counts are not standard website popularity metrics."
+        },
+        {
+            question: "Google Analytics helps to analyze",
+            options: ["Traffic", "Conversion", "Flash usage", "Keyboard shortcuts"],
+            correct: [0, 1],
+            type: "multi",
+            explanation: "Google Analytics primarily tracks website traffic (visitor data) and conversions (goal completions). It doesn't monitor Flash usage details or keyboard shortcuts."
+        },
+        {
+            question: "Technical SEO includes checking for",
+            options: ["Site speed", "Mobile friendliness", "H1 tags", "Price tags"],
+            correct: [0, 1],
+            type: "multi",
+            explanation: "Technical SEO focuses on site infrastructure including site speed and mobile friendliness. While H1 tags are important, they're more On-Page SEO. Price tags are not SEO-related."
+        },
+        {
+            question: "The following can optimize website content for SEO:",
+            options: ["Using relevant keywords", "Optimizing heading tags", "Posting random images", "Ignoring meta descriptions"],
+            correct: [0, 1],
+            type: "multi",
+            explanation: "Using relevant keywords and optimizing heading tags are fundamental SEO content practices. Posting random images and ignoring meta descriptions harm SEO optimization."
+        },
+        {
+            question: "Googlebot performs",
+            options: ["Crawling", "Indexing", "Shopping", "Analytics"],
+            correct: [0, 1],
+            type: "multi",
+            explanation: "Googlebot crawls web pages to discover content and indexes them in Google's database for search results. It doesn't perform shopping or analytics functions."
+        },
+        {
+            question: "Acquisition in Digital Analytics means:",
+            options: ["Knowing about your website", "Generating customer interest", "Calculating bounce rate", "Posting videos"],
+            correct: [0, 1],
+            type: "multi",
+            explanation: "Acquisition in analytics refers to how users discover your website (knowing about it) and the process of generating customer interest. Bounce rate calculation and posting videos are different activities."
+        },
+        {
+            question: "Off-page SEO includes",
+            options: ["Link building", "Social media shares", "Tag coloring", "Page speed"],
+            correct: [0, 1],
+            type: "multi",
+            explanation: "Off-page SEO involves external factors like link building (getting other sites to link to you) and social media shares (external engagement). Tag coloring and page speed are on-page/technical factors."
+        },
+        {
+            question: "Secure websites are checked for",
+            options: ["SSL", "Malware", "Email marketing", "Bounce rate"],
+            correct: [0, 1],
+            type: "multi",
+            explanation: "Website security involves checking for SSL certificates (encrypted connections) and malware protection. Email marketing and bounce rate are not security concerns."
+        },
+
+        // Part C: Match the Column (3)
+        {
+            question: "Match the following digital marketing terms with their definitions:",
+            type: "match",
+            options: ["1-a, 2-b, 3-c, 4-d, 5-e, 6-f", "1-b, 2-a, 3-d, 4-c, 5-f, 6-e", "1-c, 2-d, 3-a, 4-b, 5-e, 6-f", "1-f, 2-e, 3-b, 4-a, 5-c, 6-d"],
+            correct: 0,
+            explanation: "Correct matching: Crawler collects webpage data (1-a), Long tail keywords are specific phrases like 'Best blue running shoes for men' (2-b), On-Page SEO deals with HTML tags and titles (3-c), Google Analytics tracks website traffic (4-d), Robots.txt controls page access (5-e), and Technical SEO handles site speed and mobile compatibility (6-f).",
+            matchData: {
+                columnA: ["1. Crawler", "2. Long tail keyword", "3. On-Page SEO", "4. Google Analytics", "5. Robots.txt", "6. Technical SEO"],
+                columnB: ["a. Collects webpage data", "b. 'Best blue running shoes for men'", "c. HTML tags, titles", "d. Tracks website traffic", "e. Page access control", "f. Site speed, mobile compatibility"]
+            }
+        },
+        {
+            question: "Match SEO concepts with their applications:",
+            type: "match",
+            options: ["1-c, 2-a, 3-d, 4-b", "1-a, 2-b, 3-c, 4-d", "1-d, 2-c, 3-b, 4-a", "1-b, 2-d, 3-a, 4-c"],
+            correct: 0,
+            explanation: "Correct matching: Black Hat SEO involves unethical practices (1-c), White Hat SEO uses ethical optimization (2-a), Keywords are search terms used by users (3-d), and Backlinks are external links pointing to your site (4-b).",
+            matchData: {
+                columnA: ["1. Black Hat SEO", "2. White Hat SEO", "3. Keywords", "4. Backlinks"],
+                columnB: ["a. Ethical optimization", "b. External links to your site", "c. Unethical practices", "d. Search terms used by users"]
+            }
+        },
+        {
+            question: "Match digital marketing tools with their primary functions:",
+            type: "match",
+            options: ["1-b, 2-d, 3-a, 4-c", "1-a, 2-b, 3-c, 4-d", "1-c, 2-a, 3-d, 4-b", "1-d, 2-c, 3-b, 4-a"],
+            correct: 0,
+            explanation: "Correct matching: Google Analytics analyzes website traffic and user behavior (1-b), SEOptimer provides SEO audit and recommendations (2-d), Social Media platforms enable audience engagement (3-a), and Email Marketing involves direct communication campaigns (4-c).",
+            matchData: {
+                columnA: ["1. Google Analytics", "2. SEOptimer", "3. Social Media", "4. Email Marketing"],
+                columnB: ["a. Audience engagement", "b. Traffic analysis", "c. Direct communication", "d. SEO audit"]
+            }
+        },
+
+        // Part D: True/False (7)
+        {
+            question: "Digital marketing always requires a physical marketplace.",
+            options: ["True", "False"],
+            correct: 1,
+            type: "boolean",
+            explanation: "False. Digital marketing operates entirely online without requiring physical marketplaces. It uses digital channels like websites, social media, and search engines to reach customers."
+        },
+        {
+            question: "Crawlers are used to collect data from websites for search engines.",
+            options: ["True", "False"],
+            correct: 0,
+            type: "boolean",
+            explanation: "True. Crawlers (also called spiders or bots) are automated programs that systematically browse and collect data from websites to build search engine indexes."
+        },
+        {
+            question: "Organic search results require payment to appear.",
+            options: ["True", "False"],
+            correct: 1,
+            type: "boolean",
+            explanation: "False. Organic search results are free and appear based on relevance and SEO optimization. Only paid advertisements require payment to appear in search results."
+        },
+        {
+            question: "SEO optimization can be analyzed by Google Analytics.",
+            options: ["True", "False"],
+            correct: 0,
+            type: "boolean",
+            explanation: "True. Google Analytics provides valuable SEO insights including organic traffic, keyword performance, page rankings, and user behavior data that help analyze SEO effectiveness."
+        },
+        {
+            question: "Pages ranked high always have the highest file size.",
+            options: ["True", "False"],
+            correct: 1,
+            type: "boolean",
+            explanation: "False. High-ranking pages often have optimized file sizes for faster loading. Page speed is a ranking factor, so smaller, optimized files typically perform better in search results."
+        },
+        {
+            question: "Technical SEO helps improve website ranking.",
+            options: ["True", "False"],
+            correct: 0,
+            type: "boolean",
+            explanation: "True. Technical SEO improves website infrastructure, speed, mobile-friendliness, and crawlability, which are important ranking factors that help improve search engine positions."
+        },
+        {
+            question: "All paid ads on search engines are marked as 'Sponsored' or 'Ad'.",
+            options: ["True", "False"],
+            correct: 0,
+            type: "boolean",
+            explanation: "True. Search engines are required to clearly label paid advertisements with terms like 'Sponsored', 'Ad', or similar markers to distinguish them from organic results for user transparency."
+        }
     ];
 
     let currentQuestionIndex = 0;
@@ -732,13 +974,13 @@
 
     function verifyResetCode() {
         const enteredCode = document.getElementById('resetCode').value.trim();
-        const correctCode = "TESSA"; // 🔑 CHANGE THIS TO YOUR DESIRED CODE
+         const correctCode = "TESSA"; // 🔑 CHANGE THIS TO YOUR DESIRED CODE
         const errorDiv = document.getElementById('codeError');
         
         if (enteredCode === correctCode) {
             // Correct code - show final confirmation
             if (confirm('🚨 FINAL WARNING 🚨\n\nYou are about to permanently delete ALL leaderboard scores!\n\nThis action CANNOT be undone.\n\nClick OK to proceed or Cancel to abort.')) {
-                localStorage.removeItem('quizLeaderboard');
+                localStorage.removeItem('digitalMarketingQuizLeaderboard');
                 closeResetModal();
                 
                 showNotification('✅ Leaderboard has been reset successfully!', 'success');
@@ -897,6 +1139,7 @@
         let questionHTML = question.question;
         if (question.type === 'match' && question.matchData) {
             questionHTML += `<table class="match-table">`;
+            questionHTML += `<tr><th style="padding: 12px; background: rgba(59, 130, 246, 0.1);">Column A</th><th style="padding: 12px; background: rgba(59, 130, 246, 0.1);">Column B</th></tr>`;
             for(let i = 0; i < question.matchData.columnA.length; i++) {
                 questionHTML += `<tr><td>${question.matchData.columnA[i]}</td><td>${question.matchData.columnB[i]}</td></tr>`;
             }
@@ -1017,10 +1260,10 @@
         let messageColor = "var(--incorrect)";
         
         if (percentage >= 90) {
-            message = "Outstanding! You're a web design expert! 🌟";
+            message = "Outstanding! You're a digital marketing expert! 🌟";
             messageColor = "var(--correct)";
         } else if (percentage >= 80) {
-            message = "Excellent work! Great knowledge! 🎉";
+            message = "Excellent work! Great knowledge of digital marketing! 🎉";
             messageColor = "var(--correct)";
         } else if (percentage >= 70) {
             message = "Good job! You're on the right track! 👍";
@@ -1103,7 +1346,7 @@
     }
 
     function getLeaderboard() { 
-        return JSON.parse(localStorage.getItem('quizLeaderboard') || '[]'); 
+        return JSON.parse(localStorage.getItem('digitalMarketingQuizLeaderboard') || '[]'); 
     }
     
     function saveScoreToLeaderboard(score, percentage, timeTaken) {
@@ -1125,7 +1368,7 @@
         });
         
         // Keep top 10 scores
-        localStorage.setItem('quizLeaderboard', JSON.stringify(board.slice(0, 10)));
+        localStorage.setItem('digitalMarketingQuizLeaderboard', JSON.stringify(board.slice(0, 10)));
     }
     
     function showLeaderboard() {

@@ -17,25 +17,24 @@
             min-height: 100vh;
             padding: 20px;
             color: white;
-            display: flex; /* Added for overall layout control */
-            flex-direction: column; /* Added for overall layout control */
-            align-items: center; /* Center content horizontally */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        /* NEW: Top Navigation Buttons */
         .top-nav-buttons {
             width: 100%;
-            max-width: 800px; /* Align with container max-width */
+            max-width: 800px;
             display: flex;
-            justify-content: flex-start; /* Align to start for left placement */
+            justify-content: flex-start;
             gap: 15px;
             margin-bottom: 20px;
-            padding: 0 10px; /* Add some padding on smaller screens */
+            padding: 0 10px;
         }
 
         .container {
             max-width: 800px;
-            width: 100%; /* Ensure it takes full width within max-width */
+            width: 100%;
             margin: 0 auto;
         }
 
@@ -138,7 +137,7 @@
             color: white;
             box-shadow: 0 0 8px rgba(99, 102, 241, 0.4);
         }
-        .category-match {
+        .category-correlation {
             background: linear-gradient(135deg, #7c2d12 0%, #ea580c 100%);
             color: white;
             box-shadow: 0 0 8px rgba(234, 88, 12, 0.4);
@@ -222,8 +221,8 @@
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
-            text-decoration: none; /* For anchor tags */
-            display: inline-flex; /* For anchor tags to allow padding */
+            text-decoration: none;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
         }
@@ -252,12 +251,12 @@
         }
 
         .btn-danger {
-            background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
             box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
         }
 
         .btn-danger:hover {
-            background: linear-gradient(135deg, #b91c1c 0%, #dc2626 100%);
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
             box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
         }
 
@@ -537,38 +536,9 @@
             flex-wrap: wrap;
         }
 
-        /* Styles for the match-the-pairs table */
-        .match-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            color: #e2e8f0;
-        }
-
-        .match-table th, .match-table td {
-            border: 1px solid rgba(59, 130, 246, 0.3);
-            padding: 10px 15px;
-            text-align: left;
-        }
-
-        .match-table th {
-            background: rgba(30, 58, 138, 0.5);
-            font-weight: bold;
-            color: #93c5fd;
-        }
-
-        .match-table tr:nth-child(even) {
-            background: rgba(30, 58, 138, 0.1);
-        }
-
-        .match-table tr:hover {
-            background: rgba(59, 130, 246, 0.15);
-        }
-
-
         @media (max-width: 768px) {
             .top-nav-buttons {
-                justify-content: center; /* Center buttons on smaller screens */
+                justify-content: center;
                 flex-wrap: wrap;
             }
             .container {
@@ -609,6 +579,16 @@
         .hidden {
             display: none;
         }
+
+        /* Animation styles for notifications */
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
     </style>
 </head>
 <body>
@@ -622,7 +602,7 @@
             <h1>Economics Quiz</h1>
             <div class="progress-container">
                 <div class="progress-bar" id="progressBar" style="width: 0%">
-                    <span id="progressText">0 / 10</span>
+                    <span id="progressText">0 / 30</span>
                 </div>
             </div>
         </div>
@@ -646,7 +626,7 @@
 
         <div class="quiz-container page" id="quizContainer">
             <div class="question-header">
-                <div class="question-number" id="questionNumber">Question 1 of 10</div>
+                <div class="question-number" id="questionNumber">Question 1 of 30</div>
                 <div class="category-badge" id="categoryBadge">MCQ</div>
             </div>
             
@@ -667,7 +647,7 @@
             <div class="results-screen">
                 <h2>Quiz Complete!</h2>
                 <div class="score-display">
-                    <h3 id="finalScore">0/10</h3>
+                    <h3 id="finalScore">0/30</h3>
                     <p>Your Performance</p>
                 </div>
                 
@@ -695,7 +675,7 @@
                     <button class="btn" onclick="showDetailedResults()">View Detailed Results</button>
                     <button class="btn btn-secondary" onclick="restartQuiz()">Take Quiz Again</button>
                     <button class="btn btn-secondary" onclick="showLeaderboard()">View Leaderboard</button>
-                    </div>
+                </div>
 
                 <div class="detailed-results hidden" id="detailedResults">
                     <h3>📊 Detailed Answer Review</h3>
@@ -712,371 +692,231 @@
                 </div>
                 <div class="leaderboard-buttons">
                     <button class="btn btn-secondary" onclick="hideLeaderboard()">Back to Quiz</button>
-                    <button class="btn btn-danger" onclick="clearLeaderboard()">Clear Leaderboard</button>
+                    <button class="btn btn-danger" onclick="showAdminReset()">🔒 Reset Scores</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Quiz data with 10 selected questions from all categories
+        // Quiz data with your economics questions
         const quizData = [
-            // MCQ Questions (25)
+            // MCQ Questions (12)
             {
-                question: "Who coined the terms 'microeconomics' and 'macroeconomics'?",
-                options: ["Adam Smith", "Alfred Marshall", "John Maynard Keynes", "Ragnar Frisch"],
-                correct: 3,
-                category: "mcq",
-                explanation: "Ragnar Frisch, a Norwegian economist, coined these terms to distinguish between the study of individual economic units and the economy as a whole."
-            },
-            {
-                question: "The Greek root 'Mikros' (micro) means:",
-                options: ["Large", "Small", "Aggregate", "Equilibrium"],
-                correct: 1,
-                category: "mcq",
-                explanation: "The term 'micro' is derived from the Greek word 'mikros', meaning 'small'."
-            },
-            {
-                question: "Which economist popularized microeconomics through 'Principles of Economics'?",
-                options: ["J.R. Hicks", "Alfred Marshall", "David Ricardo", "J.S. Mill"],
-                correct: 1,
-                category: "mcq",
-                explanation: "Alfred Marshall's 'Principles of Economics' (1890) laid the foundation for modern microeconomic theory."
-            },
-            {
-                question: "Macroeconomics gained prominence after:",
-                options: ["The Mercantilist era", "The Great Depression", "The Industrial Revolution", "The Physiocrats’ movement"],
-                correct: 1,
-                category: "mcq",
-                explanation: "The Great Depression of 1929-1930s highlighted the need for macroeconomic analysis and policy, leading to its prominence."
-            },
-            {
-                question: "The scope of microeconomics includes:",
-                options: ["National income", "General price level", "Theory of factor pricing", "Business cycles"],
-                correct: 2,
-                category: "mcq",
-                explanation: "Microeconomics deals with specific aspects of the economy, such as theory of product pricing, theory of factor pricing, and theory of economic welfare."
-            },
-            {
-                question: "Macroeconomics is best described as:",
-                options: ["Study of individual firms", "Functioning of the economy as a whole", "Analysis of product pricing", "Microscopic study of the economy"],
-                correct: 1,
-                category: "mcq",
-                explanation: "Macroeconomics studies the economy as a whole, including aggregate variables like national income, employment, and inflation."
-            },
-            {
-                question: "The 'slicing method' refers to:",
-                options: ["Studying national aggregates", "Dividing the economy into individual units", "General equilibrium analysis", "Policy-oriented science"],
-                correct: 1,
-                category: "mcq",
-                explanation: "The 'slicing method' is a technique used in microeconomics to study individual parts of the economy by 'slicing' the whole into smaller units."
-            },
-            {
-                question: "Keynes’ major contribution to macroeconomics is:",
-                options: ["Theory of factor pricing", "General Theory of Employment, Interest and Money", "Principles of partial equilibrium", "Marginalism principle"],
-                correct: 1,
-                category: "mcq",
-                explanation: "John Maynard Keynes's 'General Theory of Employment, Interest and Money' (1936) is considered the foundational text of modern macroeconomics."
-            },
-            {
-                question: "Microeconomics is also called:",
-                options: ["Income theory", "Price theory", "Growth theory", "Employment theory"],
-                correct: 1,
-                category: "mcq",
-                explanation: "Microeconomics is also known as Price Theory because it primarily explains how prices are determined in various markets."
-            },
-            {
-                question: "A feature exclusive to macroeconomics is:",
-                options: ["Partial equilibrium", "Study of individual units", "General equilibrium analysis", "Marginalism principle"],
-                correct: 2,
-                category: "mcq",
-                explanation: "Macroeconomics utilizes general equilibrium analysis, which considers the simultaneous interaction of all markets in the economy, unlike microeconomics' partial equilibrium."
-            },
-            {
-                question: "The theory of economic welfare in microeconomics focuses on:",
-                options: ["National income fluctuations", "Efficiency in resource allocation", "Currency exchange rates", "Business cycle control"],
-                correct: 1,
-                category: "mcq",
-                explanation: "The theory of economic welfare in microeconomics deals with the efficiency in the allocation of resources and the maximization of social welfare."
-            },
-            {
-                question: "Which concept is central to microeconomic decision-making?",
-                options: ["National output", "Marginalism", "General price level", "Aggregate savings"],
-                correct: 1,
-                category: "mcq",
-                explanation: "Marginalism – analyzing decisions at the margin – is fundamental to microeconomic analysis, where decisions are based on incremental changes."
-            },
-            {
-                question: "Physiocrats contributed to early:",
-                options: ["Microeconomic analysis", "Macroeconomic analysis", "Factor pricing theory", "Market structure models"],
-                correct: 1,
-                category: "mcq",
-                explanation: "The Physiocrats, an 18th-century French school of economists, made early contributions to macroeconomic thought, particularly regarding national income."
-            },
-            {
-                question: "The 'lumping method' is associated with:",
-                options: ["Microeconomics", "Macroeconomics", "Welfare economics", "Partial equilibrium"],
-                correct: 1,
-                category: "mcq",
-                explanation: "The 'lumping method' (or aggregative method) is used in macroeconomics to study the economy as a whole by aggregating individual units."
-            },
-            {
-                question: "Which falls under macroeconomics?",
-                options: ["Theory of consumer demand", "Theory of business cycles", "Firm-level supply analysis", "Individual income determination"],
-                correct: 1,
-                category: "mcq",
-                explanation: "The Theory of Business Cycles, dealing with fluctuations in overall economic activity, is a key area of macroeconomics."
-            },
-            {
-                question: "Maurice Dobb defined microeconomics as:",
-                options: ["'Study of large aggregates'", "'Microscopic study of the economy'", "'Functioning of the whole economy'", "'Policy-oriented science'"],
-                correct: 1,
-                category: "mcq",
-                explanation: "Maurice Dobb defined microeconomics as the 'microscopic study of the economy', focusing on individual units."
-            },
-            {
-                question: "Microeconomics assumes:",
-                options: ["Dynamic economic variables", "'Ceteris Paribus' (other things constant)", "Government intervention", "Full employment as variable"],
-                correct: 1,
-                category: "mcq",
-                explanation: "Microeconomics typically uses the 'ceteris paribus' assumption, meaning 'all other things being equal', to isolate the effect of one variable."
-            },
-            {
-                question: "Macro theory of distribution studies:",
-                options: ["Individual wages", "Relative shares in national income", "Firm-level profits", "Consumer satisfaction maximization"],
-                correct: 1,
-                category: "mcq",
-                explanation: "Macro theory of distribution examines how the total national income is distributed among different factors of production (e.g., total wages, total rent)."
-            },
-            {
-                question: "A limitation of microeconomics is:",
-                options: ["Ignoring individual behavior", "Not studying national unemployment", "Overemphasizing inflation", "Neglecting resource allocation"],
-                correct: 1,
-                category: "mcq",
-                explanation: "Microeconomics focuses on individual units and thus cannot address aggregate problems like national unemployment or inflation directly."
-            },
-            {
-                question: "Macroeconomics helps governments address:",
-                options: ["Individual pricing strategies", "Economic growth and employment", "Firm-level production efficiency", "Consumer demand patterns"],
-                correct: 1,
-                category: "mcq",
-                explanation: "Macroeconomics provides insights and tools for governments to formulate policies related to overall economic growth, employment, and stability."
-            },
-            {
-                question: "The 16th-17th century Mercantilists advocated:",
-                options: ["Microeconomic policies", "Macroeconomic policies", "Factor pricing models", "Partial equilibrium analysis"],
-                correct: 1,
-                category: "mcq",
-                explanation: "Mercantilists focused on accumulating national wealth through trade surpluses, a concept related to overall national economic policy (macroeconomics)."
-            },
-            {
-                question: "Efficiency in consumption (microeconomics) aims to:",
-                options: ["Maximize production output", "Maximize societal satisfaction", "Increase national income", "Control inflation"],
-                correct: 1,
-                category: "mcq",
-                explanation: "Efficiency in consumption refers to the distribution of goods and services among consumers in a way that maximizes overall societal satisfaction, a microeconomic welfare concept."
-            },
-            {
-                question: "Which economist contributed to macroeconomics development besides Keynes?",
-                options: ["Joan Robinson", "Irving Fisher", "Alfred Marshall", "A.P. Lerner"],
-                correct: 1,
-                category: "mcq",
-                explanation: "Irving Fisher made significant contributions to economic theory, particularly on interest rates and monetary theory, which are macroeconomic topics."
-            },
-            {
-                question: "Classical economists like Adam Smith:",
-                options: ["Exclusively used micro analysis", "Combined macro and micro analysis", "Focused only on national income", "Rejected aggregate studies"],
-                correct: 1,
-                category: "mcq",
-                explanation: "Classical economists often combined elements of both micro and macro analysis in their broader economic theories."
-            },
-            {
-                question: "Macroeconomics is policy-oriented because it:",
-                options: ["Studies individual firms", "Suggests solutions for inflation/unemployment", "Analyzes market structures", "Focuses on consumer behavior"],
-                correct: 1,
-                category: "mcq",
-                explanation: "Macroeconomics is policy-oriented as it provides frameworks and tools for governments to address economy-wide issues like inflation, unemployment, and recessions."
-            },
-
-            // Odd One Out (10)
-            {
-                question: "Choose the odd one: Theory of product pricing, Theory of factor pricing, Theory of economic welfare, Theory of general price level",
-                options: ["Theory of product pricing", "Theory of factor pricing", "Theory of economic welfare", "Theory of general price level"],
-                correct: 3,
-                category: "odd",
-                explanation: "Theory of general price level is macroeconomic, while others are microeconomic concepts."
-            },
-            {
-                question: "Choose the odd one: Rent, Wages, National income, Interest",
-                options: ["Rent", "Wages", "National income", "Interest"],
-                correct: 2,
-                category: "odd",
-                explanation: "National income is an aggregate concept, while others are factor rewards for individual factors of production."
-            },
-            {
-                question: "Choose the odd one: Alfred Marshall, J.M. Keynes, David Ricardo, J.S. Mill",
-                options: ["Alfred Marshall", "J.M. Keynes", "David Ricardo", "J.S. Mill"],
-                correct: 1,
-                category: "odd",
-                explanation: "J.M. Keynes pioneered modern macroeconomics, while Alfred Marshall, David Ricardo, and J.S. Mill were primarily associated with classical and neoclassical microeconomic thought."
-            },
-            {
-                question: "Choose the odd one: Partial equilibrium, Slicing method, Marginalism, Lumping method",
-                options: ["Partial equilibrium", "Slicing method", "Marginalism", "Lumping method"],
-                correct: 3,
-                category: "odd",
-                explanation: "Lumping method is a macroeconomic approach, while partial equilibrium, slicing method, and marginalism are microeconomic tools/concepts."
-            },
-            {
-                question: "Choose the odd one: Perfect competition, Monopoly, Inflation, Oligopoly",
-                options: ["Perfect competition", "Monopoly", "Inflation", "Oligopoly"],
-                correct: 2,
-                category: "odd",
-                explanation: "Inflation is a macroeconomic phenomenon (general price level increase), while perfect competition, monopoly, and oligopoly are microeconomic market structures."
-            },
-            {
-                question: "Choose the odd one: Physiocrats, Mercantilists, Neoclassical economists, Keynesians",
-                options: ["Physiocrats", "Mercantilists", "Neoclassical economists", "Keynesians"],
-                correct: 2,
-                category: "odd",
-                explanation: "Neoclassical economists are most strongly associated with the development and popularization of microeconomics, while Physiocrats, Mercantilists, and Keynesians are more aligned with macroeconomic thought or early aggregate analysis."
-            },
-            {
-                question: "Choose the odd one: Efficiency in production, Efficiency in consumption, Overall economic efficiency, Income inequality",
-                options: ["Efficiency in production", "Efficiency in consumption", "Overall economic efficiency", "Income inequality"],
-                correct: 3,
-                category: "odd",
-                explanation: "Efficiency in production, consumption, and overall economic efficiency are core concepts of microeconomic welfare theory. Income inequality is a macroeconomic distribution issue."
-            },
-            {
-                question: "Choose the odd one: Individual consumer, Individual producer, National output, Price of a commodity",
-                options: ["Individual consumer", "Individual producer", "National output", "Price of a commodity"],
-                correct: 2,
-                category: "odd",
-                explanation: "National output is an aggregate, economy-wide measure, making it a macroeconomic concept. The others are microeconomic units or concepts."
-            },
-            {
-                question: "Choose the odd one: Theory of business cycles, Theory of investment function, Theory of consumption function, Theory of factor pricing",
-                options: ["Theory of business cycles", "Theory of investment function", "Theory of consumption function", "Theory of factor pricing"],
-                correct: 3,
-                category: "odd",
-                explanation: "Theory of factor pricing (determining wages, rent, interest, profit) is a microeconomic theory. The others are fundamental theories within macroeconomics dealing with aggregate economic activity."
-            },
-            {
-                question: "Choose the odd one: Free market economy, Foreign trade analysis, Business decisions, Economic growth models",
-                options: ["Free market economy", "Foreign trade analysis", "Business decisions", "Economic growth models"],
-                correct: 3,
-                category: "odd",
-                explanation: "Economic growth models are a core area of macroeconomics, focusing on long-term expansion of an economy. The others are either general economic systems or microeconomic applications."
-            },
-
-            // Identify the Term (10)
-            {
-                question: "Identify the term: 'Microscopic study of the economy.' (Maurice Dobb's definition)",
-                options: ["Macroeconomics", "Econometrics", "Microeconomics", "Welfare economics"],
-                correct: 2,
-                category: "identify",
-                explanation: "Maurice Dobb defined microeconomics as the 'microscopic study of the economy'."
-            },
-            {
-                question: "Identify the term: 'Deals with the functioning of the economy as a whole.' (Carl Shapiro's definition)",
-                options: ["Microeconomics", "Partial equilibrium", "Macroeconomics", "Factor pricing"],
-                correct: 2,
-                category: "identify",
-                explanation: "This definition accurately describes macroeconomics, which focuses on the aggregate economy."
-            },
-            {
-                question: "Identify the term: 'Equilibrium analysis of an individual economic unit.'",
-                options: ["General equilibrium", "Partial equilibrium", "Growth equilibrium", "Dynamic equilibrium"],
-                correct: 1,
-                category: "identify",
-                explanation: "Partial equilibrium analysis examines the equilibrium of a single market or unit, assuming other markets remain constant."
-            },
-            {
-                question: "Identify the term: 'Distribution of goods to maximize societal satisfaction.'",
-                options: ["Efficiency in production", "Efficiency in consumption", "Overall efficiency", "Economic welfare"],
-                correct: 1,
-                category: "identify",
-                explanation: "This refers to efficiency in consumption, a key aspect of welfare economics under microeconomics."
-            },
-            {
-                question: "Identify the term: 'Study of large aggregates like employment and national income.' (J.L. Hansen’s definition)",
-                options: ["Microeconomics", "Price theory", "Macroeconomics", "Marginalism"],
-                correct: 2,
-                category: "identify",
-                explanation: "J.L. Hansen's definition points directly to macroeconomics, which deals with aggregates."
-            },
-            {
-                question: "Identify the term: 'Change in total output caused by an additional unit of input.'",
-                options: ["Equilibrium", "Slicing method", "Marginalism", "Lumping method"],
-                correct: 2,
-                category: "identify",
-                explanation: "Marginalism is the principle of evaluating the additional (marginal) benefits and costs of one more unit of an activity."
-            },
-            {
-                question: "Identify the term: 'Analysis of demand-supply balance in the entire economy.'",
-                options: ["Partial equilibrium", "General equilibrium", "Market equilibrium", "Static equilibrium"],
-                correct: 1,
-                category: "identify",
-                explanation: "General equilibrium analysis studies the interaction and equilibrium of all markets simultaneously across the entire economy."
-            },
-            {
-                question: "Identify the term: 'Production of goods most desired by society.'",
-                options: ["Efficiency in production", "Efficiency in consumption", "Overall economic efficiency", "Factor allocation"],
-                correct: 2,
-                category: "identify",
-                explanation: "Overall economic efficiency in microeconomics encompasses both production and consumption efficiency to maximize societal well-being."
-            },
-            {
-                question: "Identify the term: 'Method of splitting the economy into individual units for study.'",
-                options: ["Lumping method", "Slicing method", "Marginal analysis", "Aggregative analysis"],
-                correct: 1,
-                category: "identify",
-                explanation: "The slicing method is used in microeconomics to examine individual units or markets within the larger economy."
-            },
-            {
-                question: "Identify the term: 'Relative shares of factor rewards in total national income.'",
-                options: ["Factor pricing", "Macro theory of distribution", "Product pricing", "Welfare theory"],
-                correct: 1,
-                category: "identify",
-                explanation: "The macro theory of distribution specifically examines how the national income (aggregate income) is divided among rent, wages, interest, and profit."
-            },
-
-            // Match the Pairs (5)
-            {
-                question: "Match economists to contributions:<br><br><table class='match-table'><thead><tr><th>Column A</th><th>Column B</th></tr></thead><tbody><tr><td>1. Ragnar Frisch</td><td>A. Coined 'microeconomics' and 'macroeconomics'</td></tr><tr><td>2. Alfred Marshall</td><td>B. Popularized microeconomics</td></tr><tr><td>3. John Maynard Keynes</td><td>C. Developed macroeconomic framework</td></tr><tr><td>4. Physiocrats</td><td>D. Early analysis of national income</td></tr></tbody></table>",
-                options: ["1-A, 2-B, 3-C, 4-D", "1-B, 2-A, 3-D, 4-C", "1-C, 2-D, 3-B, 4-A", "1-D, 2-C, 3-A, 4-B"],
-                correct: 0, // Options are 0-indexed, so "1-A, 2-B, 3-C, 4-D" is the first option
-                category: "match",
-                explanation: "Ragnar Frisch coined the terms; Alfred Marshall popularized microeconomics; John Maynard Keynes developed the macroeconomic framework; Physiocrats provided early national income analysis."
-            },
-            {
-                question: "Match concepts to branches:<br><br><table class='match-table'><thead><tr><th>Column A</th><th>Column B</th></tr></thead><tbody><tr><td>1. Theory of product pricing</td><td>A. Microeconomics</td></tr><tr><td>2. Theory of national income</td><td>B. Macroeconomics</td></tr><tr><td>3. Theory of factor pricing</td><td>C. Microeconomics</td></tr><tr><td>4. Theory of business cycles</td><td>D. Macroeconomics</td></tr></tbody></table>",
-                options: ["1-B, 2-A, 3-B, 4-A", "1-A, 2-B, 3-C, 4-D", "1-B, 2-B, 3-A, 4-A", "1-A, 2-A, 3-B, 4-B"],
-                correct: 1, // "1-A, 2-B, 3-A, 4-B" corresponds to the second option
-                category: "match",
-                explanation: "Product and factor pricing are microeconomic concepts. National income and business cycles are macroeconomic concepts."
-            },
-            {
-                question: "Match features to branches:<br><br><table class='match-table'><thead><tr><th>Column A</th><th>Column B</th></tr></thead><tbody><tr><td>1. Partial equilibrium</td><td>A. Microeconomics</td></tr><tr><td>2. Policy-oriented</td><td>B. Macroeconomics</td></tr><tr><td>3. Study of individual units</td><td>C. Microeconomics</td></tr><tr><td>4. Growth models</td><td>D. Macroeconomics</td></tr></tbody></table>",
-                options: ["1-A, 2-B, 3-B, 4-A", "1-B, 2-A, 3-A, 4-B", "1-A, 2-B, 3-C, 4-D", "1-B, 2-B, 3-A, 4-A"],
-                correct: 2, // "1-A, 2-B, 3-C, 4-D" where C=A and D=B, indicating the third option
-                category: "match",
-                explanation: "Partial equilibrium and study of individual units are microeconomic. Policy-oriented nature and growth models are macroeconomic."
-            },
-            {
-                question: "Match historical eras to approaches:<br><br><table class='match-table'><thead><tr><th>Column A</th><th>Column B</th></tr></thead><tbody><tr><td>1. Mercantilists (16th-17th c.)</td><td>A. Early macroeconomic policies</td></tr><tr><td>2. Classical economists</td><td>B. Combined micro-macro analysis</td></tr><tr><td>3. Great Depression (1930s)</td><td>C. Rise of macroeconomics</td></tr><tr><td>4. Neo-classical era</td><td>D. Microeconomics popularization</td></tr></tbody></table>",
-                options: ["1-A, 2-B, 3-C, 4-D", "1-B, 2-A, 3-D, 4-C", "1-C, 2-D, 3-B, 4-A", "1-D, 2-C, 3-A, 4-B"],
+                question: "The branch of economics that deals with the allocation of resources is:",
+                options: ["Micro economics", "Macro economics", "Econometrics", "None of these"],
                 correct: 0,
-                category: "match",
-                explanation: "Mercantilists had early macroeconomic policies; Classical economists combined analyses; the Great Depression led to macroeconomics' rise; the Neo-classical era popularized microeconomics."
+                category: "mcq",
+                explanation: "Microeconomics is the branch of economics that studies how individuals, households, and firms make decisions regarding the allocation of scarce resources. It focuses on supply and demand, market structures, and resource allocation at the individual level."
             },
             {
-                question: "Match importance to branches:<br><br><table class='match-table'><thead><tr><th>Column A</th><th>Column B</th></tr></thead><tbody><tr><td>1. Price determination</td><td>A. Microeconomics</td></tr><tr><td>2. Controlling inflation</td><td>B. Macroeconomics</td></tr><tr><td>3. Business decisions</td><td>C. Microeconomics</td></tr><tr><td>4. National income analysis</td><td>D. Macroeconomics</td></tr></tbody></table>",
-                options: ["1-A, 2-B, 3-B, 4-A", "1-B, 2-A, 3-A, 4-B", "1-A, 2-B, 3-C, 4-D", "1-B, 2-B, 3-A, 4-A"],
-                correct: 2, // "1-A, 2-B, 3-C, 4-D" where C=A and D=B, indicating the third option
-                category: "match",
-                explanation: "Price determination and business decisions are microeconomic. Controlling inflation and national income analysis are macroeconomic."
+                question: "Which of the following concepts are studied under Micro economics?",
+                options: ["National income", "General price level", "Factor pricing", "Product pricing"],
+                correct: 3,
+                category: "mcq",
+                explanation: "Product pricing is a key concept in microeconomics, which deals with how prices of individual goods and services are determined in specific markets. National income and general price level are macroeconomic concepts."
+            },
+            {
+                question: "The method adopted in micro economic analysis is:",
+                options: ["Lumping method", "Aggregative method", "Slicing method", "Inclusive method"],
+                correct: 2,
+                category: "mcq",
+                explanation: "The slicing method is used in microeconomics where the economy is divided into smaller units (individual consumers, firms, markets) for detailed analysis. This contrasts with macroeconomics which uses the lumping method."
+            },
+            {
+                question: "Which of the following concepts are studied under Macro economics?",
+                options: ["Whole economy", "Economic development", "Aggregate supply", "Product pricing"],
+                correct: 0,
+                category: "mcq",
+                explanation: "Macroeconomics studies the whole economy as a single unit, including aggregates like national income, total employment, and overall economic performance. While economic development and aggregate supply are also macroeconomic, 'whole economy' is the most comprehensive answer."
+            },
+            {
+                question: "The theory of economic welfare in Micro economics deals with:",
+                options: ["Gross National Product", "Efficiency in allocation of resources", "Aggregation of national income", "Economic fluctuations"],
+                correct: 1,
+                category: "mcq",
+                explanation: "The theory of economic welfare in microeconomics focuses on efficiency in the allocation of resources to maximize social welfare. It examines how resources can be distributed to achieve optimal satisfaction for society."
+            },
+            {
+                question: "Who coined the terms 'Microeconomics' and 'Macroeconomics'?",
+                options: ["Adam Smith", "Alfred Marshall", "Ragnar Frisch", "John Maynard Keynes"],
+                correct: 2,
+                category: "mcq",
+                explanation: "Ragnar Frisch, a Norwegian economist and Nobel Prize winner, coined the terms 'microeconomics' and 'macroeconomics' in 1933 to distinguish between the study of individual economic units and the economy as a whole."
+            },
+            {
+                question: "The study of individual consumer behaviour and individual producer behaviour falls under:",
+                options: ["Microeconomics", "Macroeconomics", "Econometrics", "Welfare economics"],
+                correct: 0,
+                category: "mcq",
+                explanation: "Microeconomics specifically studies individual economic units including consumer behavior (how individuals make purchasing decisions) and producer behavior (how firms make production and pricing decisions)."
+            },
+            {
+                question: "Macro economics primarily studies:",
+                options: ["Individual prices of goods", "National income and employment", "Price of a particular commodity", "Individual consumer behaviour"],
+                correct: 1,
+                category: "mcq",
+                explanation: "Macroeconomics focuses on aggregate economic variables such as national income, total employment, inflation, and economic growth. It studies the economy as a whole rather than individual components."
+            },
+            {
+                question: "The principle key tool used in Micro economic analysis is:",
+                options: ["Aggregation", "Marginalism", "General equilibrium", "Economic growth modeling"],
+                correct: 1,
+                category: "mcq",
+                explanation: "Marginalism is the fundamental principle in microeconomics that analyzes decisions based on marginal (additional) benefits and costs. It helps explain how rational agents make optimal choices."
+            },
+            {
+                question: "Macro economics is concerned with:",
+                options: ["Partial equilibrium", "Individual income", "General price level", "Product pricing"],
+                correct: 2,
+                category: "mcq",
+                explanation: "Macroeconomics deals with aggregate variables including the general price level (inflation/deflation), which affects the entire economy. Partial equilibrium and product pricing are microeconomic concepts."
+            },
+            {
+                question: "Which economist published 'General Theory of Employment, Interest and Money' (1936)?",
+                options: ["Ragnar Frisch", "John Maynard Keynes", "Adam Smith", "Alfred Marshall"],
+                correct: 1,
+                category: "mcq",
+                explanation: "John Maynard Keynes published this seminal work in 1936, which laid the foundation for modern macroeconomics and challenged classical economic theories, especially during the Great Depression."
+            },
+            {
+                question: "The supply and demand forces determine the price of:",
+                options: ["Aggregate goods", "Individual commodities", "National income", "Business cycles"],
+                correct: 1,
+                category: "mcq",
+                explanation: "Supply and demand forces determine the prices of individual commodities in specific markets, which is a core concept in microeconomics. This market mechanism establishes equilibrium prices for particular goods and services."
+            },
+
+            // Odd One Out (6)
+            {
+                question: "Odd one out:",
+                options: ["Rent", "Wages", "Inflation", "Interest"],
+                correct: 2,
+                category: "odd",
+                explanation: "Inflation is a macroeconomic concept referring to the general rise in price levels. Rent, wages, and interest are factor payments studied in microeconomics as rewards to land, labor, and capital respectively."
+            },
+            {
+                question: "Odd one out:",
+                options: ["Microeconomics", "Macroeconomics", "National income", "Product pricing"],
+                correct: 2,
+                category: "odd",
+                explanation: "National income is a specific macroeconomic concept, while the others are either branches of economics (micro/macro) or a specific topic (product pricing). National income is a variable studied within macroeconomics."
+            },
+            {
+                question: "Odd one out:",
+                options: ["Slicing method", "Lumping method", "Partial equilibrium", "Price theory"],
+                correct: 1,
+                category: "odd",
+                explanation: "Lumping method is used in macroeconomics to aggregate individual units into totals. The other three (slicing method, partial equilibrium, and price theory) are microeconomic approaches and concepts."
+            },
+            {
+                question: "Odd one out:",
+                options: ["General price level", "Aggregate demand", "Individual supply", "Business cycles"],
+                correct: 2,
+                category: "odd",
+                explanation: "Individual supply is a microeconomic concept focusing on a single firm's supply. General price level, aggregate demand, and business cycles are all macroeconomic concepts dealing with economy-wide phenomena."
+            },
+            {
+                question: "Odd one out:",
+                options: ["Alfred Marshall", "John Maynard Keynes", "Maurice Dobb", "David Ricardo"],
+                correct: 1,
+                category: "odd",
+                explanation: "John Maynard Keynes is primarily associated with macroeconomics and founded modern macroeconomic theory. The others (Marshall, Dobb, Ricardo) are more closely associated with microeconomic theory and classical economics."
+            },
+            {
+                question: "Odd one out:",
+                options: ["Theory of investment function", "Theory of product pricing", "Theory of business cycles", "Theory of economic growth"],
+                correct: 1,
+                category: "odd",
+                explanation: "Theory of product pricing is a microeconomic concept dealing with how individual product prices are determined. The other three (investment function, business cycles, economic growth) are macroeconomic theories."
+            },
+
+            // Identify the Term (6)
+            {
+                question: "It is the branch of economics which studies individual units like consumers, firms, and prices.",
+                options: ["Macroeconomics", "Microeconomics", "Econometrics", "Welfare economics"],
+                correct: 1,
+                category: "identify",
+                explanation: "This definition perfectly describes microeconomics, which focuses on individual economic units such as consumers, firms, and the determination of individual prices in specific markets."
+            },
+            {
+                question: "The study of economy as a whole, including aggregates such as national income and employment, is called:",
+                options: ["Welfare economics", "Microeconomics", "Macroeconomics", "Monetary economics"],
+                correct: 2,
+                category: "identify",
+                explanation: "Macroeconomics studies the economy as a whole and deals with aggregate variables like national income, total employment, inflation, and economic growth."
+            },
+            {
+                question: "The approach that splits the whole economy into small units for study is called:",
+                options: ["Lumping method", "Slicing method", "General equilibrium", "Marginalism"],
+                correct: 1,
+                category: "identify",
+                explanation: "The slicing method is the approach used in microeconomics where the economy is divided or 'sliced' into smaller units (individual consumers, firms, markets) for detailed analysis."
+            },
+            {
+                question: "The principle which studies changes in total by an additional unit is:",
+                options: ["Efficiency analysis", "Marginalism", "Aggregation", "Business cycles"],
+                correct: 1,
+                category: "identify",
+                explanation: "Marginalism is the economic principle that analyzes the effect of adding one additional unit (marginal benefit, marginal cost, marginal utility) to understand optimal decision-making."
+            },
+            {
+                question: "The analysis that looks at equilibrium of the whole economy is called:",
+                options: ["Partial equilibrium", "General equilibrium", "Slicing method", "Price theory"],
+                correct: 1,
+                category: "identify",
+                explanation: "General equilibrium analysis examines the equilibrium of all markets simultaneously across the entire economy, considering the interdependence of all economic variables."
+            },
+            {
+                question: "The term used for overall maximization of satisfaction in society through efficient resource allocation is:",
+                options: ["Economic welfare", "Economic growth", "Economic fluctuations", "Factor pricing"],
+                correct: 0,
+                category: "identify",
+                explanation: "Economic welfare refers to the overall well-being of society achieved through efficient allocation of resources to maximize total satisfaction or utility."
+            },
+
+            // Correlation Questions (6)
+            {
+                question: "Micro economics : Slicing method :: Macro economics : ?",
+                options: ["Splitting method", "General equilibrium", "Lumping method", "Market equilibrium"],
+                correct: 2,
+                category: "correlation",
+                explanation: "Just as microeconomics uses the slicing method to divide the economy into individual units, macroeconomics uses the lumping method (or aggregative method) to combine individual units into aggregates."
+            },
+            {
+                question: "Micro economics : Individual income :: Macro economics : ?",
+                options: ["Individual wealth", "National income", "Personal savings", "Individual demand"],
+                correct: 1,
+                category: "correlation",
+                explanation: "Microeconomics studies individual income (income of a person or household), while macroeconomics studies national income (total income of all individuals in the economy)."
+            },
+            {
+                question: "Macro economic theory : Income and employment :: Micro economics : ?",
+                options: ["Product pricing", "Business cycles", "National output", "General price level"],
+                correct: 0,
+                category: "correlation",
+                explanation: "Just as macroeconomic theory deals with income and employment at the aggregate level, microeconomics deals with product pricing at the individual market level."
+            },
+            {
+                question: "Makros : Macro economics :: Mikros : ?",
+                options: ["Micro economics", "Economic welfare", "Business cycles", "Investment theory"],
+                correct: 0,
+                category: "correlation",
+                explanation: "The Greek word 'Makros' (meaning large) is the root of macroeconomics, while 'Mikros' (meaning small) is the root of microeconomics."
+            },
+            {
+                question: "General equilibrium : Macro economics :: Partial equilibrium : ?",
+                options: ["Micro economics", "National income accounting", "Economic welfare", "Aggregate demand"],
+                correct: 0,
+                category: "correlation",
+                explanation: "General equilibrium is used in macroeconomics to study the entire economy, while partial equilibrium is used in microeconomics to study individual markets or sectors."
+            },
+            {
+                question: "Theory of Income and Employment : Macro economics :: Theory of Product Pricing : ?",
+                options: ["Micro economics", "Monetary economics", "Welfare economics", "Economic growth theory"],
+                correct: 0,
+                category: "correlation",
+                explanation: "Theory of Income and Employment is a key area of macroeconomics, while Theory of Product Pricing is a fundamental area of microeconomics."
             }
         ];
 
@@ -1088,9 +928,9 @@
         let currentPlayerName = '';
 
         // DOM elements
-        let startScreen, quizContainer, resultsScreen, leaderboardScreen; // Declared with let
-        let progressBar, progressText, questionNumber, categoryBadge, questionText, optionsContainer; // Declared with let
-        let prevBtn, nextBtn, playerNameInput; // Declared with let
+        let startScreen, quizContainer, resultsScreen, leaderboardScreen;
+        let progressBar, progressText, questionNumber, categoryBadge, questionText, optionsContainer;
+        let prevBtn, nextBtn, playerNameInput;
 
         // Show/hide pages
         function showPage(pageId) {
@@ -1099,6 +939,233 @@
             });
             document.getElementById(pageId).classList.add('active');
         }
+
+        // Admin reset system with secure code
+        function showAdminReset() {
+            const modalOverlay = document.createElement('div');
+            modalOverlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.85);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 1000;
+                backdrop-filter: blur(5px);
+            `;
+
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+                border: 2px solid rgba(239, 68, 68, 0.5);
+                border-radius: 20px;
+                padding: 30px;
+                text-align: center;
+                color: white;
+                box-shadow: 0 25px 50px rgba(0, 0, 0, 0.9), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+                max-width: 450px;
+                width: 90%;
+                animation: modalSlideIn 0.3s ease-out;
+            `;
+
+            modal.innerHTML = `
+                <div style="margin-bottom: 25px;">
+                    <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #ef4444, #dc2626); 
+                                border-radius: 50%; display: flex; align-items: center; justify-content: center; 
+                                margin: 0 auto 15px auto; font-size: 24px;">🔒</div>
+                    <h3 style="color: #ef4444; margin-bottom: 10px; font-size: 1.5rem;">Admin Access Required</h3>
+                    <p style="color: #cbd5e1; margin-bottom: 0;">Enter the reset code to clear all leaderboard scores:</p>
+                </div>
+                
+                <div style="margin: 25px 0;">
+                    <input type="password" id="resetCode" placeholder="Enter reset code" 
+                           style="width: 100%; padding: 15px; border-radius: 10px; border: 2px solid rgba(239, 68, 68, 0.3); 
+                                  background: rgba(239, 68, 68, 0.1); color: white; text-align: center; 
+                                  font-size: 16px; font-weight: bold; letter-spacing: 2px;">
+                    <div id="codeError" style="color: #ef4444; font-size: 14px; margin-top: 10px; display: none;">
+                        ❌ Incorrect code. Access denied.
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                    <button onclick="verifyResetCode()" class="btn btn-danger" 
+                            style="min-width: 140px; font-weight: bold;">
+                        🗑️ Reset Leaderboard
+                    </button>
+                    <button onclick="closeResetModal()" class="btn btn-secondary" 
+                            style="min-width: 100px;">
+                        Cancel
+                    </button>
+                </div>
+                
+                <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(239, 68, 68, 0.2);">
+                    <p style="font-size: 12px; color: #94a3b8; line-height: 1.4;">
+                        ⚠️ <strong>Warning:</strong> This action will permanently delete all player scores and cannot be undone!
+                    </p>
+                </div>
+            `;
+
+            // Add modal animation CSS
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes modalSlideIn {
+                    from { 
+                        opacity: 0; 
+                        transform: scale(0.7) translateY(-50px); 
+                    }
+                    to { 
+                        opacity: 1; 
+                        transform: scale(1) translateY(0); 
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+
+            modalOverlay.appendChild(modal);
+            document.body.appendChild(modalOverlay);
+            window.currentResetModal = modalOverlay;
+            
+            const codeInput = document.getElementById('resetCode');
+            codeInput.focus();
+            codeInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    verifyResetCode();
+                }
+            });
+
+            // Close modal when clicking outside
+            modalOverlay.addEventListener('click', function(e) {
+                if (e.target === modalOverlay) {
+                    closeResetModal();
+                }
+            });
+        }
+
+        function verifyResetCode() {
+            const enteredCode = document.getElementById('resetCode').value.trim();
+            const correctCode = "TESSA"; // Change this to your desired code
+            const errorDiv = document.getElementById('codeError');
+            
+            if (enteredCode === correctCode) {
+                // Correct code - show final confirmation
+                if (confirm('🚨 FINAL WARNING 🚨\n\nYou are about to permanently delete ALL leaderboard scores!\n\nThis action CANNOT be undone.\n\nClick OK to proceed or Cancel to abort.')) {
+                    localStorage.removeItem('economicsQuizLeaderboard');
+                    closeResetModal();
+                    
+                    showNotification('✅ Leaderboard has been reset successfully!', 'success');
+                    
+                    // Refresh leaderboard display if currently viewing it
+                    if (document.getElementById('leaderboardScreen').classList.contains('active')) {
+                        displayLeaderboard();
+                    }
+                }
+            } else {
+                // Wrong code - show error
+                errorDiv.style.display = 'block';
+                document.getElementById('resetCode').value = '';
+                document.getElementById('resetCode').focus();
+                
+                // Add shake animation to modal
+                const modal = window.currentResetModal.querySelector('div');
+                modal.style.animation = 'shake 0.5s ease-in-out';
+                setTimeout(() => {
+                    modal.style.animation = '';
+                }, 500);
+            }
+        }
+
+        function closeResetModal() {
+            if (window.currentResetModal) {
+                window.currentResetModal.style.animation = 'fadeOut 0.3s ease-in';
+                setTimeout(() => {
+                    if (document.body.contains(window.currentResetModal)) {
+                        document.body.removeChild(window.currentResetModal);
+                    }
+                    window.currentResetModal = null;
+                }, 300);
+            }
+        }
+
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            const isSuccess = type === 'success';
+            
+            notification.style.cssText = `
+                position: fixed;
+                top: 30px;
+                right: 30px;
+                padding: 20px 25px;
+                border-radius: 12px;
+                color: white;
+                font-weight: bold;
+                font-size: 16px;
+                z-index: 1001;
+                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+                background: ${isSuccess ? 
+                    'linear-gradient(135deg, #22c55e, #16a34a)' : 
+                    'linear-gradient(135deg, #ef4444, #dc2626)'};
+                border: 1px solid ${isSuccess ? '#16a34a' : '#dc2626'};
+                animation: slideIn 0.4s ease-out;
+                max-width: 300px;
+                text-align: center;
+            `;
+            
+            notification.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 10px; justify-content: center;">
+                    <span style="font-size: 20px;">${isSuccess ? '✅' : '❌'}</span>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Auto remove after 4 seconds
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.4s ease-in';
+                setTimeout(() => {
+                    if (document.body.contains(notification)) {
+                        document.body.removeChild(notification);
+                    }
+                }, 400);
+            }, 4000);
+        }
+
+        // Add shake animation for wrong code
+        const shakeStyle = document.createElement('style');
+        shakeStyle.textContent = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+                20%, 40%, 60%, 80% { transform: translateX(5px); }
+            }
+            @keyframes fadeOut {
+                from { opacity: 1; transform: scale(1); }
+                to { opacity: 0; transform: scale(0.8); }
+            }
+        `;
+        document.head.appendChild(shakeStyle);
+
+        // Secret key combination (type "RESET" to trigger admin panel)
+        let keySequence = [];
+        const secretKeys = ['KeyR', 'KeyE', 'KeyS', 'KeyE', 'KeyT'];
+
+        document.addEventListener('keydown', function(e) {
+            keySequence.push(e.code);
+            
+            if (keySequence.length > secretKeys.length) {
+                keySequence.shift();
+            }
+            
+            if (keySequence.length === secretKeys.length && 
+                keySequence.every((key, index) => key === secretKeys[index])) {
+                
+                showAdminReset();
+                keySequence = [];
+            }
+        });
 
         // Leaderboard functions
         function saveScore(name, score, percentage, grade, correctAnswers, totalQuestions) {
@@ -1141,7 +1208,7 @@
             if (scores.length === 0) {
                 container.innerHTML = `
                     <div class="no-scores-message">
-                        <p>No scores yet! Be the first to take the quiz and set a record!</p>
+                        <p>🎯 No scores yet! Be the first to take the quiz and set a record!</p>
                     </div>
                 `;
                 return;
@@ -1177,13 +1244,6 @@
 
         function hideLeaderboard() {
             showPage('startScreen');
-        }
-
-        function clearLeaderboard() {
-            if (confirm('Are you sure you want to clear all leaderboard data? This action cannot be undone.')) {
-                localStorage.removeItem('economicsQuizLeaderboard');
-                displayLeaderboard();
-            }
         }
 
         // Start the quiz
@@ -1226,12 +1286,12 @@
                 'mcq': 'MCQ',
                 'odd': 'Odd One Out',
                 'identify': 'Identify the Term',
-                'match': 'Match the Pairs'
+                'correlation': 'Correlation'
             };
             categoryBadge.textContent = categoryNames[question.category] || 'MCQ';
             categoryBadge.className = `category-badge category-${question.category}`;
             
-            // Set question text (handle HTML for match questions)
+            // Set question text
             questionText.innerHTML = question.question;
             
             // Update progress
@@ -1341,17 +1401,17 @@
             // Performance message
             let message;
             if (percentage >= 90) {
-                message = "Outstanding! You have excellent knowledge of economics concepts!";
+                message = "🌟 Outstanding! You have excellent knowledge of economics concepts!";
             } else if (percentage >= 80) {
-                message = "Great job! You have a strong understanding of economics!";
+                message = "🎉 Great job! You have a strong understanding of economics!";
             } else if (percentage >= 70) {
-                message = "Good work! You have a solid grasp of the material!";
+                message = "👍 Good work! You have a solid grasp of the material!";
             } else if (percentage >= 60) {
-                message = "Fair performance. Consider reviewing the material for better understanding.";
+                message = "📚 Fair performance. Consider reviewing the material for better understanding.";
             } else if (percentage >= 50) {
-                message = "You passed, but there's room for improvement. Keep studying!";
+                message = "💪 You passed, but there's room for improvement. Keep studying!";
             } else {
-                message = "Keep practicing! Review the material and try again to improve your score.";
+                message = "🔄 Keep practicing! Review the material and try again to improve your score.";
             }
             
             document.getElementById('performanceMessage').textContent = message;
@@ -1425,7 +1485,7 @@
 
         // Initialize the quiz when page loads
         document.addEventListener('DOMContentLoaded', function() {
-            // Assign DOM elements to the `let` variables
+            // Assign DOM elements to the variables
             startScreen = document.getElementById('startScreen');
             quizContainer = document.getElementById('quizContainer');
             resultsScreen = document.getElementById('resultsScreen');

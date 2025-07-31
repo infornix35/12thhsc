@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Database Quiz</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f2f5;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: #4a90e2;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .quiz-content {
+            padding: 30px;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .question {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+
+        .question h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .options {
+            margin: 10px 0;
+        }
+
+        .option {
+            margin: 8px 0;
+            padding: 10px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .option:hover {
+            border-color: #4a90e2;
+            background: #f0f8ff;
+        }
+
+        .option.selected {
+            border-color: #4a90e2;
+            background: #e6f3ff;
+        }
+
+        input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        .name-section {
+            padding: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .name-section input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .submit-section {
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #ddd;
+        }
+
+        .btn {
+            background: #4a90e2;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+        }
+
+        .btn:hover {
+            background: #357abd;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+        }
+
+        .btn-secondary:hover {
+            background: #545b62;
+        }
+
+        .result-screen {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .score-display {
+            font-size: 48px;
+            color: #4a90e2;
+            margin: 20px 0;
+        }
+
+        .leaderboard {
+            text-align: left;
+            margin-top: 30px;
+        }
+
+        .leaderboard-entry {
+            padding: 10px;
+            margin: 5px 0;
+            background: #f9f9f9;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Simple responsive */
+        @media (max-width: 600px) {
+            .container {
+                margin: 10px;
+            }
+            .quiz-content {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Quiz Screen -->
+        <div id="quizScreen">
+            <div class="header">
+                <h1>🗄️ Database Quiz</h1>
+                <p>Answer all questions and submit to see your results</p>
+            </div>
+
+            <div class="name-section">
+                <label><strong>Your Name:</strong></label>
+                <input type="text" id="playerName" placeholder="Enter your name..." required>
+            </div>
+
+            <div class="quiz-content">
+                <!-- Question 1 -->
+                <div class="question">
+                    <h3>1. What best defines a database?</h3>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q1" value="0"> Set of calculations
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q1" value="1"> Collection of related data
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q1" value="2"> Single text file
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q1" value="3"> Paper records
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Question 2 -->
+                <div class="question">
+                    <h3>2. What is the default file extension for LibreOffice Base?</h3>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q2" value="0"> .odt
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q2" value="1"> .odb
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q2" value="2"> .ods
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q2" value="3"> .odp
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Question 3 -->
+                <div class="question">
+                    <h3>3. Which object is used to retrieve data from a database?</h3>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q3" value="0"> Table
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q3" value="1"> Report
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q3" value="2"> Query
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q3" value="3"> Form
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Question 4 -->
+                <div class="question">
+                    <h3>4. In a database table, each horizontal row is called:</h3>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q4" value="0"> Field
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q4" value="1"> Record
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q4" value="2"> Column
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q4" value="3"> Primary key
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Question 5 -->
+                <div class="question">
+                    <h3>5. What is the primary purpose of a form in LibreOffice Base?</h3>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q5" value="0"> Print data
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q5" value="1"> Display images
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q5" value="2"> Collect and edit data
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q5" value="3"> Design database structure
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Question 6 -->
+                <div class="question">
+                    <h3>6. A form is used to enter data into the database.</h3>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q6" value="1"> True
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q6" value="0"> False
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Question 7 -->
+                <div class="question">
+                    <h3>7. Columns in a table are called records.</h3>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q7" value="1"> True
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q7" value="0"> False
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Question 8 -->
+                <div class="question">
+                    <h3>8. Which key uniquely identifies a row in a relation?</h3>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q8" value="0"> Foreign key
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q8" value="1"> Primary key
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q8" value="2"> Composite key
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q8" value="3"> Alternate key
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Question 9 -->
+                <div class="question">
+                    <h3>9. Primary keys can have duplicate values.</h3>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q9" value="1"> True
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q9" value="0"> False
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Question 10 -->
+                <div class="question">
+                    <h3>10. Queries can retrieve data based on conditions.</h3>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q10" value="1"> True
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q10" value="0"> False
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="submit-section">
+                <button class="btn" onclick="submitQuiz()">Submit Quiz</button>
+                <button class="btn btn-secondary" onclick="showLeaderboard()">View Leaderboard</button>
+            </div>
+        </div>
+
+        <!-- Result Screen -->
+        <div id="resultScreen" class="hidden">
+            <div class="header">
+                <h1>🎉 Quiz Results</h1>
+            </div>
+            <div class="result-screen">
+                <div class="score-display" id="scoreDisplay">0/10</div>
+                <h2 id="resultMessage">Good job!</h2>
+                <p id="resultDetails">You got 0 out of 10 questions correct.</p>
+                
+                <button class="btn" onclick="restartQuiz()">Take Quiz Again</button>
+                <button class="btn btn-secondary" onclick="showLeaderboard()">View Leaderboard</button>
+            </div>
+        </div>
+
+        <!-- Leaderboard Screen -->
+        <div id="leaderboardScreen" class="hidden">
+            <div class="header">
+                <h1>🏆 Leaderboard</h1>
+            </div>
+            <div class="result-screen">
+                <div class="leaderboard" id="leaderboardList">
+                    <p>No scores yet. Be the first to take the quiz!</p>
+                </div>
+                
+                <button class="btn" onclick="goBackToQuiz()">Back to Quiz</button>
+                <button class="btn btn-secondary" onclick="clearLeaderboard()">Clear Scores</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ========================================
+        // EASY TO CHANGE SETTINGS
+        // ========================================
+        
+        // Quiz answers (change these if you modify questions)
+        const correctAnswers = {
+            q1: "1",  // Collection of related data
+            q2: "1",  // .odb
+            q3: "2",  // Query
+            q4: "1",  // Record
+            q5: "2",  // Collect and edit data
+            q6: "1",  // True
+            q7: "0",  // False
+            q8: "1",  // Primary key
+            q9: "0",  // False
+            q10: "1"  // True
+        };
+
+        const totalQuestions = 10;
+
+        // ========================================
+        // MAIN QUIZ FUNCTIONS
+        // ========================================
+
+        function submitQuiz() {
+            // Get player name
+            const playerName = document.getElementById('playerName').value.trim();
+            if (!playerName) {
+                alert('Please enter your name before submitting!');
+                return;
+            }
+
+            // Calculate score
+            let score = 0;
+            for (let question in correctAnswers) {
+                const selectedAnswer = document.querySelector(`input[name="${question}"]:checked`);
+                if (selectedAnswer && selectedAnswer.value === correctAnswers[question]) {
+                    score++;
+                }
+            }
+
+            // Save score to leaderboard
+            saveScore(playerName, score);
+
+            // Show results
+            showResults(score);
+        }
+
+        function showResults(score) {
+            const percentage = Math.round((score / totalQuestions) * 100);
+            
+            // Update result display
+            document.getElementById('scoreDisplay').textContent = `${score}/${totalQuestions}`;
+            document.getElementById('resultDetails').textContent = `You got ${score} out of ${totalQuestions} questions correct (${percentage}%).`;
+            
+            // Set result message based on score
+            const resultMessage = document.getElementById('resultMessage');
+            if (percentage >= 90) {
+                resultMessage.textContent = "Excellent! 🌟";
+                resultMessage.style.color = "#28a745";
+            } else if (percentage >= 70) {
+                resultMessage.textContent = "Good job! 👍";
+                resultMessage.style.color = "#17a2b8";
+            } else if (percentage >= 50) {
+                resultMessage.textContent = "Not bad! 💪";
+                resultMessage.style.color = "#ffc107";
+            } else {
+                resultMessage.textContent = "Keep practicing! 📚";
+                resultMessage.style.color = "#dc3545";
+            }
+
+            // Hide quiz, show results
+            document.getElementById('quizScreen').classList.add('hidden');
+            document.getElementById('resultScreen').classList.remove('hidden');
+            document.getElementById('leaderboardScreen').classList.add('hidden');
+        }
+
+        function saveScore(name, score) {
+            // Get existing scores from localStorage
+            let scores = JSON.parse(localStorage.getItem('quizScores') || '[]');
+            
+            // Add new score
+            scores.push({
+                name: name,
+                score: score,
+                date: new Date().toLocaleDateString()
+            });
+            
+            // Sort by score (highest first)
+            scores.sort((a, b) => b.score - a.score);
+            
+            // Keep only top 10 scores
+            scores = scores.slice(0, 10);
+            
+            // Save back to localStorage
+            localStorage.setItem('quizScores', JSON.stringify(scores));
+        }
+
+        function showLeaderboard() {
+            const scores = JSON.parse(localStorage.getItem('quizScores') || '[]');
+            const leaderboardList = document.getElementById('leaderboardList');
+            
+            if (scores.length === 0) {
+                leaderboardList.innerHTML = '<p>No scores yet. Be the first to take the quiz!</p>';
+            } else {
+                let html = '';
+                scores.forEach((entry, index) => {
+                    const rank = index + 1;
+                    const icon = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : `${rank}.`;
+                    html += `
+                        <div class="leaderboard-entry">
+                            <span><strong>${icon} ${entry.name}</strong> - ${entry.date}</span>
+                            <span><strong>${entry.score}/${totalQuestions}</strong></span>
+                        </div>
+                    `;
+                });
+                leaderboardList.innerHTML = html;
+            }
+
+            // Show leaderboard screen
+            document.getElementById('quizScreen').classList.add('hidden');
+            document.getElementById('resultScreen').classList.add('hidden');
+            document.getElementById('leaderboardScreen').classList.remove('hidden');
+        }
+
+        function clearLeaderboard() {
+            if (confirm('Are you sure you want to clear all scores?')) {
+                localStorage.removeItem('quizScores');
+                showLeaderboard(); // Refresh the display
+            }
+        }
+
+        function restartQuiz() {
+            // Clear all selections
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.checked = false;
+            });
+            
+            // Clear name
+            document.getElementById('playerName').value = '';
+            
+            // Show quiz screen
+            goBackToQuiz();
+            
+            // Scroll to top
+            document.querySelector('.quiz-content').scrollTop = 0;
+        }
+
+        function goBackToQuiz() {
+            document.getElementById('quizScreen').classList.remove('hidden');
+            document.getElementById('resultScreen').classList.add('hidden');
+            document.getElementById('leaderboardScreen').classList.add('hidden');
+        }
+
+        // ========================================
+        // VISUAL EFFECTS (OPTIONAL)
+        // ========================================
+        
+        // Add click effect to options
+        document.querySelectorAll('.option').forEach(option => {
+            option.addEventListener('click', function() {
+                // Remove selected class from siblings
+                this.parentNode.querySelectorAll('.option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                
+                // Add selected class to clicked option
+                this.classList.add('selected');
+            });
+        });
+    </script>
+</body>
+</html>

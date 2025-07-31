@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web Design Quiz</title>
+    <title>Computerised Accounting with GST Quiz</title>
     <style>
         :root {
             --bg-dark: #0f172a;
@@ -320,6 +320,13 @@
             vertical-align: top;
         }
         
+        .match-table th {
+            background: rgba(59, 130, 246, 0.2);
+            padding: 12px;
+            font-weight: 600;
+            color: var(--primary-light);
+        }
+        
         .match-table tr:nth-child(even) {
             background: rgba(59, 130, 246, 0.05);
         }
@@ -339,6 +346,11 @@
         .leaderboard-entry:hover { 
             background: rgba(59, 130, 246, 0.1);
             transform: translateY(-1px);
+        }
+        
+        .leaderboard-entry.current-user {
+            background: rgba(34, 197, 94, 0.2) !important;
+            border-color: #22c55e !important;
         }
         
         .leaderboard-rank {
@@ -437,8 +449,8 @@
     <div class="container">
         <!-- Start Screen -->
         <div id="startScreen" class="quiz-card page active">
-            <h1>🎯 Web Design Quiz</h1>
-            <p>Test your knowledge of HTML5 and CSS. Enter your name to begin the challenge!</p>
+            <h1>💼 Computerised Accounting with GST Quiz</h1>
+            <p>Test your knowledge of Computerised Accounting, GST concepts, vouchers, and software applications!</p>
             <input type="text" id="playerName" placeholder="Enter your name..." maxlength="20" required>
             <div id="nameError" class="error-message hidden">Please enter your name to continue</div>
             <div class="btn-grid" style="margin-top: 20px;">
@@ -465,16 +477,16 @@
                 <h3>Scoring:</h3>
                 <ul style="margin-left: 20px; margin-bottom: 20px;">
                     <li>Each question is worth 1 point</li>
-                    <li>Total: 50 questions</li>
-                    <li>Passing score: 30+ points (60%)</li>
+                    <li>Total: 40 questions</li>
+                    <li>Passing score: 24+ points (60%)</li>
                 </ul>
                 
-                <h3>Tips:</h3>
+                <h3>Topics Covered:</h3>
                 <ul style="margin-left: 20px;">
-                    <li>Read each question carefully</li>
-                    <li>For multi-choice, select exactly 2 answers</li>
-                    <li>You can navigate back to review answers</li>
-                    <li>All questions must be answered to finish</li>
+                    <li>Accounting Software Functions</li>
+                    <li>GST Types and Applications</li>
+                    <li>Voucher Types and Usage</li>
+                    <li>Ledger Management</li>
                 </ul>
             </div>
             <div class="btn-grid">
@@ -505,7 +517,7 @@
             <h1>🎉 Quiz Complete!</h1>
             <div class="results-grid">
                 <div class="result-item">
-                    <h3 id="finalScore">0/50</h3>
+                    <h3 id="finalScore">0/40</h3>
                     <p>Score</p>
                 </div>
                 <div class="result-item">
@@ -544,63 +556,287 @@
 
 <script>
     const quizData = [
-        // Part A: Single Choice (25)
-        { question: "Which HTML5 input type defines a color picker?", options: ["type=\"range\"", "type=\"color\"", "type=\"file\"", "type=\"search\""], correct: 1, type: "single", explanation: "The type=\"color\" input creates a color picker interface." },
-        { question: "The `pattern` attribute in HTML5 forms is used for:", options: ["Setting minimum input length", "Validating input using regular expressions", "Disabling an input field", "Autocompleting user data"], correct: 1, type: "single", explanation: "The `pattern` attribute uses regular expressions to validate user input." },
-        { question: "Which attribute makes an input field mandatory?", options: ["disabled", "autofocus", "required", "placeholder"], correct: 2, type: "single", explanation: "The `required` attribute ensures users must fill in the field before submitting." },
-        { question: "The `&lt;meta&gt;` tag is placed within:", options: ["&lt;body&gt;", "&lt;footer&gt;", "&lt;head&gt;", "&lt;section&gt;"], correct: 2, type: "single", explanation: "Meta tags provide document metadata and belong in the &lt;head&gt; section." },
-        { question: "CSS syntax consists of:", options: ["Selector and declarations", "Tags and attributes", "Classes and IDs", "Properties and values"], correct: 0, type: "single", explanation: "A CSS rule consists of a selector and a declaration block." },
-        { question: "To set an image as a webpage background, use:", options: ["background-color", "background-image", "border-image", "img-src"], correct: 1, type: "single", explanation: "The `background-image` property sets one or more background images for an element." },
-        { question: "Which CSS property centers text horizontally?", options: ["font-align", "vertical-align", "text-align", "position: center"], correct: 2, type: "single", explanation: "The `text-align` property specifies the horizontal alignment of text." },
-        { question: "For an ordered list starting at 50, use:", options: ["&lt;ol start=\"50\"&gt;", "&lt;ol value=\"50\"&gt;", "&lt;ol begin=\"50\"&gt;", "&lt;ol reversed=\"50\"&gt;"], correct: 0, type: "single", explanation: "The `start` attribute for an `<ol>` tag specifies the start value." },
-        { question: "The `&lt;audio&gt;` tag attribute that loops playback is:", options: ["cycle", "repeat", "loop", "reversed"], correct: 2, type: "single", explanation: "The `loop` attribute, if specified, will cause the audio to automatically repeat." },
-        { question: "Client-side image maps use:", options: ["&lt;servermap&gt;", "&lt;map&gt; and &lt;area&gt;", "&lt;imagemap&gt;", "&lt;hotspot&gt;"], correct: 1, type: "single", explanation: "A client-side image map uses `<map>` and `<area>` elements." },
-        { question: "To embed an external webpage section, use:", options: ["&lt;frame&gt;", "&lt;inline&gt;", "&lt;iframe&gt;", "&lt;embed&gt;"], correct: 2, type: "single", explanation: "The `<iframe>` (Inline Frame) element embeds another HTML page into the current one." },
-        { question: "Free web hosting for limited periods is:", options: ["Dedicated hosting", "Shared hosting", "Server hosting", "Free hosting"], correct: 3, type: "single", explanation: "Free hosting provides web hosting at no cost, often with limitations." },
-        { question: "The CSS property `float: right` moves an element:", options: ["To the left of its container", "To the right of its container", "To the top", "To the bottom"], correct: 1, type: "single", explanation: "The `float` property places an element on the left or right side of its container." },
-        { question: "Which HTML5 tag creates a definition list?", options: ["&lt;nl&gt;", "&lt;dl&gt;", "&lt;def&gt;", "&lt;list&gt;"], correct: 1, type: "single", explanation: "The `<dl>` tag is used to create a description list." },
-        { question: "To disable an input field, use:", options: ["readonly", "disabled", "blocked", "inactive"], correct: 1, type: "single", explanation: "The `disabled` attribute makes an input field un-clickable and un-usable." },
-        { question: "The `&lt;source&gt;` tag is used with:", options: ["&lt;audio&gt; and &lt;video&gt;", "&lt;img&gt;", "&lt;map&gt;", "&lt;iframe&gt;"], correct: 0, type: "single", explanation: "The `<source>` tag specifies multiple media resources for `<video>` and `<audio>`." },
-        { question: "For fixed positioning relative to the browser window, use:", options: ["position: static", "position: fixed", "position: relative", "position: absolute"], correct: 1, type: "single", explanation: "`position: fixed` makes an element positioned relative to the viewport." },
-        { question: "Which attribute specifies an image for `&lt;input type=\"image\"&gt;`?", options: ["img", "source", "src", "href"], correct: 2, type: "single", explanation: "For an `<input>` of type `image`, the `src` attribute is required." },
-        { question: "The `autocomplete` attribute:", options: ["Validates email formats", "Suggests previous input values", "Disables form submission", "Hides input fields"], correct: 1, type: "single", explanation: "The `autocomplete` attribute provides a hint to the browser for auto-completion." },
-        { question: "To create a polygon hotspot in an image map, use `shape=\"____\"`.", options: ["rect", "circle", "poly", "triangle"], correct: 2, type: "single", explanation: "`shape=\"poly\"` is used for defining a polygonal region." },
-        { question: "The CSS universal selector is:", options: ["#", ".", "*", "@"], correct: 2, type: "single", explanation: "The asterisk (*) is the universal selector in CSS." },
-        { question: "Which tag defines a term in a definition list?", options: ["&lt;dd&gt;", "&lt;dt&gt;", "&lt;dfn&gt;", "&lt;term&gt;"], correct: 1, type: "single", explanation: "The `<dt>` (Description Term) tag specifies a term in a description list." },
-        { question: "For a video thumbnail before playback, use:", options: ["preload", "poster", "thumbnail", "src"], correct: 1, type: "single", explanation: "The `poster` attribute specifies an image to be shown while the video is downloading." },
-        { question: "The first file loaded on free web hosting must be named:", options: ["home.html", "start.html", "index.html", "main.html"], correct: 2, type: "single", explanation: "Web servers are typically configured to look for `index.html` as the default file." },
-        { question: "Grouping CSS selectors uses:", options: ["Periods (.)", "Commas (,)", "Semicolons (;)", "Colons (:)"], correct: 1, type: "single", explanation: "To apply the same styles to multiple selectors, you group them with a comma." },
-        
-        // Part B: Multi Choice (10)
-        { question: "Select TWO new HTML5 input types for validation:", options: ["type=\"tel\"", "type=\"button\"", "type=\"email\"", "type=\"text\"", "type=\"radio\""], correct: [0, 2], type: "multi", explanation: "HTML5 introduced 'tel' and 'email' for better validation and mobile keyboards." },
-        { question: "Select TWO attributes that restrict input values:", options: ["max", "color", "min", "src", "alt"], correct: [0, 2], type: "multi", explanation: "The max and min attributes set upper and lower bounds for numeric inputs." },
-        { question: "Select TWO required attributes for `&lt;meta&gt;` tags:", options: ["name", "href", "content", "size", "type"], correct: [0, 2], type: "multi", explanation: "Meta tags typically require both name and content attributes." },
-        { question: "Select TWO CSS properties for text styling:", options: ["font-weight", "background-image", "text-decoration", "float", "position"], correct: [0, 2], type: "multi", explanation: "`font-weight` and `text-decoration` are both used to style text." },
-        { question: "Select TWO elements used in a definition list:", options: ["&lt;dt&gt;", "&lt;ol&gt;", "&lt;dd&gt;", "&lt;ul&gt;", "&lt;li&gt;"], correct: [0, 2], type: "multi", explanation: "Definition lists use <dt> for terms and <dd> for descriptions." },
-        { question: "Select TWO common audio formats supported by HTML5:", options: [".mp3", ".avi", ".ogg", ".mp4", ".wmv"], correct: [0, 2], type: "multi", explanation: "MP3 and OGG are commonly supported audio formats in HTML5." },
-        { question: "Select TWO shapes for image map hotspots:", options: ["rect", "square", "poly", "line", "dot"], correct: [0, 2], type: "multi", explanation: "Image maps support `rect` (rectangle) and `poly` (polygon) shapes." },
-        { question: "Select TWO types of web hosting:", options: ["Shared hosting", "Cloud hosting", "Free hosting", "Email hosting", "Dedicated hosting"], correct: [0, 2], type: "multi", explanation: "Shared and Free hosting are common types of web hosting services." },
-        { question: "Select TWO CSS `display` property values:", options: ["inline", "fixed", "block", "float", "none"], correct: [0, 2], type: "multi", explanation: "`inline` and `block` are fundamental display values." },
-        { question: "Select TWO tags for embedding media:", options: ["&lt;audio&gt;", "&lt;img&gt;", "&lt;video&gt;", "&lt;map&gt;", "&lt;iframe&gt;"], correct: [0, 2], type: "multi", explanation: "The `<audio>` and `<video>` tags are for embedding media content." },
-        
-        // Part C: Match the Pairs (5 as single choice)
-        { question: "Match HTML5 input types to their descriptions:", type: "match", options: ["1-c, 2-d, 3-a, 4-b", "1-a, 2-b, 3-c, 4-d", "1-d, 2-c, 3-b, 4-a", "1-b, 2-a, 3-d, 4-c"], correct: 0, explanation: "Correct pairings: color→c, number→d, url→a, date→b.", matchData: { columnA: ["1. `color`", "2. `number`", "3. `url`", "4. `date`"], columnB: ["a. URL field", "b. date picker", "c. color picker", "d. number field"] } },
-        { question: "Match CSS properties to their uses:", type: "match", options: ["1-b, 2-a, 3-d, 4-c", "1-a, 2-b, 3-c, 4-d", "1-d, 2-c, 3-b, 4-a", "1-c, 2-d, 3-a, 4-b"], correct: 0, explanation: "Correct pairings: text-align→b, background-color→a, font-family→d, padding→c.", matchData: { columnA: ["1. `text-align`", "2. `background-color`", "3. `font-family`", "4. `padding`"], columnB: ["a. sets background", "b. aligns text", "c. adds space", "d. controls font"] } },
-        { question: "Match tags to their functions:", type: "match", options: ["1-b, 2-a, 3-c, 4-d", "1-a, 2-b, 3-d, 4-c", "1-d, 2-c, 3-b, 4-a", "1-c, 2-d, 3-a, 4-b"], correct: 0, explanation: "Correct pairings: meta→b, iframe→a, map→c, source→d.", matchData: { columnA: ["1. `&lt;meta&gt;`", "2. `&lt;iframe&gt;`", "3. `&lt;map&gt;`", "4. `&lt;source&gt;`"], columnB: ["a. inline frame", "b. metadata", "c. image map", "d. media resource"] } },
-        { question: "Match CSS selectors to their syntax:", type: "match", options: ["1-c, 2-a, 3-b, 4-d", "1-a, 2-b, 3-c, 4-d", "1-d, 2-c, 3-a, 4-b", "1-b, 2-d, 3-c, 4-a"], correct: 0, explanation: "Correct pairings: Class→c, ID→a, Universal→b, Group→d.", matchData: { columnA: ["1. Class", "2. ID", "3. Universal", "4. Group"], columnB: ["a. `#name`", "b. `*`", "c. `.name`", "d. `h1, p`"] } },
-        { question: "Match lists to their attributes:", type: "match", options: ["1-b, 2-a, 3-c, 4-d", "1-a, 2-b, 3-d, 4-c", "1-d, 2-c, 3-b, 4-a", "1-c, 2-d, 3-a, 4-b"], correct: 0, explanation: "Correct pairings: Ordered→b, Unordered→a, Definition→c, Nested→d.", matchData: { columnA: ["1. Ordered", "2. Unordered", "3. Definition", "4. Nested"], columnB: ["a. `disc`", "b. `start`", "c. `&lt;dt&gt;`", "d. list in list"] } },
-        
-        // Part D: True/False (10)
-        { question: "The `pattern` attribute uses JavaScript for validation.", options: ["True", "False"], correct: 1, type: "boolean", explanation: "False. The pattern attribute uses regular expressions (regex), not JavaScript." },
-        { question: "`&lt;meta&gt;` tags are visible on the webpage.", options: ["True", "False"], correct: 1, type: "boolean", explanation: "False. Meta tags are for browsers and search engines, not visual display." },
-        { question: "External CSS files use the `&lt;style&gt;` tag.", options: ["True", "False"], correct: 1, type: "boolean", explanation: "False. External CSS is linked using the <link> tag." },
-        { question: "`float: none` is the default CSS behavior.", options: ["True", "False"], correct: 0, type: "boolean", explanation: "True. Elements have float: none by default." },
-        { question: "HTML5 supports `type=\"bullet\"` for unordered lists.", options: ["True", "False"], correct: 1, type: "boolean", explanation: "False. List styling is handled by the CSS `list-style-type` property." },
-        { question: "`&lt;video&gt;` tags require the `controls` attribute to show playback buttons.", options: ["True", "False"], correct: 0, type: "boolean", explanation: "True. Without `controls`, the video player will not have visible controls." },
-        { question: "Image maps can only be server-side.", options: ["True", "False"], correct: 1, type: "boolean", explanation: "False. Image maps can be client-side or server-side." },
-        { question: "Free hosting requires a paid domain.", options: ["True", "False"], correct: 1, type: "boolean", explanation: "False. Free hosting often provides free subdomains." },
-        { question: "`position: absolute` ignores page flow.", options: ["True", "False"], correct: 0, type: "boolean", explanation: "True. Absolutely positioned elements are removed from the normal document flow." },
-        { question: "The `&lt;dd&gt;` tag defines a term in a definition list.", options: ["True", "False"], correct: 1, type: "boolean", explanation: "False. The `<dd>` tag defines the description; `<dt>` defines the term." },
+        // Part A: Single Choice MCQs (15)
+        {
+            question: "What is the primary function of accounting software?",
+            options: ["Record and process accounting transactions", "Design company logos", "Manage employee attendance", "Handle marketing campaigns"],
+            correct: 0,
+            type: "single",
+            explanation: "The primary function of accounting software is to record and process accounting transactions systematically. It helps automate financial data entry, calculations, and reporting, making accounting processes more efficient and accurate."
+        },
+        {
+            question: "Voucher used to record amount received is called:",
+            options: ["Payment voucher", "Receipt voucher", "Sales voucher", "Purchase voucher"],
+            correct: 1,
+            type: "single",
+            explanation: "A Receipt voucher is used to record money received by the business. It documents cash or bank receipts from customers, debtors, or any other source of income."
+        },
+        {
+            question: "What is GSTIN?",
+            options: ["Goods and Services Tax Identification Number", "General Sales Tax Invoice Number", "Government Service Tax Identification", "Goods Service Transaction Invoice"],
+            correct: 0,
+            type: "single",
+            explanation: "GSTIN stands for Goods and Services Tax Identification Number. It is a unique 15-digit identification number assigned to every business registered under the GST system in India."
+        },
+        {
+            question: "CGST applies to:",
+            options: ["Inter-state supply", "Intra-state supply collected by State", "Intra-state supply collected by Central Govt", "Import of goods"],
+            correct: 2,
+            type: "single",
+            explanation: "CGST (Central Goods and Services Tax) applies to intra-state supply and is collected by the Central Government. It is levied along with SGST on transactions within the same state."
+        },
+        {
+            question: "HSN code is used for classification of:",
+            options: ["Services", "Goods", "Companies", "Vouchers"],
+            correct: 1,
+            type: "single",
+            explanation: "HSN (Harmonized System of Nomenclature) codes are used for classification of goods. These are internationally standardized codes that help in systematic classification of products for taxation purposes."
+        },
+        {
+            question: "Which voucher is used to record goods returned by customer?",
+            options: ["Sales Return/Credit Note", "Purchase Return/Debit Note", "Contra Voucher", "Journal Voucher"],
+            correct: 0,
+            type: "single",
+            explanation: "Sales Return/Credit Note voucher is used to record goods returned by customers. It reduces the customer's liability and adjusts the sales figures accordingly."
+        },
+        {
+            question: "Integrated GST (IGST) applies when goods are supplied:",
+            options: ["Within the same state", "Between states", "Imported from abroad", "Exported outside India"],
+            correct: 1,
+            type: "single",
+            explanation: "IGST (Integrated Goods and Services Tax) applies when goods are supplied between different states (inter-state supply). It is collected by the Central Government and later distributed between Central and State governments."
+        },
+        {
+            question: "Tax invoices are generated using information entered in:",
+            options: ["Purchase vouchers", "Sales vouchers", "Journal vouchers", "Receipt vouchers"],
+            correct: 1,
+            type: "single",
+            explanation: "Tax invoices are generated using information entered in Sales vouchers. The sales voucher contains all necessary details like customer information, goods sold, tax rates, and amounts that appear on the tax invoice."
+        },
+        {
+            question: "Which feature must be enabled in software for GST processing?",
+            options: ["Enable VAT", "Enable GST", "Enable TDS", "Enable Payroll"],
+            correct: 1,
+            type: "single",
+            explanation: "To process GST transactions in accounting software, the 'Enable GST' feature must be activated. This enables GST-specific fields, calculations, and reporting functionalities."
+        },
+        {
+            question: "Expenses related to purchased services with GST are recorded under which ledger?",
+            options: ["Purchase ledger", "Sales ledger", "Service purchase ledger", "Capital ledger"],
+            correct: 2,
+            type: "single",
+            explanation: "Expenses related to purchased services with GST are recorded under the Service purchase ledger. This ledger specifically tracks service purchases and their associated GST for accurate tax reporting."
+        },
+        {
+            question: "What is a ledger in accounting software?",
+            options: ["A list of employees", "A financial account head", "A type of voucher", "A tax authority"],
+            correct: 1,
+            type: "single",
+            explanation: "A ledger in accounting software is a financial account head that represents specific accounts like Cash, Bank, Sales, Purchase, etc. It maintains the running balance and transaction history for each account."
+        },
+        {
+            question: "Which is NOT a typical voucher type?",
+            options: ["Receipt", "Payment", "Transfer", "Sales Return"],
+            correct: 2,
+            type: "single",
+            explanation: "Transfer is not a typical voucher type in standard accounting. Common voucher types include Receipt, Payment, Sales, Purchase, Sales Return, Purchase Return, Journal, and Contra vouchers."
+        },
+        {
+            question: "The final step of GST entry in software includes:",
+            options: ["Enabling payroll", "Posting vouchers", "Printing marketing reports", "Designing invoice template"],
+            correct: 1,
+            type: "single",
+            explanation: "The final step of GST entry in software includes posting vouchers. This finalizes the transaction entry and updates all related ledgers, ensuring the data is saved and reflected in reports."
+        },
+        {
+            question: "Accounting reports generated by software include:",
+            options: ["Trial Balance and GST reports", "Marketing plan", "Employee time sheets", "Product specifications"],
+            correct: 0,
+            type: "single",
+            explanation: "Accounting software generates financial reports like Trial Balance, Profit & Loss, Balance Sheet, and GST reports (GSTR-1, GSTR-2, etc.). These reports help in financial analysis and compliance."
+        },
+        {
+            question: "Which accounting package is NOT mentioned as an example?",
+            options: ["Tally ERP 9", "Ubuntu", "GNUKhata", "Akaunting"],
+            correct: 1,
+            type: "single",
+            explanation: "Ubuntu is a Linux operating system, not an accounting software package. Tally ERP 9, GNUKhata, and Akaunting are all accounting software applications."
+        },
+
+        // Part B: Two Correct Options (15)
+        {
+            question: "Which of the following are types of GST?",
+            options: ["CGST", "TDS", "SGST", "IGST"],
+            correct: [0, 2],
+            type: "multi",
+            explanation: "CGST (Central GST) and SGST (State GST) are the main types of GST for intra-state transactions. TDS is Tax Deducted at Source, not a GST type. IGST is also a GST type but only two answers were required."
+        },
+        {
+            question: "Which are important voucher types?",
+            options: ["Contra", "Invoice", "Journal", "Debit Note"],
+            correct: [0, 2],
+            type: "multi",
+            explanation: "Contra and Journal are fundamental voucher types in accounting. Contra voucher records fund transfers between cash and bank, while Journal voucher records adjusting and non-cash entries."
+        },
+        {
+            question: "Which documents are needed for GST registration?",
+            options: ["PAN Card", "Passport", "Aadhaar Card", "Business Address Proof"],
+            correct: [0, 2],
+            type: "multi",
+            explanation: "PAN Card and Aadhaar Card are essential documents for GST registration in India. PAN is mandatory for all businesses, and Aadhaar is required for individual proprietors."
+        },
+        {
+            question: "What features enable GST in accounting software?",
+            options: ["Company creation", "GST details entry", "Product launch", "Ledger creation"],
+            correct: [0, 1],
+            type: "multi",
+            explanation: "Company creation and GST details entry are essential features to enable GST functionality in accounting software. These set up the basic structure for GST-compliant transactions."
+        },
+        {
+            question: "Key GST codes include:",
+            options: ["HSN", "SAC", "PAN", "CIN"],
+            correct: [0, 1],
+            type: "multi",
+            explanation: "HSN (Harmonized System of Nomenclature) for goods and SAC (Service Accounting Code) for services are key GST classification codes used for tax determination and compliance."
+        },
+        {
+            question: "Which factors affect GST tax rates in software?",
+            options: ["Place of supply", "Value of goods", "Employee designation", "Time of purchase"],
+            correct: [0, 1],
+            type: "multi",
+            explanation: "Place of supply determines whether CGST+SGST or IGST applies, and value of goods affects tax calculations. These are key factors in determining GST rates and amounts."
+        },
+        {
+            question: "Essential GST ledgers include:",
+            options: ["CGST ledger", "SGST ledger", "Payroll ledger", "Advance Tax ledger"],
+            correct: [0, 1],
+            type: "multi",
+            explanation: "CGST ledger and SGST ledger are essential for tracking Central GST and State GST respectively. These ledgers maintain records of tax paid and claimed for compliance purposes."
+        },
+        {
+            question: "Which accounting reports reflect GST data?",
+            options: ["GSTR-1", "GSTR-2", "Income Tax return", "Trial Balance"],
+            correct: [0, 1],
+            type: "multi",
+            explanation: "GSTR-1 (outward supplies) and GSTR-2 (inward supplies) are specific GST returns that reflect GST transaction data. These are mandatory compliance reports under the GST system."
+        },
+        {
+            question: "For purchase of goods, vouchers needed are:",
+            options: ["Purchase voucher", "Sales voucher", "Payment voucher", "Credit Note"],
+            correct: [0, 2],
+            type: "multi",
+            explanation: "Purchase voucher records the goods bought, and Payment voucher records the amount paid to suppliers. Both are needed to complete the purchase transaction cycle."
+        },
+        {
+            question: "What must be included in stock items for GST?",
+            options: ["GST Rates", "Quantity", "Supplier address", "Unit of measurement"],
+            correct: [0, 3],
+            type: "multi",
+            explanation: "GST Rates are essential for tax calculations, and Unit of measurement is required for proper inventory tracking and GST compliance in stock items."
+        },
+        {
+            question: "Benefits of computerised accounting include:",
+            options: ["Accurate calculations", "Faster processing", "Marketing strategy", "Manual book keeping"],
+            correct: [0, 1],
+            type: "multi",
+            explanation: "Computerised accounting provides accurate calculations by eliminating human errors and enables faster processing of transactions compared to manual methods."
+        },
+        {
+            question: "IGST collected goes to:",
+            options: ["State Government", "Central Government", "Local Authorities", "Exporters"],
+            correct: [0, 1],
+            type: "multi",
+            explanation: "IGST collected initially goes to the Central Government, which then distributes the appropriate portions to both Central and State governments based on consumption patterns."
+        },
+        {
+            question: "Accounts payable and accounts receivable are parts of:",
+            options: ["Voucher types", "Software modules", "GST Codes", "Tax slabs"],
+            correct: [0, 1],
+            type: "multi",
+            explanation: "Accounts payable and receivable are managed through specific voucher types (like purchase/payment and sales/receipt vouchers) and are integral parts of accounting software modules."
+        },
+        {
+            question: "Contra voucher is used for:",
+            options: ["Recording cash deposits", "Payment to suppliers", "Transfer between bank and cash", "Sales returns"],
+            correct: [0, 2],
+            type: "multi",
+            explanation: "Contra voucher is used for recording cash deposits in bank and transfers between bank and cash accounts. It handles fund movements within the organization's own accounts."
+        },
+        {
+            question: "Which are common accounting software packages?",
+            options: ["Tally ERP 9", "GNUCash", "Microsoft Office", "LedgerSMB"],
+            correct: [0, 1],
+            type: "multi",
+            explanation: "Tally ERP 9 and GNUCash are specialized accounting software packages. Microsoft Office is a productivity suite, and while LedgerSMB exists, the primary examples are Tally and GNUCash."
+        },
+
+        // Part C: Match the Column (2 sets)
+        {
+            question: "Match the accounting terms with their definitions:",
+            type: "match",
+            options: ["1-c, 2-a, 3-d, 4-b", "1-a, 2-b, 3-c, 4-d", "1-d, 2-c, 3-b, 4-a", "1-b, 2-d, 3-a, 4-c"],
+            correct: 0,
+            explanation: "Correct matching: Voucher is a document for recording transactions (1-c), GSTIN is the 15-digit GST registration number (2-a), HSN Code is the classification code for goods (3-d), and IGST is GST on interstate supplies (4-b).",
+            matchData: {
+                columnA: ["1. Voucher", "2. GSTIN", "3. HSN Code", "4. IGST"],
+                columnB: ["a. 15-digit GST registration number", "b. GST on interstate supplies", "c. Document for recording transaction", "d. Classification code for goods"]
+            }
+        },
+        {
+            question: "Match the GST types with their applications:",
+            type: "match",
+            options: ["1-b, 2-c, 3-a", "1-a, 2-b, 3-c", "1-c, 2-a, 3-b", "1-b, 2-a, 3-c"],
+            correct: 0,
+            explanation: "Correct matching: CGST is GST collected by Central govt on intra-state supply (1-b), SGST is GST collected by State govt on intra-state supply (2-c), and IGST is GST applicable on inter-state supply (3-a).",
+            matchData: {
+                columnA: ["1. CGST", "2. SGST", "3. IGST"],
+                columnB: ["a. GST applicable on inter-state supply", "b. GST collected by Central govt on intra-state supply", "c. GST collected by State govt on intra-state supply"]
+            }
+        },
+
+        // Part D: True/False (6)
+        {
+            question: "Voucher is a pre-numbered accounting document.",
+            options: ["True", "False"],
+            correct: 0,
+            type: "boolean",
+            explanation: "True. Vouchers are typically pre-numbered accounting documents that help maintain proper sequence and control over financial transactions, ensuring audit trail and preventing fraud."
+        },
+        {
+            question: "IGST is collected by the State Government.",
+            options: ["True", "False"],
+            correct: 1,
+            type: "boolean",
+            explanation: "False. IGST (Integrated GST) is collected by the Central Government for inter-state transactions. The Central Government later distributes the collected IGST between Central and State governments."
+        },
+        {
+            question: "GSTIN is a 15-digit registration number for dealers under GST.",
+            options: ["True", "False"],
+            correct: 0,
+            type: "boolean",
+            explanation: "True. GSTIN (Goods and Services Tax Identification Number) is a unique 15-digit registration number assigned to every business registered under the GST system for identification and compliance purposes."
+        },
+        {
+            question: "HSN codes are used to classify services under GST.",
+            options: ["True", "False"],
+            correct: 1,
+            type: "boolean",
+            explanation: "False. HSN (Harmonized System of Nomenclature) codes are used to classify goods, not services. Services are classified using SAC (Service Accounting Code) under GST."
+        },
+        {
+            question: "Contra voucher is used for fund transfer between bank and cash.",
+            options: ["True", "False"],
+            correct: 0,
+            type: "boolean",
+            explanation: "True. Contra voucher is specifically used to record fund transfers between bank and cash accounts, including cash deposits, withdrawals, and transfers between different bank accounts."
+        },
+        {
+            question: "Accounting software cannot generate GST reports.",
+            options: ["True", "False"],
+            correct: 1,
+            type: "boolean",
+            explanation: "False. Modern accounting software can generate various GST reports including GSTR-1, GSTR-2, GSTR-3B, and other compliance reports required for GST filing and tax management."
+        }
     ];
 
     let currentQuestionIndex = 0;
@@ -732,13 +968,13 @@
 
     function verifyResetCode() {
         const enteredCode = document.getElementById('resetCode').value.trim();
-        const correctCode = "TESSA"; // 🔑 CHANGE THIS TO YOUR DESIRED CODE
+        const correctCode = "TESSA"; // 🔑 RESET PASSWORD IS NOW "TESSA"
         const errorDiv = document.getElementById('codeError');
         
         if (enteredCode === correctCode) {
             // Correct code - show final confirmation
             if (confirm('🚨 FINAL WARNING 🚨\n\nYou are about to permanently delete ALL leaderboard scores!\n\nThis action CANNOT be undone.\n\nClick OK to proceed or Cancel to abort.')) {
-                localStorage.removeItem('quizLeaderboard');
+                localStorage.removeItem('accountingGSTQuizLeaderboard');
                 closeResetModal();
                 
                 showNotification('✅ Leaderboard has been reset successfully!', 'success');
@@ -897,6 +1133,7 @@
         let questionHTML = question.question;
         if (question.type === 'match' && question.matchData) {
             questionHTML += `<table class="match-table">`;
+            questionHTML += `<tr><th style="padding: 12px; background: rgba(59, 130, 246, 0.1);">Column A</th><th style="padding: 12px; background: rgba(59, 130, 246, 0.1);">Column B</th></tr>`;
             for(let i = 0; i < question.matchData.columnA.length; i++) {
                 questionHTML += `<tr><td>${question.matchData.columnA[i]}</td><td>${question.matchData.columnB[i]}</td></tr>`;
             }
@@ -1017,10 +1254,10 @@
         let messageColor = "var(--incorrect)";
         
         if (percentage >= 90) {
-            message = "Outstanding! You're a web design expert! 🌟";
+            message = "Outstanding! You're an accounting expert! 🌟";
             messageColor = "var(--correct)";
         } else if (percentage >= 80) {
-            message = "Excellent work! Great knowledge! 🎉";
+            message = "Excellent work! Great knowledge of accounting and GST! 🎉";
             messageColor = "var(--correct)";
         } else if (percentage >= 70) {
             message = "Good job! You're on the right track! 👍";
@@ -1103,7 +1340,7 @@
     }
 
     function getLeaderboard() { 
-        return JSON.parse(localStorage.getItem('quizLeaderboard') || '[]'); 
+        return JSON.parse(localStorage.getItem('accountingGSTQuizLeaderboard') || '[]'); 
     }
     
     function saveScoreToLeaderboard(score, percentage, timeTaken) {
@@ -1113,19 +1350,22 @@
             score: score, 
             percentage: percentage,
             timeTaken: timeTaken,
-            date: new Date().toLocaleDateString()
+            date: new Date().toLocaleDateString(),
+            timestamp: Date.now()
         };
         
         board.push(entry);
         board.sort((a, b) => {
             // Primary sort by score (descending)
             if (b.score !== a.score) return b.score - a.score;
-            // Secondary sort by time taken (ascending - less time is better)
+            // Secondary sort by percentage (descending)
+            if (b.percentage !== a.percentage) return b.percentage - a.percentage;
+            // Tertiary sort by time taken (ascending - less time is better)
             return a.timeTaken - b.timeTaken;
         });
         
         // Keep top 10 scores
-        localStorage.setItem('quizLeaderboard', JSON.stringify(board.slice(0, 10)));
+        localStorage.setItem('accountingGSTQuizLeaderboard', JSON.stringify(board.slice(0, 10)));
     }
     
     function showLeaderboard() {
@@ -1133,23 +1373,29 @@
         const container = document.getElementById('leaderboardContainer');
         
         if (board.length === 0) {
-            container.innerHTML = '<p style="text-align: center; color: var(--text-dark);">No scores yet. Be the first to take the quiz! 🎯</p>';
+            container.innerHTML = `
+                <div style="text-align: center; padding: 40px; background: rgba(59, 130, 246, 0.05); border-radius: 12px; border: 1px dashed rgba(59, 130, 246, 0.3);">
+                    <p style="color: var(--text-dark); font-size: 18px; margin-bottom: 10px;">🎯 No scores yet!</p>
+                    <p style="color: var(--text-dark); font-size: 14px;">Be the first to take the quiz and set a record!</p>
+                </div>
+            `;
         } else {
             let html = '';
             board.forEach((entry, i) => {
                 const rankIcon = i === 0 ? '👑' : i === 1 ? '🥈' : i === 2 ? '🥉' : `${i + 1}.`;
                 const timeText = entry.timeTaken ? ` • ${entry.timeTaken}min` : '';
+                const isCurrentPlayer = entry.name === playerName;
                 
                 html += `
-                    <div class="leaderboard-entry">
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <span class="leaderboard-rank">${rankIcon}</span>
+                    <div class="leaderboard-entry ${isCurrentPlayer ? 'current-user' : ''}">
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <span class="leaderboard-rank" style="font-size: 20px;">${rankIcon}</span>
                             <div>
-                                <strong>${entry.name}</strong>
-                                <br><small style="color: var(--text-dark);">${entry.date}${timeText}</small>
+                                <div style="font-weight: bold; color: var(--text-light); font-size: 16px;">${entry.name}</div>
+                                <div style="color: var(--text-dark); font-size: 12px;">${entry.date}${timeText}</div>
                             </div>
                         </div>
-                        <div class="leaderboard-score">${entry.score}/${quizData.length} (${entry.percentage}%)</div>
+                        <div class="leaderboard-score" style="font-size: 18px;">${entry.score}/${quizData.length}</div>
                     </div>
                 `;
             });

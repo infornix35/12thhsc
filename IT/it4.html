@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web Design Quiz</title>
+    <title>E-Commerce and E-Governance Quiz</title>
     <style>
         :root {
             --bg-dark: #0f172a;
@@ -320,6 +320,13 @@
             vertical-align: top;
         }
         
+        .match-table th {
+            background: rgba(59, 130, 246, 0.2);
+            padding: 12px;
+            font-weight: 600;
+            color: var(--primary-light);
+        }
+        
         .match-table tr:nth-child(even) {
             background: rgba(59, 130, 246, 0.05);
         }
@@ -339,6 +346,11 @@
         .leaderboard-entry:hover { 
             background: rgba(59, 130, 246, 0.1);
             transform: translateY(-1px);
+        }
+        
+        .leaderboard-entry.current-user {
+            background: rgba(34, 197, 94, 0.2) !important;
+            border-color: #22c55e !important;
         }
         
         .leaderboard-rank {
@@ -437,8 +449,8 @@
     <div class="container">
         <!-- Start Screen -->
         <div id="startScreen" class="quiz-card page active">
-            <h1>🎯 Web Design Quiz</h1>
-            <p>Test your knowledge of HTML5 and CSS. Enter your name to begin the challenge!</p>
+            <h1>🛒 E-Commerce and E-Governance Quiz</h1>
+            <p>Test your knowledge of E-Commerce concepts, E-Governance, digital payments, and online security!</p>
             <input type="text" id="playerName" placeholder="Enter your name..." maxlength="20" required>
             <div id="nameError" class="error-message hidden">Please enter your name to continue</div>
             <div class="btn-grid" style="margin-top: 20px;">
@@ -465,16 +477,16 @@
                 <h3>Scoring:</h3>
                 <ul style="margin-left: 20px; margin-bottom: 20px;">
                     <li>Each question is worth 1 point</li>
-                    <li>Total: 50 questions</li>
-                    <li>Passing score: 30+ points (60%)</li>
+                    <li>Total: 40 questions</li>
+                    <li>Passing score: 24+ points (60%)</li>
                 </ul>
                 
-                <h3>Tips:</h3>
+                <h3>Topics Covered:</h3>
                 <ul style="margin-left: 20px;">
-                    <li>Read each question carefully</li>
-                    <li>For multi-choice, select exactly 2 answers</li>
-                    <li>You can navigate back to review answers</li>
-                    <li>All questions must be answered to finish</li>
+                    <li>E-Commerce Fundamentals and Models</li>
+                    <li>E-Governance Types and Services</li>
+                    <li>Digital Payment Systems</li>
+                    <li>Online Security and Encryption</li>
                 </ul>
             </div>
             <div class="btn-grid">
@@ -505,7 +517,7 @@
             <h1>🎉 Quiz Complete!</h1>
             <div class="results-grid">
                 <div class="result-item">
-                    <h3 id="finalScore">0/50</h3>
+                    <h3 id="finalScore">0/40</h3>
                     <p>Score</p>
                 </div>
                 <div class="result-item">
@@ -544,63 +556,287 @@
 
 <script>
     const quizData = [
-        // Part A: Single Choice (25)
-        { question: "Which HTML5 input type defines a color picker?", options: ["type=\"range\"", "type=\"color\"", "type=\"file\"", "type=\"search\""], correct: 1, type: "single", explanation: "The type=\"color\" input creates a color picker interface." },
-        { question: "The `pattern` attribute in HTML5 forms is used for:", options: ["Setting minimum input length", "Validating input using regular expressions", "Disabling an input field", "Autocompleting user data"], correct: 1, type: "single", explanation: "The `pattern` attribute uses regular expressions to validate user input." },
-        { question: "Which attribute makes an input field mandatory?", options: ["disabled", "autofocus", "required", "placeholder"], correct: 2, type: "single", explanation: "The `required` attribute ensures users must fill in the field before submitting." },
-        { question: "The `&lt;meta&gt;` tag is placed within:", options: ["&lt;body&gt;", "&lt;footer&gt;", "&lt;head&gt;", "&lt;section&gt;"], correct: 2, type: "single", explanation: "Meta tags provide document metadata and belong in the &lt;head&gt; section." },
-        { question: "CSS syntax consists of:", options: ["Selector and declarations", "Tags and attributes", "Classes and IDs", "Properties and values"], correct: 0, type: "single", explanation: "A CSS rule consists of a selector and a declaration block." },
-        { question: "To set an image as a webpage background, use:", options: ["background-color", "background-image", "border-image", "img-src"], correct: 1, type: "single", explanation: "The `background-image` property sets one or more background images for an element." },
-        { question: "Which CSS property centers text horizontally?", options: ["font-align", "vertical-align", "text-align", "position: center"], correct: 2, type: "single", explanation: "The `text-align` property specifies the horizontal alignment of text." },
-        { question: "For an ordered list starting at 50, use:", options: ["&lt;ol start=\"50\"&gt;", "&lt;ol value=\"50\"&gt;", "&lt;ol begin=\"50\"&gt;", "&lt;ol reversed=\"50\"&gt;"], correct: 0, type: "single", explanation: "The `start` attribute for an `<ol>` tag specifies the start value." },
-        { question: "The `&lt;audio&gt;` tag attribute that loops playback is:", options: ["cycle", "repeat", "loop", "reversed"], correct: 2, type: "single", explanation: "The `loop` attribute, if specified, will cause the audio to automatically repeat." },
-        { question: "Client-side image maps use:", options: ["&lt;servermap&gt;", "&lt;map&gt; and &lt;area&gt;", "&lt;imagemap&gt;", "&lt;hotspot&gt;"], correct: 1, type: "single", explanation: "A client-side image map uses `<map>` and `<area>` elements." },
-        { question: "To embed an external webpage section, use:", options: ["&lt;frame&gt;", "&lt;inline&gt;", "&lt;iframe&gt;", "&lt;embed&gt;"], correct: 2, type: "single", explanation: "The `<iframe>` (Inline Frame) element embeds another HTML page into the current one." },
-        { question: "Free web hosting for limited periods is:", options: ["Dedicated hosting", "Shared hosting", "Server hosting", "Free hosting"], correct: 3, type: "single", explanation: "Free hosting provides web hosting at no cost, often with limitations." },
-        { question: "The CSS property `float: right` moves an element:", options: ["To the left of its container", "To the right of its container", "To the top", "To the bottom"], correct: 1, type: "single", explanation: "The `float` property places an element on the left or right side of its container." },
-        { question: "Which HTML5 tag creates a definition list?", options: ["&lt;nl&gt;", "&lt;dl&gt;", "&lt;def&gt;", "&lt;list&gt;"], correct: 1, type: "single", explanation: "The `<dl>` tag is used to create a description list." },
-        { question: "To disable an input field, use:", options: ["readonly", "disabled", "blocked", "inactive"], correct: 1, type: "single", explanation: "The `disabled` attribute makes an input field un-clickable and un-usable." },
-        { question: "The `&lt;source&gt;` tag is used with:", options: ["&lt;audio&gt; and &lt;video&gt;", "&lt;img&gt;", "&lt;map&gt;", "&lt;iframe&gt;"], correct: 0, type: "single", explanation: "The `<source>` tag specifies multiple media resources for `<video>` and `<audio>`." },
-        { question: "For fixed positioning relative to the browser window, use:", options: ["position: static", "position: fixed", "position: relative", "position: absolute"], correct: 1, type: "single", explanation: "`position: fixed` makes an element positioned relative to the viewport." },
-        { question: "Which attribute specifies an image for `&lt;input type=\"image\"&gt;`?", options: ["img", "source", "src", "href"], correct: 2, type: "single", explanation: "For an `<input>` of type `image`, the `src` attribute is required." },
-        { question: "The `autocomplete` attribute:", options: ["Validates email formats", "Suggests previous input values", "Disables form submission", "Hides input fields"], correct: 1, type: "single", explanation: "The `autocomplete` attribute provides a hint to the browser for auto-completion." },
-        { question: "To create a polygon hotspot in an image map, use `shape=\"____\"`.", options: ["rect", "circle", "poly", "triangle"], correct: 2, type: "single", explanation: "`shape=\"poly\"` is used for defining a polygonal region." },
-        { question: "The CSS universal selector is:", options: ["#", ".", "*", "@"], correct: 2, type: "single", explanation: "The asterisk (*) is the universal selector in CSS." },
-        { question: "Which tag defines a term in a definition list?", options: ["&lt;dd&gt;", "&lt;dt&gt;", "&lt;dfn&gt;", "&lt;term&gt;"], correct: 1, type: "single", explanation: "The `<dt>` (Description Term) tag specifies a term in a description list." },
-        { question: "For a video thumbnail before playback, use:", options: ["preload", "poster", "thumbnail", "src"], correct: 1, type: "single", explanation: "The `poster` attribute specifies an image to be shown while the video is downloading." },
-        { question: "The first file loaded on free web hosting must be named:", options: ["home.html", "start.html", "index.html", "main.html"], correct: 2, type: "single", explanation: "Web servers are typically configured to look for `index.html` as the default file." },
-        { question: "Grouping CSS selectors uses:", options: ["Periods (.)", "Commas (,)", "Semicolons (;)", "Colons (:)"], correct: 1, type: "single", explanation: "To apply the same styles to multiple selectors, you group them with a comma." },
-        
-        // Part B: Multi Choice (10)
-        { question: "Select TWO new HTML5 input types for validation:", options: ["type=\"tel\"", "type=\"button\"", "type=\"email\"", "type=\"text\"", "type=\"radio\""], correct: [0, 2], type: "multi", explanation: "HTML5 introduced 'tel' and 'email' for better validation and mobile keyboards." },
-        { question: "Select TWO attributes that restrict input values:", options: ["max", "color", "min", "src", "alt"], correct: [0, 2], type: "multi", explanation: "The max and min attributes set upper and lower bounds for numeric inputs." },
-        { question: "Select TWO required attributes for `&lt;meta&gt;` tags:", options: ["name", "href", "content", "size", "type"], correct: [0, 2], type: "multi", explanation: "Meta tags typically require both name and content attributes." },
-        { question: "Select TWO CSS properties for text styling:", options: ["font-weight", "background-image", "text-decoration", "float", "position"], correct: [0, 2], type: "multi", explanation: "`font-weight` and `text-decoration` are both used to style text." },
-        { question: "Select TWO elements used in a definition list:", options: ["&lt;dt&gt;", "&lt;ol&gt;", "&lt;dd&gt;", "&lt;ul&gt;", "&lt;li&gt;"], correct: [0, 2], type: "multi", explanation: "Definition lists use <dt> for terms and <dd> for descriptions." },
-        { question: "Select TWO common audio formats supported by HTML5:", options: [".mp3", ".avi", ".ogg", ".mp4", ".wmv"], correct: [0, 2], type: "multi", explanation: "MP3 and OGG are commonly supported audio formats in HTML5." },
-        { question: "Select TWO shapes for image map hotspots:", options: ["rect", "square", "poly", "line", "dot"], correct: [0, 2], type: "multi", explanation: "Image maps support `rect` (rectangle) and `poly` (polygon) shapes." },
-        { question: "Select TWO types of web hosting:", options: ["Shared hosting", "Cloud hosting", "Free hosting", "Email hosting", "Dedicated hosting"], correct: [0, 2], type: "multi", explanation: "Shared and Free hosting are common types of web hosting services." },
-        { question: "Select TWO CSS `display` property values:", options: ["inline", "fixed", "block", "float", "none"], correct: [0, 2], type: "multi", explanation: "`inline` and `block` are fundamental display values." },
-        { question: "Select TWO tags for embedding media:", options: ["&lt;audio&gt;", "&lt;img&gt;", "&lt;video&gt;", "&lt;map&gt;", "&lt;iframe&gt;"], correct: [0, 2], type: "multi", explanation: "The `<audio>` and `<video>` tags are for embedding media content." },
-        
-        // Part C: Match the Pairs (5 as single choice)
-        { question: "Match HTML5 input types to their descriptions:", type: "match", options: ["1-c, 2-d, 3-a, 4-b", "1-a, 2-b, 3-c, 4-d", "1-d, 2-c, 3-b, 4-a", "1-b, 2-a, 3-d, 4-c"], correct: 0, explanation: "Correct pairings: color→c, number→d, url→a, date→b.", matchData: { columnA: ["1. `color`", "2. `number`", "3. `url`", "4. `date`"], columnB: ["a. URL field", "b. date picker", "c. color picker", "d. number field"] } },
-        { question: "Match CSS properties to their uses:", type: "match", options: ["1-b, 2-a, 3-d, 4-c", "1-a, 2-b, 3-c, 4-d", "1-d, 2-c, 3-b, 4-a", "1-c, 2-d, 3-a, 4-b"], correct: 0, explanation: "Correct pairings: text-align→b, background-color→a, font-family→d, padding→c.", matchData: { columnA: ["1. `text-align`", "2. `background-color`", "3. `font-family`", "4. `padding`"], columnB: ["a. sets background", "b. aligns text", "c. adds space", "d. controls font"] } },
-        { question: "Match tags to their functions:", type: "match", options: ["1-b, 2-a, 3-c, 4-d", "1-a, 2-b, 3-d, 4-c", "1-d, 2-c, 3-b, 4-a", "1-c, 2-d, 3-a, 4-b"], correct: 0, explanation: "Correct pairings: meta→b, iframe→a, map→c, source→d.", matchData: { columnA: ["1. `&lt;meta&gt;`", "2. `&lt;iframe&gt;`", "3. `&lt;map&gt;`", "4. `&lt;source&gt;`"], columnB: ["a. inline frame", "b. metadata", "c. image map", "d. media resource"] } },
-        { question: "Match CSS selectors to their syntax:", type: "match", options: ["1-c, 2-a, 3-b, 4-d", "1-a, 2-b, 3-c, 4-d", "1-d, 2-c, 3-a, 4-b", "1-b, 2-d, 3-c, 4-a"], correct: 0, explanation: "Correct pairings: Class→c, ID→a, Universal→b, Group→d.", matchData: { columnA: ["1. Class", "2. ID", "3. Universal", "4. Group"], columnB: ["a. `#name`", "b. `*`", "c. `.name`", "d. `h1, p`"] } },
-        { question: "Match lists to their attributes:", type: "match", options: ["1-b, 2-a, 3-c, 4-d", "1-a, 2-b, 3-d, 4-c", "1-d, 2-c, 3-b, 4-a", "1-c, 2-d, 3-a, 4-b"], correct: 0, explanation: "Correct pairings: Ordered→b, Unordered→a, Definition→c, Nested→d.", matchData: { columnA: ["1. Ordered", "2. Unordered", "3. Definition", "4. Nested"], columnB: ["a. `disc`", "b. `start`", "c. `&lt;dt&gt;`", "d. list in list"] } },
-        
-        // Part D: True/False (10)
-        { question: "The `pattern` attribute uses JavaScript for validation.", options: ["True", "False"], correct: 1, type: "boolean", explanation: "False. The pattern attribute uses regular expressions (regex), not JavaScript." },
-        { question: "`&lt;meta&gt;` tags are visible on the webpage.", options: ["True", "False"], correct: 1, type: "boolean", explanation: "False. Meta tags are for browsers and search engines, not visual display." },
-        { question: "External CSS files use the `&lt;style&gt;` tag.", options: ["True", "False"], correct: 1, type: "boolean", explanation: "False. External CSS is linked using the <link> tag." },
-        { question: "`float: none` is the default CSS behavior.", options: ["True", "False"], correct: 0, type: "boolean", explanation: "True. Elements have float: none by default." },
-        { question: "HTML5 supports `type=\"bullet\"` for unordered lists.", options: ["True", "False"], correct: 1, type: "boolean", explanation: "False. List styling is handled by the CSS `list-style-type` property." },
-        { question: "`&lt;video&gt;` tags require the `controls` attribute to show playback buttons.", options: ["True", "False"], correct: 0, type: "boolean", explanation: "True. Without `controls`, the video player will not have visible controls." },
-        { question: "Image maps can only be server-side.", options: ["True", "False"], correct: 1, type: "boolean", explanation: "False. Image maps can be client-side or server-side." },
-        { question: "Free hosting requires a paid domain.", options: ["True", "False"], correct: 1, type: "boolean", explanation: "False. Free hosting often provides free subdomains." },
-        { question: "`position: absolute` ignores page flow.", options: ["True", "False"], correct: 0, type: "boolean", explanation: "True. Absolutely positioned elements are removed from the normal document flow." },
-        { question: "The `&lt;dd&gt;` tag defines a term in a definition list.", options: ["True", "False"], correct: 1, type: "boolean", explanation: "False. The `<dd>` tag defines the description; `<dt>` defines the term." },
+        // Part A: Single Choice MCQs (15)
+        {
+            question: "Which is the most accurate definition of E-Commerce?",
+            options: ["Trade through personal interaction", "Paperless exchange over the internet", "Exchange using only face-to-face meetings", "Manual processing of business transactions"],
+            correct: 1,
+            type: "single",
+            explanation: "E-Commerce is defined as paperless exchange over the internet, enabling businesses and consumers to conduct transactions electronically without physical paperwork or face-to-face meetings."
+        },
+        {
+            question: "E-commerce allows customers to shop:",
+            options: ["During office hours only", "24 hours a day, 7 days a week", "Only on weekends", "Only through social media"],
+            correct: 1,
+            type: "single",
+            explanation: "One of the key advantages of E-commerce is that it allows customers to shop 24/7, providing round-the-clock accessibility without time or location restrictions."
+        },
+        {
+            question: "Which is NOT an advantage of E-Commerce?",
+            options: ["Global reach", "Higher paperwork", "Cost saving", "Anytime shopping"],
+            correct: 1,
+            type: "single",
+            explanation: "Higher paperwork is NOT an advantage of E-Commerce. In fact, E-Commerce reduces paperwork by digitizing transactions and records, making processes more efficient."
+        },
+        {
+            question: "In traditional commerce, the interaction is:",
+            options: ["Screen-to-face", "Only online", "Manual and personal", "Anonymous"],
+            correct: 2,
+            type: "single",
+            explanation: "Traditional commerce involves manual and personal interaction between buyers and sellers, typically conducted face-to-face in physical locations with personal customer service."
+        },
+        {
+            question: "Which is a major disadvantage of E-Commerce?",
+            options: ["More paperwork", "Security concerns", "Instant delivery", "Limited global reach"],
+            correct: 1,
+            type: "single",
+            explanation: "Security concerns are a major disadvantage of E-Commerce, including risks of data breaches, identity theft, fraud, and unauthorized access to personal and financial information."
+        },
+        {
+            question: "What is the first phase of the E-Commerce trade cycle?",
+            options: ["Settlement", "Pre-sale", "Execution", "After Sale"],
+            correct: 1,
+            type: "single",
+            explanation: "Pre-sale is the first phase of the E-Commerce trade cycle, involving activities like product search, comparison, negotiation, and customer inquiry before making a purchase decision."
+        },
+        {
+            question: "Which payment mode is commonly used for international E-Commerce?",
+            options: ["Cash", "Credit cards", "Cheques", "Manual bank deposit"],
+            correct: 1,
+            type: "single",
+            explanation: "Credit cards are commonly used for international E-Commerce as they provide secure, instant payment processing across borders with currency conversion capabilities."
+        },
+        {
+            question: "E-wallet is best described as:",
+            options: ["Physical wallet", "Electronic pre-paid account", "Cheque book", "Paper slip"],
+            correct: 1,
+            type: "single",
+            explanation: "An E-wallet is an electronic pre-paid account that stores digital money, allowing users to make online payments and transactions without using physical cash or cards."
+        },
+        {
+            question: "Which is an example of Business-to-Consumer (B2C) E-Commerce?",
+            options: ["Wholesaler selling to retailer", "Online retailer selling to customer", "Consumer selling to consumer", "Blogger writing for business"],
+            correct: 1,
+            type: "single",
+            explanation: "B2C E-Commerce involves businesses selling directly to individual consumers, such as online retailers like Amazon selling products to end customers."
+        },
+        {
+            question: "EDI stands for:",
+            options: ["Electronic Data Interchange", "Email Delivery Index", "Electronic Digital Invoice", "Encrypted Digital Identity"],
+            correct: 0,
+            type: "single",
+            explanation: "EDI stands for Electronic Data Interchange, which is the structured transmission of data between organizations by electronic means for business document exchange."
+        },
+        {
+            question: "What does M-commerce refer to?",
+            options: ["Commerce with manual records", "Mobile commerce through wireless devices", "Online auctions only", "Barcode technology"],
+            correct: 1,
+            type: "single",
+            explanation: "M-commerce refers to Mobile commerce conducted through wireless devices like smartphones and tablets, enabling shopping, banking, and payments on mobile platforms."
+        },
+        {
+            question: "The main use of encryption in E-Commerce is:",
+            options: ["Increase transaction speed", "Secure information transmission", "Generate marketing emails", "Design websites"],
+            correct: 1,
+            type: "single",
+            explanation: "Encryption in E-Commerce is primarily used to secure information transmission, protecting sensitive data like credit card numbers and personal information during online transactions."
+        },
+        {
+            question: "Which type of e-Governance allows citizens to access government services?",
+            options: ["G2B", "G2C", "G2G", "G2E"],
+            correct: 1,
+            type: "single",
+            explanation: "G2C (Government-to-Citizen) is the type of e-Governance that allows citizens to access government services online, such as tax filing, license renewal, and benefit applications."
+        },
+        {
+            question: "A digital signature in E-Commerce guarantees:",
+            options: ["Fast delivery", "Authenticity of a document", "24x7 shopping", "Instant refund"],
+            correct: 1,
+            type: "single",
+            explanation: "A digital signature guarantees the authenticity of a document by verifying the identity of the sender and ensuring the document hasn't been tampered with during transmission."
+        },
+        {
+            question: "Which is a popular application of social commerce?",
+            options: ["Tax payment portal", "Facebook marketplace", "Bank transfer site", "Paper invoice generation"],
+            correct: 1,
+            type: "single",
+            explanation: "Facebook marketplace is a popular application of social commerce, allowing users to buy and sell products within the social media platform environment."
+        },
+
+        // Part B: Two Correct Options (15)
+        {
+            question: "Which are two main disadvantages of E-Commerce?",
+            options: ["Security risks", "Easy setup", "Setup costs", "Fewer product options"],
+            correct: [0, 2],
+            type: "multi",
+            explanation: "Security risks and setup costs are major disadvantages of E-Commerce. Security risks include data breaches and fraud, while setup costs involve initial investment in technology and infrastructure."
+        },
+        {
+            question: "Payment modes commonly used in E-Commerce include:",
+            options: ["Credit card", "Cash on delivery", "E-wallet", "Barter"],
+            correct: [0, 2],
+            type: "multi",
+            explanation: "Credit cards and E-wallets are common digital payment modes in E-Commerce, providing secure and convenient online transaction methods."
+        },
+        {
+            question: "Phases of the E-Commerce trade cycle include:",
+            options: ["Pre-sale", "Marketing", "After-sale", "Advertising"],
+            correct: [0, 2],
+            type: "multi",
+            explanation: "Pre-sale and After-sale are key phases of the E-Commerce trade cycle. Pre-sale involves search and negotiation, while After-sale includes customer support and service."
+        },
+        {
+            question: "In EDI, the most commonly exchanged formats are:",
+            options: ["Purchase orders", "Product ratings", "Invoices", "Cheques"],
+            correct: [0, 2],
+            type: "multi",
+            explanation: "Purchase orders and Invoices are the most commonly exchanged business documents in EDI systems, facilitating automated business-to-business transactions."
+        },
+        {
+            question: "Common forms of E-Commerce are:",
+            options: ["M-Commerce", "Social Commerce", "Street trade", "Fax order"],
+            correct: [0, 1],
+            type: "multi",
+            explanation: "M-Commerce (mobile commerce) and Social Commerce are modern forms of E-Commerce that leverage mobile devices and social media platforms respectively."
+        },
+        {
+            question: "Advantages of e-Governance include:",
+            options: ["Reduced corruption", "Increased paperwork", "High transparency", "Manual processes"],
+            correct: [0, 2],
+            type: "multi",
+            explanation: "Reduced corruption and High transparency are key advantages of e-Governance, as digital systems provide clear audit trails and reduce human intervention in government processes."
+        },
+        {
+            question: "Which are types of E-Governance relationships?",
+            options: ["G2G", "B2C", "G2E", "P2P"],
+            correct: [0, 2],
+            type: "multi",
+            explanation: "G2G (Government-to-Government) and G2E (Government-to-Employee) are types of E-Governance relationships that facilitate inter-government communication and employee services."
+        },
+        {
+            question: "Phases included in the execution and settlement stages of a trade cycle are:",
+            options: ["Order", "Invoice", "Team meeting", "Advertising"],
+            correct: [0, 1],
+            type: "multi",
+            explanation: "Order processing and Invoice generation are key activities in the execution and settlement phases of the trade cycle, handling transaction completion and payment."
+        },
+        {
+            question: "Two main types of encryption are:",
+            options: ["Symmetric (private key)", "Random key", "Asymmetric (public key)", "Cyclic"],
+            correct: [0, 2],
+            type: "multi",
+            explanation: "Symmetric (private key) and Asymmetric (public key) are the two main types of encryption methods used to secure data transmission in E-Commerce."
+        },
+        {
+            question: "Security measures in E-Commerce encompass:",
+            options: ["Encryption", "Digital certificate", "Marketing strategy", "Social media use"],
+            correct: [0, 1],
+            type: "multi",
+            explanation: "Encryption and Digital certificates are essential security measures in E-Commerce that protect data transmission and verify identity authentication."
+        },
+        {
+            question: "Which two models of E-Commerce involve consumers?",
+            options: ["C2B", "C2C", "B2B", "G2C"],
+            correct: [0, 1],
+            type: "multi",
+            explanation: "C2B (Consumer-to-Business) and C2C (Consumer-to-Consumer) are E-Commerce models that directly involve consumers as active participants in transactions."
+        },
+        {
+            question: "Features of e-Governance include:",
+            options: ["Accessibility", "Confidentiality", "Simplicity", "Interactivity"],
+            correct: [0, 3],
+            type: "multi",
+            explanation: "Accessibility and Interactivity are key features of e-Governance, providing citizens with easy access to government services and interactive online interfaces."
+        },
+        {
+            question: "Digital certificates help to:",
+            options: ["Secure data over internet", "Convert data into invoices", "Verify identity online", "Market products"],
+            correct: [0, 2],
+            type: "multi",
+            explanation: "Digital certificates secure data transmission over the internet and verify identity online, ensuring authentic and encrypted communication in E-Commerce."
+        },
+        {
+            question: "M-Commerce is used for:",
+            options: ["Mobile ticketing", "Mobile banking", "Desktop shopping", "Telemarketing"],
+            correct: [0, 1],
+            type: "multi",
+            explanation: "Mobile ticketing and Mobile banking are popular applications of M-Commerce, allowing users to purchase tickets and conduct banking transactions through mobile devices."
+        },
+        {
+            question: "Social commerce happens over platforms like:",
+            options: ["Facebook", "Instagram", "Mozilla Firefox", "Outlook"],
+            correct: [0, 1],
+            type: "multi",
+            explanation: "Facebook and Instagram are social media platforms that facilitate social commerce through marketplace features and integrated shopping capabilities."
+        },
+
+        // Part C: Match the Column (2 sets - shuffled as requested)
+        {
+            question: "Match the E-Commerce and E-Governance terms with their applications:",
+            type: "match",
+            options: ["1-a, 2-d, 3-e, 4-b, 5-f, 6-c, 7-g", "1-b, 2-a, 3-d, 4-c, 5-e, 6-f, 7-g", "1-c, 2-e, 3-f, 4-g, 5-a, 6-b, 7-d", "1-g, 2-f, 3-c, 4-a, 5-b, 6-d, 7-e"],
+            correct: 0,
+            explanation: "Correct matching: License renewal is G2E service (1-a), Wholesaler-to-retailer is B2B (2-d), Online facility is G2C (3-e), M-commerce is E-bill payment (4-b), Government agencies sharing database is G2G (5-f), EDI is paperless information exchange (6-c), and Cipher Text is coded form of data (7-g).",
+            matchData: {
+                columnA: ["1. License renewal", "2. Wholesaler-to-retailer", "3. Online facility", "4. M-commerce", "5. Government agencies share database", "6. EDI", "7. Cipher Text"],
+                columnB: ["a. G2E services", "b. E-bill payment", "c. Paperless exchange of information", "d. B2B", "e. G2C", "f. G2G", "g. Coded form of data"]
+            }
+        },
+        {
+            question: "Match the E-Commerce phases and security concepts:",
+            type: "match",
+            options: ["1-f, 2-e, 3-a, 4-c, 5-d, 6-b", "1-a, 2-b, 3-c, 4-d, 5-e, 6-f", "1-d, 2-c, 3-f, 4-a, 5-b, 6-e", "1-b, 2-f, 3-d, 4-e, 5-a, 6-c"],
+            correct: 0,
+            explanation: "Correct matching: Execution phase involves Order and delivery (1-f), Digital certificate provides Online identity for PKI (2-e), Pre-sale phase includes Search and negotiate (3-a), Encryption enables Secure data transformation (4-c), Settlement phase handles Invoice and payment (5-d), and Digital signature provides Authenticity verification (6-b).",
+            matchData: {
+                columnA: ["1. Execution phase", "2. Digital certificate", "3. Pre-sale phase", "4. Encryption", "5. Settlement phase", "6. Digital signature"],
+                columnB: ["a. Search and negotiate", "b. Authenticity verification of e-documents", "c. Secure data transformation between parties", "d. Invoice and payment", "e. Online identity for public key infrastructure", "f. Order and delivery"]
+            }
+        },
+
+        // Part D: True/False (6)
+        {
+            question: "E-Commerce allows shopping only during business hours.",
+            options: ["True", "False"],
+            correct: 1,
+            type: "boolean",
+            explanation: "False. E-Commerce allows shopping 24 hours a day, 7 days a week, which is one of its key advantages over traditional commerce that operates during limited business hours."
+        },
+        {
+            question: "G2B is a type of E-Governance serving business organizations.",
+            options: ["True", "False"],
+            correct: 0,
+            type: "boolean",
+            explanation: "True. G2B (Government-to-Business) is a type of E-Governance that provides services to business organizations, such as business registration, tax filing, and regulatory compliance."
+        },
+        {
+            question: "In E-Commerce, e-wallets can store money for future online transactions.",
+            options: ["True", "False"],
+            correct: 0,
+            type: "boolean",
+            explanation: "True. E-wallets are electronic pre-paid accounts that can store digital money, allowing users to make future online transactions without repeatedly entering payment details."
+        },
+        {
+            question: "M-commerce can be done only on desktop computers.",
+            options: ["True", "False"],
+            correct: 1,
+            type: "boolean",
+            explanation: "False. M-commerce (Mobile commerce) is specifically designed for mobile devices like smartphones and tablets, not desktop computers."
+        },
+        {
+            question: "Encryption is not used for protecting transactions in E-Commerce.",
+            options: ["True", "False"],
+            correct: 1,
+            type: "boolean",
+            explanation: "False. Encryption is a critical security measure used in E-Commerce to protect sensitive transaction data, personal information, and financial details during online transactions."
+        },
+        {
+            question: "Checking holiday balance online is an example of G2E service.",
+            options: ["True", "False"],
+            correct: 0,
+            type: "boolean",
+            explanation: "True. Checking holiday balance online is a G2E (Government-to-Employee) service that allows government employees to access their employment-related information digitally."
+        }
     ];
 
     let currentQuestionIndex = 0;
@@ -732,13 +968,13 @@
 
     function verifyResetCode() {
         const enteredCode = document.getElementById('resetCode').value.trim();
-        const correctCode = "TESSA"; // 🔑 CHANGE THIS TO YOUR DESIRED CODE
+        const correctCode = "TESSA"; // 🔑 RESET PASSWORD IS "TESSA"
         const errorDiv = document.getElementById('codeError');
         
         if (enteredCode === correctCode) {
             // Correct code - show final confirmation
             if (confirm('🚨 FINAL WARNING 🚨\n\nYou are about to permanently delete ALL leaderboard scores!\n\nThis action CANNOT be undone.\n\nClick OK to proceed or Cancel to abort.')) {
-                localStorage.removeItem('quizLeaderboard');
+                localStorage.removeItem('eCommerceEGovernanceQuizLeaderboard');
                 closeResetModal();
                 
                 showNotification('✅ Leaderboard has been reset successfully!', 'success');
@@ -897,6 +1133,7 @@
         let questionHTML = question.question;
         if (question.type === 'match' && question.matchData) {
             questionHTML += `<table class="match-table">`;
+            questionHTML += `<tr><th style="padding: 12px; background: rgba(59, 130, 246, 0.1);">Column A</th><th style="padding: 12px; background: rgba(59, 130, 246, 0.1);">Column B</th></tr>`;
             for(let i = 0; i < question.matchData.columnA.length; i++) {
                 questionHTML += `<tr><td>${question.matchData.columnA[i]}</td><td>${question.matchData.columnB[i]}</td></tr>`;
             }
@@ -1017,10 +1254,10 @@
         let messageColor = "var(--incorrect)";
         
         if (percentage >= 90) {
-            message = "Outstanding! You're a web design expert! 🌟";
+            message = "Outstanding! You're an E-Commerce expert! 🌟";
             messageColor = "var(--correct)";
         } else if (percentage >= 80) {
-            message = "Excellent work! Great knowledge! 🎉";
+            message = "Excellent work! Great knowledge of E-Commerce and E-Governance! 🎉";
             messageColor = "var(--correct)";
         } else if (percentage >= 70) {
             message = "Good job! You're on the right track! 👍";
@@ -1103,7 +1340,7 @@
     }
 
     function getLeaderboard() { 
-        return JSON.parse(localStorage.getItem('quizLeaderboard') || '[]'); 
+        return JSON.parse(localStorage.getItem('eCommerceEGovernanceQuizLeaderboard') || '[]'); 
     }
     
     function saveScoreToLeaderboard(score, percentage, timeTaken) {
@@ -1113,19 +1350,22 @@
             score: score, 
             percentage: percentage,
             timeTaken: timeTaken,
-            date: new Date().toLocaleDateString()
+            date: new Date().toLocaleDateString(),
+            timestamp: Date.now()
         };
         
         board.push(entry);
         board.sort((a, b) => {
             // Primary sort by score (descending)
             if (b.score !== a.score) return b.score - a.score;
-            // Secondary sort by time taken (ascending - less time is better)
+            // Secondary sort by percentage (descending)
+            if (b.percentage !== a.percentage) return b.percentage - a.percentage;
+            // Tertiary sort by time taken (ascending - less time is better)
             return a.timeTaken - b.timeTaken;
         });
         
         // Keep top 10 scores
-        localStorage.setItem('quizLeaderboard', JSON.stringify(board.slice(0, 10)));
+        localStorage.setItem('eCommerceEGovernanceQuizLeaderboard', JSON.stringify(board.slice(0, 10)));
     }
     
     function showLeaderboard() {
@@ -1133,23 +1373,29 @@
         const container = document.getElementById('leaderboardContainer');
         
         if (board.length === 0) {
-            container.innerHTML = '<p style="text-align: center; color: var(--text-dark);">No scores yet. Be the first to take the quiz! 🎯</p>';
+            container.innerHTML = `
+                <div style="text-align: center; padding: 40px; background: rgba(59, 130, 246, 0.05); border-radius: 12px; border: 1px dashed rgba(59, 130, 246, 0.3);">
+                    <p style="color: var(--text-dark); font-size: 18px; margin-bottom: 10px;">🎯 No scores yet!</p>
+                    <p style="color: var(--text-dark); font-size: 14px;">Be the first to take the quiz and set a record!</p>
+                </div>
+            `;
         } else {
             let html = '';
             board.forEach((entry, i) => {
                 const rankIcon = i === 0 ? '👑' : i === 1 ? '🥈' : i === 2 ? '🥉' : `${i + 1}.`;
                 const timeText = entry.timeTaken ? ` • ${entry.timeTaken}min` : '';
+                const isCurrentPlayer = entry.name === playerName;
                 
                 html += `
-                    <div class="leaderboard-entry">
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <span class="leaderboard-rank">${rankIcon}</span>
+                    <div class="leaderboard-entry ${isCurrentPlayer ? 'current-user' : ''}">
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <span class="leaderboard-rank" style="font-size: 20px;">${rankIcon}</span>
                             <div>
-                                <strong>${entry.name}</strong>
-                                <br><small style="color: var(--text-dark);">${entry.date}${timeText}</small>
+                                <div style="font-weight: bold; color: var(--text-light); font-size: 16px;">${entry.name}</div>
+                                <div style="color: var(--text-dark); font-size: 12px;">${entry.date}${timeText}</div>
                             </div>
                         </div>
-                        <div class="leaderboard-score">${entry.score}/${quizData.length} (${entry.percentage}%)</div>
+                        <div class="leaderboard-score" style="font-size: 18px;">${entry.score}/${quizData.length}</div>
                     </div>
                 `;
             });
